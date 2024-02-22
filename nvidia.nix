@@ -1,4 +1,4 @@
-{ config, unstable, ... }:
+{ config, pkgs, ... }:
 
 {
   # Enable OpenGL
@@ -40,5 +40,5 @@
   };
 
   # driver update hack
-  boot.kernelPackages = unstable.legacyPackages.x86_64-linux.linuxPackages;
+  boot.kernelPackages = pkgs.unstable.linuxPackages;
 }

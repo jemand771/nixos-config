@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, unstable, ... }:
 
 {
   # Enable OpenGL
@@ -38,4 +38,7 @@
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
+
+  # driver update hack
+  boot.kernelPackages = unstable.legacyPackages.x86_64-linux.linuxPackages;
 }

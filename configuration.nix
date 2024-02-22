@@ -138,6 +138,8 @@
     nvtop-nvidia
     nfs-utils
     git
+    wine64
+    winetricks
   ];
   hardware.ckb-next.enable = true;
   hardware.xone.enable = true;

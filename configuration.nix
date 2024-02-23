@@ -100,6 +100,7 @@
       pinta
       prismlauncher
       lutris
+      yt-dlp
     ];
   };
 

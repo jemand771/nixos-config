@@ -98,6 +98,7 @@
       vscode
       tetrio-desktop
       pinta
+      prismlauncher
     ];
   };
 

@@ -129,7 +129,7 @@
     solaar
     logitech-udev-rules
     streamdeck-ui
-    linuxKernel.packages.linux_zen.xone
+    config.boot.kernelPackages.xone
     python311
     qt6.qtwebsockets
     libsForQt5.qt5.qtwebsockets

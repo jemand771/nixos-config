@@ -99,6 +99,7 @@
       tetrio-desktop
       pinta
       prismlauncher
+      lutris
     ];
   };
 

@@ -141,6 +141,7 @@
     nvtop-nvidia
     nfs-utils
     git
+    wine
     wine64
     winetricks
   ];

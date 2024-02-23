@@ -42,6 +42,7 @@
         ./backups.nix
         ./configuration.nix
         ./hardware/nvidia.nix
+        ./hardware/nic.nix
         ./nix-tools.nix
         ./mounts.nix
       ];

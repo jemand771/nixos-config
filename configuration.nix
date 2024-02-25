@@ -141,8 +141,8 @@
     nvtop-nvidia
     nfs-utils
     git
-    wine
-    wine64
+    wineWowPackages.full
+    wineWow64Packages.full
     winetricks
   ];
   hardware.ckb-next.enable = true;

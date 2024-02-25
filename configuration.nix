@@ -101,6 +101,7 @@
       prismlauncher
       lutris
       yt-dlp
+      jetbrains-toolbox
     ];
   };
 

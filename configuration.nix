@@ -153,6 +153,7 @@
     wineWowPackages.full
     wineWow64Packages.full
     winetricks
+    nodejs_20
   ];
   hardware.ckb-next.enable = true;
   hardware.xone.enable = true;

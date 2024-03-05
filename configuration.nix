@@ -110,6 +110,7 @@
           hash = "sha256-KA4lxfiZLkkMANOg77n9mANTYXI+BJRwGUa1TRalFGM=";
         };
       })
+      kubectl
     ];
   };
 

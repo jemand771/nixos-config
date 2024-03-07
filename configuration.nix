@@ -113,6 +113,7 @@
       kubectl
       firefox
       libsForQt5.kdeconnect-kde
+      dig
     ];
   };
 

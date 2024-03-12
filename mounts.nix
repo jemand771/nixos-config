@@ -23,6 +23,11 @@
       what = "10.7.5.1:/nfs/backup";
       where = "/mnt/backup";
     })
+
+    (commonMountOptions // {
+      what = "10.7.5.1:/nfs/ines";
+      where = "/mnt/ines";
+    })
   ];
 
   systemd.automounts = let commonAutoMountOptions = {
@@ -37,5 +42,6 @@
   [
     (commonAutoMountOptions // { where = "/mnt/main"; })
     (commonAutoMountOptions // { where = "/mnt/backup"; })
+    (commonAutoMountOptions // { where = "/mnt/ines"; })
   ];
 }

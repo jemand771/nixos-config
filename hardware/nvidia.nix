@@ -36,9 +36,13 @@
     nvidiaSettings = true;
 
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+      version = "550.54.14";
+      sha256_64bit = "sha256-jEl/8c/HwxD7h1FJvDD6pP0m0iN7LLps0uiweAFXz+M=";
+      sha256_aarch64 = "";
+      openSha256 = "";
+      settingsSha256 = "sha256-m2rNASJp0i0Ez2OuqL+JpgEF0Yd8sYVCyrOoo/ln2a4=";
+      persistencedSha256 = "";
+    };
   };
-
-  # driver update hack
-  boot.kernelPackages = pkgs.unstable.linuxPackages;
 }

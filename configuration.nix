@@ -112,7 +112,6 @@
       })
       kubectl
       firefox
-      libsForQt5.kdeconnect-kde
       dig
     ];
   };
@@ -162,6 +161,7 @@
   ];
   hardware.ckb-next.enable = true;
   hardware.xone.enable = true;
+  programs.kdeconnect.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -175,16 +175,6 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
-
-  networking.firewall = {
-    enable = true;
-    allowedTCPPortRanges = [
-      { from = 1714; to = 1764; } # KDE Connect
-    ];
-    allowedUDPPortRanges = [
-      { from = 1714; to = 1764; } # KDE Connect
-    ];
-  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

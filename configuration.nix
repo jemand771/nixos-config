@@ -113,6 +113,7 @@
       kubectl
       firefox
       dig
+      google-cloud-sdk
     ];
   };
 

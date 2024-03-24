@@ -144,7 +144,6 @@
     curl
     htop
     nano
-    ckb-next
     solaar
     logitech-udev-rules
     streamdeck-ui

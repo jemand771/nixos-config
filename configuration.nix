@@ -111,6 +111,8 @@
         };
       })
       kubectl
+      kubernetes-helm
+      kubeseal
       firefox
       dig
       (google-cloud-sdk.withExtraComponents( with pkgs.google-cloud-sdk.components; [

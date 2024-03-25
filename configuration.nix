@@ -163,7 +163,6 @@
     protontricks
     nodejs_20
   ];
-  hardware.ckb-next.enable = true;
   hardware.xone.enable = true;
   programs.kdeconnect.enable = true;
 

@@ -99,6 +99,7 @@
       tetrio-desktop
       pinta
       prismlauncher
+      jre8
       lutris
       yt-dlp
       jetbrains-toolbox
@@ -162,6 +163,7 @@
     winetricks
     protontricks
     nodejs_20
+    ffmpeg
   ];
   hardware.xone.enable = true;
   programs.kdeconnect.enable = true;

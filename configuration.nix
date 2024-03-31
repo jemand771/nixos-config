@@ -119,6 +119,7 @@
       (google-cloud-sdk.withExtraComponents( with pkgs.google-cloud-sdk.components; [
         gke-gcloud-auth-plugin
       ]))
+      minikube
     ];
   };
 
@@ -164,6 +165,7 @@
     protontricks
     nodejs_20
     ffmpeg
+    jq
   ];
   hardware.xone.enable = true;
   programs.kdeconnect.enable = true;

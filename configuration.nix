@@ -166,6 +166,7 @@
     nodejs_20
     ffmpeg
     jq
+    kcalc
   ];
   hardware.xone.enable = true;
   programs.kdeconnect.enable = true;

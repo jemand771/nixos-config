@@ -120,6 +120,7 @@
         gke-gcloud-auth-plugin
       ]))
       minikube
+      obs-studio
     ];
   };
 

@@ -121,6 +121,7 @@
       ]))
       minikube
       obs-studio
+      libreoffice-qt
     ];
   };
 
@@ -168,9 +169,12 @@
     ffmpeg
     jq
     kcalc
+    vlc
   ];
   hardware.xone.enable = true;
   programs.kdeconnect.enable = true;
+  programs.k3b.enable = true;
+  programs.partition-manager.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

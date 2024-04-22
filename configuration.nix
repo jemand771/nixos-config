@@ -86,7 +86,7 @@
     description = "willy";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
-      vesktop
+      unstable.vesktop
       google-chrome
       heroic
       spotify

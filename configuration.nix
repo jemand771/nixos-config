@@ -175,6 +175,10 @@
   programs.kdeconnect.enable = true;
   programs.k3b.enable = true;
   programs.partition-manager.enable = true;
+  programs.ausweisapp = {
+    enable = true;
+    openFirewall = true;
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -14,4 +14,9 @@
       fi
     '';
   };
+
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  nix.nixPath = [
+    "nixpkgs=${inputs.nixpkgs}"
+  ];
 }

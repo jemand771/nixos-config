@@ -84,7 +84,7 @@
   users.users.willy = {
     isNormalUser = true;
     description = "willy";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" ];
     packages = with pkgs; [
       unstable.vesktop
       google-chrome
@@ -208,5 +208,6 @@
   };
 
   virtualisation.docker.enable = true;
+  virtualisation.libvirtd.enable = true;
   services.openssh.enable = true;
 }

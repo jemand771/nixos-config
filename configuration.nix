@@ -122,6 +122,7 @@
       minikube
       obs-studio
       libreoffice-qt
+      nmap
     ];
   };
 

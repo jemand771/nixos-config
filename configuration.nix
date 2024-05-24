@@ -123,6 +123,9 @@
       obs-studio
       libreoffice-qt
       nmap
+      (blender.override {
+        cudaSupport = true;
+      })
     ];
   };
 

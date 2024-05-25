@@ -45,6 +45,7 @@
         ./hardware/nvidia.nix
         ./hardware/nic.nix
         ./hardware/keyboard.nix
+        ./hardware/fans.nix
         ./nix-tools.nix
         ./mounts.nix
       ];

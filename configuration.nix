@@ -45,13 +45,13 @@
   services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "de";
-    xkbVariant = "";
+    variant = "";
   };
 
   # Configure console keymap
@@ -90,7 +90,6 @@
       google-chrome
       heroic
       spotify
-      spotify-tui
       spotify-tray
       spicetify-cli
       ncdu
@@ -140,8 +139,8 @@
   ];
 
   # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "willy";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "willy";
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -154,7 +153,8 @@
     nano
     solaar
     logitech-udev-rules
-    streamdeck-ui
+    # TODO broken
+    # streamdeck-ui
     config.boot.kernelPackages.xone
     python311
     qt6.qtwebsockets
@@ -162,7 +162,7 @@
     libsForQt5.qt5.qtwebchannel
     libsForQt5.qt5.qtwebchannel
     python311Packages.websockets
-    nvtop-nvidia
+    nvtopPackages.nvidia
     nfs-utils
     git
     wineWowPackages.full

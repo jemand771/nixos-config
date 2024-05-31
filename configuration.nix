@@ -149,7 +149,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     curl
-    htop
     nano
     solaar
     logitech-udev-rules

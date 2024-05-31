@@ -17,6 +17,12 @@
     executable = true;
   };
 
+  # TODO htop's own config menu can still overwrite (delete and recreate) this file - how to prevent this?
+  programs.htop.enable = true;
+  programs.htop.settings = {
+    hide_userland_threads = 1;
+  };
+
   home.stateVersion = "23.11";
   programs.home-manager.enable = true;
 }

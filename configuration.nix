@@ -125,6 +125,8 @@
       (blender.override {
         cudaSupport = true;
       })
+      texliveFull
+      thunderbird
     ];
   };
 

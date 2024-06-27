@@ -128,6 +128,7 @@
       texliveFull
       thunderbird
       opentofu
+      gh
     ];
   };
 

@@ -177,6 +177,7 @@
     jq
     kcalc
     vlc
+    pv
   ];
   hardware.xone.enable = true;
   programs.kdeconnect.enable = true;

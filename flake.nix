@@ -37,11 +37,14 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            users.willy = import ./home.nix;
+            users.willy.imports = [
+              ./home/common.nix
+              ./home/nixbox.nix
+            ];
           };
         }
         ./backups.nix
-        ./nixbox.nix
+        ./hosts/nixbox.nix
         ./hardware/nixbox.nix
         ./hardware/nvidia.nix
         ./hardware/nic.nix
@@ -62,7 +65,7 @@
         # agenix.nixosModules.default
         # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         # ./secrets-nixos.nix
-        # home-manager.nixosModules.home-manager
+        home-manager.nixosModules.home-manager
         {
           # make unstable packages available as pkgs.unstable
           nixpkgs.overlays = [
@@ -71,14 +74,17 @@
             }))
           ];
         }
-        # {
-        #   home-manager = {
-        #     useGlobalPkgs = true;
-        #     useUserPackages = true;
-        #     users.willy = import ./home.nix;
-        #   };
-        # }
-        ./nixtique.nix
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.willy.imports = [
+              ./home/common.nix
+              ./home/nixtique.nix
+            ];
+          };
+        }
+        ./hosts/nixtique.nix
         ./hardware/nixtique.nix
         ./nix-tools.nix
         ./software/basics.nix

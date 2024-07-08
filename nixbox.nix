@@ -83,14 +83,12 @@
     extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" ];
     packages = with pkgs; [
       unstable.vesktop
-      google-chrome
       heroic
       spotify
       spotify-tray
       spicetify-cli
       ncdu
       gpu-screen-recorder-gtk
-      vscode
       tetrio-desktop
       pinta
       prismlauncher
@@ -164,7 +162,6 @@
     python311Packages.websockets
     nvtopPackages.nvidia
     nfs-utils
-    git
     wineWowPackages.full
     wineWow64Packages.full
     winetricks

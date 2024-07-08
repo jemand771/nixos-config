@@ -49,6 +49,7 @@
         ./hardware/fans.nix
         ./nix-tools.nix
         ./mounts.nix
+        ./software/basics.nix
       ];
     };
     nixosConfigurations.nixtique = nixpkgs.lib.nixosSystem {
@@ -77,6 +78,7 @@
         ./nixtique.nix
         ./hardware/nixtique.nix
         ./nix-tools.nix
+        ./software/basics.nix
       ];
     };
   };

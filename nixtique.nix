@@ -83,7 +83,6 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       vesktop
-      google-chrome
     ];
   };
 

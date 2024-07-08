@@ -4,6 +4,11 @@
   environment.systemPackages = with pkgs; [
     git
     google-chrome
-    vscode
+    (vscode-with-extensions.override {
+      vscodeExtensions = with vscode-extensions; [
+        ms-python.python
+        bbenoist.nix
+      ];
+    })
   ];
 }

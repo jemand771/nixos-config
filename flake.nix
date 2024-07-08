@@ -41,13 +41,42 @@
           };
         }
         ./backups.nix
-        ./configuration.nix
+        ./nixbox.nix
+        ./hardware/nixbox.nix
         ./hardware/nvidia.nix
         ./hardware/nic.nix
         ./hardware/keyboard.nix
         ./hardware/fans.nix
         ./nix-tools.nix
         ./mounts.nix
+      ];
+    };
+    nixosConfigurations.nixtique = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
+      modules = [
+        # agenix.nixosModules.default
+        # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
+        # ./secrets-nixos.nix
+        # home-manager.nixosModules.home-manager
+        {
+          # make unstable packages available as pkgs.unstable
+          nixpkgs.overlays = [
+            (_: prev: ({
+              unstable = import inputs.nixpkgs-unstable { config.allowUnfree = true; inherit (prev.stdenv.hostPlatform) system; };
+            }))
+          ];
+        }
+        # {
+        #   home-manager = {
+        #     useGlobalPkgs = true;
+        #     useUserPackages = true;
+        #     users.willy = import ./home.nix;
+        #   };
+        # }
+        ./nixtique.nix
+        ./hardware/nixtique.nix
+        ./nix-tools.nix
       ];
     };
   };

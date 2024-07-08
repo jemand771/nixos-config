@@ -55,19 +55,12 @@
     description = "willy";
     extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" ];
     packages = with pkgs; [
-      unstable.vesktop
       heroic
-      spotify
-      spotify-tray
-      spicetify-cli
-      ncdu
       gpu-screen-recorder-gtk
       tetrio-desktop
-      pinta
       prismlauncher
       jre8
       lutris
-      yt-dlp
       jetbrains-toolbox
       # todo headlamp desktop file
       (pkgs.appimageTools.wrapType1 {
@@ -81,19 +74,14 @@
       kubernetes-helm
       kubeseal
       firefox
-      dig
       (google-cloud-sdk.withExtraComponents( with pkgs.google-cloud-sdk.components; [
         gke-gcloud-auth-plugin
       ]))
       minikube
       obs-studio
-      libreoffice-qt
-      nmap
       (blender.override {
         cudaSupport = true;
       })
-      texliveFull
-      thunderbird
       opentofu
       gh
       insomnia
@@ -120,8 +108,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    curl
-    nano
     solaar
     logitech-udev-rules
     # TODO broken
@@ -140,11 +126,6 @@
     winetricks
     protontricks
     nodejs_20
-    ffmpeg
-    jq
-    kcalc
-    vlc
-    pv
   ];
   hardware.xone.enable = true;
   programs.kdeconnect.enable = true;

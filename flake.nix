@@ -51,6 +51,8 @@
         ./mounts.nix
         ./software/basics.nix
         ./software/locale.nix
+        ./software/shell-utils.nix
+        ./software/office-utils.nix
       ];
     };
     nixosConfigurations.nixtique = nixpkgs.lib.nixosSystem {
@@ -81,6 +83,8 @@
         ./nix-tools.nix
         ./software/basics.nix
         ./software/locale.nix
+        ./software/shell-utils.nix
+        ./software/office-utils.nix
       ];
     };
   };

@@ -10,5 +10,6 @@
         bbenoist.nix
       ];
     })
+    unstable.vesktop
   ];
 }

@@ -132,8 +132,8 @@
         ./nix-tools.nix
         ./software/basics.nix
         ./software/locale.nix
-        # ./software/shell-utils.nix
-        # ./software/office-utils.nix
+        ./software/shell-utils.nix
+        ./software/office-utils.nix
       ];
     };
   };

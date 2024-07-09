@@ -101,5 +101,40 @@
         ./software/office-utils.nix
       ];
     };
+    nixosConfigurations.nixbox2 = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
+      modules = [
+        # agenix.nixosModules.default
+        # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
+        # ./secrets-nixos.nix
+        home-manager.nixosModules.home-manager
+        {
+          # make unstable packages available as pkgs.unstable
+          nixpkgs.overlays = [
+            (_: prev: ({
+              unstable = import inputs.nixpkgs-unstable { config.allowUnfree = true; inherit (prev.stdenv.hostPlatform) system; };
+            }))
+          ];
+        }
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.willy.imports = [
+              ./home/common.nix
+              ./home/nixbox2.nix
+            ];
+          };
+        }
+        ./hosts/nixbox2.nix
+        ./hardware/nixbox2.nix
+        ./nix-tools.nix
+        ./software/basics.nix
+        ./software/locale.nix
+        # ./software/shell-utils.nix
+        # ./software/office-utils.nix
+      ];
+    };
   };
 }

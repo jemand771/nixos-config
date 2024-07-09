@@ -43,9 +43,6 @@
     isNormalUser = true;
     description = "willy";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      vesktop
-    ];
   };
 
   # Allow unfree packages

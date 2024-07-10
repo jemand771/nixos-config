@@ -11,6 +11,14 @@
   programs.htop.settings = {
     hide_userland_threads = 1;
   };
+
+  programs.vscode.enable = true;
+  programs.vscode.userSettings = {
+    "files.simpleDialog.enable" = true;
+    "git.enableSmartCommit" = true;
+    "git.confirmSync" = false;
+  };
+
   programs.ssh = {
     enable = true;
     matchBlocks = {

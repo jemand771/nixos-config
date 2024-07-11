@@ -15,8 +15,9 @@
   programs.vscode.enable = true;
   programs.vscode.userSettings = {
     "files.simpleDialog.enable" = true;
-    "git.enableSmartCommit" = true;
+    "git.autofetch" = true;
     "git.confirmSync" = false;
+    "git.enableSmartCommit" = true;
   };
   programs.vscode.extensions = with pkgs.vscode-extensions; [
     ms-python.python

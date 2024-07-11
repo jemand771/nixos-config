@@ -61,6 +61,7 @@
         ./software/locale.nix
         ./software/shell-utils.nix
         ./software/office-utils.nix
+        ./software/dev-infra.nix
       ];
     };
     nixosConfigurations.nixtique = nixpkgs.lib.nixosSystem {
@@ -99,6 +100,7 @@
         ./software/locale.nix
         ./software/shell-utils.nix
         ./software/office-utils.nix
+        ./software/dev-infra.nix
       ];
     };
     nixosConfigurations.nixbox2 = nixpkgs.lib.nixosSystem {
@@ -134,6 +136,7 @@
         ./software/locale.nix
         ./software/shell-utils.nix
         ./software/office-utils.nix
+        ./software/dev-infra.nix
       ];
     };
   };

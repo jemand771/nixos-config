@@ -19,17 +19,10 @@
     "git.confirmSync" = false;
     "git.enableSmartCommit" = true;
   };
-  programs.vscode.extensions = with pkgs.vscode-extensions; [
+  programs.vscode.extensions = with pkgs.vscode-marketplace; [
     ms-python.python
     bbenoist.nix
-    # TODO gamunu.opentofu
-  ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-    {
-      name = "opentofu";
-      publisher = "gamunu";
-      version = "0.2.1";
-      sha256 = "sha256-OizdHTSGuwBRuD/qPXjmna6kZWfRp9EimhcFk3ICN9I=";
-    }
+    gamunu.opentofu
   ];
 
   programs.ssh = {

@@ -18,9 +18,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, agenix, home-manager, plasma-manager, ... }: {
+  outputs = inputs@{
+    self,
+    nixpkgs,
+    nixpkgs-unstable,
+    agenix,
+    home-manager,
+    plasma-manager,
+    nix-vscode-extensions,
+    ...
+  }: {
 
     nixosConfigurations.nixbox = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -36,6 +49,7 @@
             (_: prev: ({
               unstable = import inputs.nixpkgs-unstable { config.allowUnfree = true; inherit (prev.stdenv.hostPlatform) system; };
             }))
+            nix-vscode-extensions.overlays.default
           ];
         }
         {
@@ -78,6 +92,7 @@
             (_: prev: ({
               unstable = import inputs.nixpkgs-unstable { config.allowUnfree = true; inherit (prev.stdenv.hostPlatform) system; };
             }))
+            nix-vscode-extensions.overlays.default
           ];
         }
         {
@@ -118,6 +133,7 @@
             (_: prev: ({
               unstable = import inputs.nixpkgs-unstable { config.allowUnfree = true; inherit (prev.stdenv.hostPlatform) system; };
             }))
+            nix-vscode-extensions.overlays.default
           ];
         }
         {

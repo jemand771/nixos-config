@@ -101,6 +101,7 @@
         ./software/shell-utils.nix
         ./software/office-utils.nix
         ./software/dev-infra.nix
+        ./sync.nix
       ];
     };
     nixosConfigurations.nixbox2 = nixpkgs.lib.nixosSystem {

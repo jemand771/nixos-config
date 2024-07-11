@@ -137,6 +137,7 @@
         ./software/shell-utils.nix
         ./software/office-utils.nix
         ./software/dev-infra.nix
+        ./sync.nix
       ];
     };
   };

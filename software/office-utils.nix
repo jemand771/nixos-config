@@ -8,7 +8,6 @@
         spotify
         spotify-tray
         texliveFull
-        thunderbird
         unstable.vesktop
         vlc
     ];

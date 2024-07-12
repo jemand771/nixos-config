@@ -60,6 +60,7 @@
             ./home/common.nix
             ./home/desktop-lag-fix.nix
             ./home/plasma.nix
+            ./home/thunderbird.nix
             { home = { inherit stateVersion; }; }
           ];
         };

@@ -33,7 +33,7 @@
     plasma-manager,
     nix-vscode-extensions,
     ...
-  }: let nixosSystem = { modules, system ? "x86_64-linux" }: nixpkgs.lib.nixosSystem {
+  }: let nixosSystem = { modules, system ? "x86_64-linux", stateVersion }: nixpkgs.lib.nixosSystem {
     inherit system;
     specialArgs = { inherit inputs; };
     modules = [
@@ -46,6 +46,23 @@
           }))
           nix-vscode-extensions.overlays.default
         ];
+      }
+      { system = { inherit stateVersion; }; }
+      ./home/options.nix
+      {
+        home-manager = {
+          useGlobalPkgs = true;
+          useUserPackages = true;
+          sharedModules = [
+            plasma-manager.homeManagerModules.plasma-manager
+          ];
+          users.willy.imports = [
+            ./home/common.nix
+            ./home/desktop-lag-fix.nix
+            ./home/plasma.nix
+            { home = { inherit stateVersion; }; }
+          ];
+        };
       }
       ./nix-tools.nix
       ./software/basics.nix
@@ -62,16 +79,6 @@
         agenix.nixosModules.default
         { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ./secrets-nixos.nix
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.willy.imports = [
-              ./home/common.nix
-              ./home/nixbox.nix
-            ];
-          };
-        }
         ./backups.nix
         ./hosts/nixbox.nix
         ./hardware/nixbox.nix
@@ -81,47 +88,30 @@
         ./hardware/fans.nix
         ./mounts.nix
       ];
+      stateVersion = "23.11";
     };
     nixosConfigurations.nixtique = nixosSystem {
       modules = [
         # agenix.nixosModules.default
         # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         # ./secrets-nixos.nix
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            sharedModules = [
-              plasma-manager.homeManagerModules.plasma-manager
-            ];
-            users.willy.imports = [
-              ./home/common.nix
-              ./home/nixtique.nix
-            ];
-          };
-        }
         ./hosts/nixtique.nix
         ./hardware/nixtique.nix
+        {
+          jemand771.plasma.enable = true;
+        }
       ];
+      stateVersion = "24.05";
     };
     nixosConfigurations.nixbox2 = nixosSystem {
       modules = [
         # agenix.nixosModules.default
         # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         # ./secrets-nixos.nix
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.willy.imports = [
-              ./home/common.nix
-              ./home/nixbox2.nix
-            ];
-          };
-        }
         ./hosts/nixbox2.nix
         ./hardware/nixbox2.nix
       ];
+      stateVersion = "24.05";
     };
   };
 }

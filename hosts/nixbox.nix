@@ -55,7 +55,6 @@
     description = "willy";
     extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" ];
     packages = with pkgs; [
-      heroic
       gpu-screen-recorder-gtk
       tetrio-desktop
       prismlauncher
@@ -137,12 +136,6 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
-
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-  };
 
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;

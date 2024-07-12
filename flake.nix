@@ -70,6 +70,7 @@
       ./software/shell-utils.nix
       ./software/office-utils.nix
       ./software/dev-infra.nix
+      ./software/gaming.nix
       ./sync.nix
     ] ++ modules;
   };

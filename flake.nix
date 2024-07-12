@@ -33,11 +33,12 @@
     plasma-manager,
     nix-vscode-extensions,
     ...
-  }: {
-
-    nixosConfigurations.nixbox = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
+  }: let commonOptions = {
+    system = "x86_64-linux";
+    specialArgs = { inherit inputs; };
+  };
+  in {
+    nixosConfigurations.nixbox = nixpkgs.lib.nixosSystem (commonOptions // {
       modules = [
         agenix.nixosModules.default
         { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
@@ -77,10 +78,8 @@
         ./software/office-utils.nix
         ./software/dev-infra.nix
       ];
-    };
-    nixosConfigurations.nixtique = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
+    });
+    nixosConfigurations.nixtique = nixpkgs.lib.nixosSystem (commonOptions // {
       modules = [
         # agenix.nixosModules.default
         # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
@@ -118,10 +117,8 @@
         ./software/dev-infra.nix
         ./sync.nix
       ];
-    };
-    nixosConfigurations.nixbox2 = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
+    });
+    nixosConfigurations.nixbox2 = nixpkgs.lib.nixosSystem (commonOptions // {
       modules = [
         # agenix.nixosModules.default
         # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
@@ -156,6 +153,6 @@
         ./software/dev-infra.nix
         ./sync.nix
       ];
-    };
+    });
   };
 }

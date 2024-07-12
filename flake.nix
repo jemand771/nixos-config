@@ -53,6 +53,7 @@
       ./software/shell-utils.nix
       ./software/office-utils.nix
       ./software/dev-infra.nix
+      ./sync.nix
     ] ++ modules;
   };
   in {
@@ -101,7 +102,6 @@
         }
         ./hosts/nixtique.nix
         ./hardware/nixtique.nix
-        ./sync.nix
       ];
     };
     nixosConfigurations.nixbox2 = nixosSystem {
@@ -121,7 +121,6 @@
         }
         ./hosts/nixbox2.nix
         ./hardware/nixbox2.nix
-        ./sync.nix
       ];
     };
   };

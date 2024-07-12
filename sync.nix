@@ -1,7 +1,8 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
-  services.syncthing = {
+  options.jemand771.syncthing.enable = lib.mkEnableOption "syncthing" // { default = true; };
+  config.services.syncthing = lib.mkIf config.jemand771.syncthing.enable {
     enable = true;
     user = "willy";
     dataDir = "/home/willy";

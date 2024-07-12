@@ -37,6 +37,22 @@
     inherit system;
     specialArgs = { inherit inputs; };
     modules = [
+      home-manager.nixosModules.home-manager
+      {
+        # make unstable packages available as pkgs.unstable
+        nixpkgs.overlays = [
+          (_: prev: ({
+            unstable = import inputs.nixpkgs-unstable { config.allowUnfree = true; inherit (prev.stdenv.hostPlatform) system; };
+          }))
+          nix-vscode-extensions.overlays.default
+        ];
+      }
+      ./nix-tools.nix
+      ./software/basics.nix
+      ./software/locale.nix
+      ./software/shell-utils.nix
+      ./software/office-utils.nix
+      ./software/dev-infra.nix
     ] ++ modules;
   };
   in {
@@ -45,16 +61,6 @@
         agenix.nixosModules.default
         { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ./secrets-nixos.nix
-        home-manager.nixosModules.home-manager
-        {
-          # make unstable packages available as pkgs.unstable
-          nixpkgs.overlays = [
-            (_: prev: ({
-              unstable = import inputs.nixpkgs-unstable { config.allowUnfree = true; inherit (prev.stdenv.hostPlatform) system; };
-            }))
-            nix-vscode-extensions.overlays.default
-          ];
-        }
         {
           home-manager = {
             useGlobalPkgs = true;
@@ -72,13 +78,7 @@
         ./hardware/nic.nix
         ./hardware/keyboard.nix
         ./hardware/fans.nix
-        ./nix-tools.nix
         ./mounts.nix
-        ./software/basics.nix
-        ./software/locale.nix
-        ./software/shell-utils.nix
-        ./software/office-utils.nix
-        ./software/dev-infra.nix
       ];
     };
     nixosConfigurations.nixtique = nixosSystem {
@@ -86,16 +86,6 @@
         # agenix.nixosModules.default
         # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         # ./secrets-nixos.nix
-        home-manager.nixosModules.home-manager
-        {
-          # make unstable packages available as pkgs.unstable
-          nixpkgs.overlays = [
-            (_: prev: ({
-              unstable = import inputs.nixpkgs-unstable { config.allowUnfree = true; inherit (prev.stdenv.hostPlatform) system; };
-            }))
-            nix-vscode-extensions.overlays.default
-          ];
-        }
         {
           home-manager = {
             useGlobalPkgs = true;
@@ -111,12 +101,6 @@
         }
         ./hosts/nixtique.nix
         ./hardware/nixtique.nix
-        ./nix-tools.nix
-        ./software/basics.nix
-        ./software/locale.nix
-        ./software/shell-utils.nix
-        ./software/office-utils.nix
-        ./software/dev-infra.nix
         ./sync.nix
       ];
     };
@@ -125,16 +109,6 @@
         # agenix.nixosModules.default
         # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         # ./secrets-nixos.nix
-        home-manager.nixosModules.home-manager
-        {
-          # make unstable packages available as pkgs.unstable
-          nixpkgs.overlays = [
-            (_: prev: ({
-              unstable = import inputs.nixpkgs-unstable { config.allowUnfree = true; inherit (prev.stdenv.hostPlatform) system; };
-            }))
-            nix-vscode-extensions.overlays.default
-          ];
-        }
         {
           home-manager = {
             useGlobalPkgs = true;
@@ -147,12 +121,6 @@
         }
         ./hosts/nixbox2.nix
         ./hardware/nixbox2.nix
-        ./nix-tools.nix
-        ./software/basics.nix
-        ./software/locale.nix
-        ./software/shell-utils.nix
-        ./software/office-utils.nix
-        ./software/dev-infra.nix
         ./sync.nix
       ];
     };

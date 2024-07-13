@@ -59,6 +59,11 @@
         user = "root";
         identityFile = "~/.ssh/id_d39s";
       };
+      "d39s-innung" = {
+        hostname = "159.69.35.76";
+        user = "root";
+        identityFile = "~/.ssh/id_d39s";
+      };
     };
   };
 

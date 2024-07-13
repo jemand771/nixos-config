@@ -33,6 +33,11 @@
       };
 
       # TODO make these generic-ish per key/host group
+      "d39s-old" = {
+        hostname = "138.201.134.54";
+        user = "root";
+        identityFile = "~/.ssh/id_d39s";
+      };
       "d39s-sx" = {
         hostname = "88.99.58.198";
         user = "root";

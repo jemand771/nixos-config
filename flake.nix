@@ -88,6 +88,7 @@
         ./hardware/nic.nix
         ./hardware/keyboard.nix
         ./hardware/fans.nix
+        ./hardware/mouse.nix
         ./mounts.nix
       ];
       stateVersion = "23.11";
@@ -99,6 +100,7 @@
         # ./secrets-nixos.nix
         ./hosts/nixtique.nix
         ./hardware/nixtique.nix
+        ./hardware/mouse.nix
         {
           jemand771.plasma.enable = true;
         }
@@ -112,6 +114,7 @@
         # ./secrets-nixos.nix
         ./hosts/nixbox2.nix
         ./hardware/nixbox2.nix
+        ./hardware/mouse.nix
       ];
       stateVersion = "24.05";
     };

@@ -95,7 +95,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     solaar
-    logitech-udev-rules
     # TODO broken
     # streamdeck-ui
     config.boot.kernelPackages.xone

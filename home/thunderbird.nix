@@ -3,6 +3,17 @@
   programs.thunderbird = {
     enable = true;
     profiles.default.isDefault = true;
+    profiles.default.settings = {
+      # order by date
+      "mailnews.default_sort_type" = 18;
+      "mailnews.default_news_sort_type" = 18;
+      # descending
+      "mailnews.default_sort_order" = 2;
+      "mailnews.default_news_sort_order" = 2;
+      # unthreaded
+      "mailnews.default_view_flags" = 0;
+      "mailnews.default_news_view_flags" = 0;
+    };
   };
   # a note on passwords:
   # while I could _probably_ set up some sort of keyring and shove in my mail passwords automatically,

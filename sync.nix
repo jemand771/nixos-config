@@ -8,6 +8,7 @@
     dataDir = "/home/willy";
     overrideDevices = true;
     overrideFolders = true;
+    openDefaultPorts = true;
     settings = {
       options.urAccepted = 3;
       devices = {

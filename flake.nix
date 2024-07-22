@@ -130,5 +130,11 @@
       ];
       stateVersion = "24.05";
     };
+    nixosConfigurations.apt-cache = nixosSystem {
+      modules = [
+        ./software/apt-cache.nix
+      ];
+      stateVersion = "23.11";
+    };
   };
 }

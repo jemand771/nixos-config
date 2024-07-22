@@ -136,5 +136,15 @@
       ];
       stateVersion = "23.11";
     };
+    nixosConfigurations.syncthing-arbiter = nixosSystem {
+      modules = [
+        # TODO this is probably bad, how to modulesPath ?
+        ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+        {
+          jemand771.syncthing.enable = true;
+        }
+      ];
+      stateVersion = "24.05";
+    };
   };
 }

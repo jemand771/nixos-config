@@ -28,9 +28,6 @@
   systemd.services.apt-cacher-ng = {
     enable = true;
     description = "apt-cacher-ng";
-    unitConfig = {
-      Type = "simple";
-    };
     serviceConfig = {
       ExecStart = "${pkgs.apt-cacher-ng}/bin/apt-cacher-ng -c /etc/nixos/acng/";
     };

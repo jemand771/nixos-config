@@ -1,7 +1,8 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-    environment.systemPackages = with pkgs; [
+    options.jemand771.office-utils.enable = lib.mkEnableOption "office utils";
+    config.environment.systemPackages = with pkgs; lib.mkIf config.jemand771.office-utils.enable [
         kcalc
         libreoffice-qt
         pinta

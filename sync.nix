@@ -1,7 +1,7 @@
 { config, lib, ... }:
 
 {
-  options.jemand771.syncthing.enable = lib.mkEnableOption "syncthing" // { default = true; };
+  options.jemand771.syncthing.enable = lib.mkEnableOption "syncthing";
   config.services.syncthing = lib.mkIf config.jemand771.syncthing.enable {
     enable = true;
     user = "willy";

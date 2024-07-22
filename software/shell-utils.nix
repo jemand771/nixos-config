@@ -1,7 +1,8 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-    environment.systemPackages = with pkgs; [
+    options.jemand771.shell-utils.enable = lib.mkEnableOption "shell utils";
+    config.environment.systemPackages = with pkgs; lib.mkIf config.jemand771.shell-utils.enable [
         curl
         dig
         ffmpeg

@@ -33,11 +33,10 @@
     plasma-manager,
     nix-vscode-extensions,
     ...
-  }: let nixosSystem = { modules, system ? "x86_64-linux", stateVersion }: nixpkgs.lib.nixosSystem {
+  }: let nixosSystem = { modules ? [], homeModules ? [], system ? "x86_64-linux", stateVersion }: nixpkgs.lib.nixosSystem {
     inherit system;
     specialArgs = { inherit inputs; };
     modules = [
-      home-manager.nixosModules.home-manager
       {
         # make unstable packages available as pkgs.unstable
         nixpkgs.overlays = [
@@ -47,10 +46,13 @@
           nix-vscode-extensions.overlays.default
         ];
       }
-      { system = { inherit stateVersion; }; }
+      ./meta-options.nix
       ./home/options.nix
+      home-manager.nixosModules.home-manager
+      ({ config, ...}:
       {
-        home-manager = {
+        options.jemand771.home-manager.enable = nixpkgs.lib.mkEnableOption "home-manager";
+        config.home-manager = nixpkgs.lib.mkIf config.jemand771.home-manager.enable {
           useGlobalPkgs = true;
           useUserPackages = true;
           sharedModules = [
@@ -62,9 +64,9 @@
             ./home/plasma.nix
             ./home/thunderbird.nix
             { home = { inherit stateVersion; }; }
-          ];
+          ] ++ homeModules;
         };
-      }
+      })
       ./nix-tools.nix
       ./software/basics.nix
       ./software/locale.nix
@@ -73,11 +75,15 @@
       ./software/dev-infra.nix
       ./software/gaming.nix
       ./sync.nix
+      { system = { inherit stateVersion; }; }
     ] ++ modules;
   };
   in {
     nixosConfigurations.nixbox = nixosSystem {
       modules = [
+        {
+          jemand771.meta.personal-system = true;
+        }
         agenix.nixosModules.default
         { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ./secrets-nixos.nix
@@ -95,6 +101,9 @@
     };
     nixosConfigurations.nixtique = nixosSystem {
       modules = [
+        {
+          jemand771.meta.personal-system = true;
+        }
         # agenix.nixosModules.default
         # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         # ./secrets-nixos.nix
@@ -109,6 +118,9 @@
     };
     nixosConfigurations.nixbox2 = nixosSystem {
       modules = [
+        {
+          jemand771.meta.personal-system = true;
+        }
         # agenix.nixosModules.default
         # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         # ./secrets-nixos.nix

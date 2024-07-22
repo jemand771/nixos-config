@@ -15,8 +15,8 @@
     DEVNAME=hwmon2=k10temp hwmon1=nct6799
     FCTEMPS=hwmon1/pwm2=hwmon2/temp1_input hwmon1/pwm4=hwmon1/temp2_input hwmon1/pwm6=hwmon1/temp2_input
     FCFANS=hwmon1/pwm2=hwmon1/fan2_input hwmon1/pwm4=hwmon1/fan4_input hwmon1/pwm6=hwmon1/fan6_input
-    MINTEMP=hwmon1/pwm2=50 hwmon1/pwm4=40 hwmon1/pwm6=40
-    MAXTEMP=hwmon1/pwm2=80 hwmon1/pwm4=50 hwmon1/pwm6=50
+    MINTEMP=hwmon1/pwm2=60 hwmon1/pwm4=40 hwmon1/pwm6=40
+    MAXTEMP=hwmon1/pwm2=90 hwmon1/pwm4=50 hwmon1/pwm6=50
     MINSTART=hwmon1/pwm2=50 hwmon1/pwm4=50 hwmon1/pwm6=50
     MINSTOP=hwmon1/pwm2=50 hwmon1/pwm4=50 hwmon1/pwm6=50
     MINPWM=hwmon1/pwm2=50 hwmon1/pwm4=50 hwmon1/pwm6=50

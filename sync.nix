@@ -1,5 +1,12 @@
 { config, lib, ... }:
-
+let
+  devices = [
+    "nixbox"
+    "nixbox2"
+    "nixtique"
+    "syncthing-arbiter"
+  ];
+in
 {
   options.jemand771.syncthing.enable = lib.mkEnableOption "syncthing";
   config.services.syncthing = lib.mkIf config.jemand771.syncthing.enable {
@@ -20,12 +27,7 @@
       folders = {
         "repos" = {
           path = "/home/willy/repos";
-          devices = [
-            "nixbox"
-            "nixbox2"
-            "nixtique"
-            "syncthing-arbiter"
-          ];
+          inherit devices;
         };
       };
     };

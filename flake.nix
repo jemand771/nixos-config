@@ -74,6 +74,7 @@
       ./software/office-utils.nix
       ./software/dev-infra.nix
       ./software/gaming.nix
+      ./software/auto-upgrade.nix
       ./sync.nix
       { system = { inherit stateVersion; }; }
     ] ++ modules;
@@ -133,6 +134,9 @@
     nixosConfigurations.apt-cache = nixosSystem {
       modules = [
         ./software/apt-cache.nix
+        {
+          jemand771.auto-upgrade.enable = true;
+        }
       ];
       stateVersion = "23.11";
     };
@@ -142,6 +146,7 @@
         ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
         {
           jemand771.syncthing.enable = true;
+          jemand771.auto-upgrade.enable = true;
         }
       ];
       stateVersion = "24.05";

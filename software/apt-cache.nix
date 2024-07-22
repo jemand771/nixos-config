@@ -32,14 +32,4 @@
       ExecStart = "${pkgs.apt-cacher-ng}/bin/apt-cacher-ng -c /etc/nixos/acng/";
     };
   };
-
-  system.autoUpgrade = {
-    enable = true;
-    flake = "github:jemand771/nixos-config";
-    allowReboot = true;
-    rebootWindow = {
-      lower = "04:00";
-      upper = "06:00";
-    };
-  };
 }

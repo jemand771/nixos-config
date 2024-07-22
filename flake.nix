@@ -145,6 +145,7 @@
         # TODO this is probably bad, how to modulesPath ?
         ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
         {
+          users.users.willy.isNormalUser = true;
           jemand771.syncthing.enable = true;
           jemand771.auto-upgrade.enable = true;
         }

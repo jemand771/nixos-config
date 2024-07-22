@@ -76,7 +76,7 @@
     ] ++ modules;
   };
   in {
-    nixosConfigurations.nixbox = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nixbox = nixosSystem {
       modules = [
         agenix.nixosModules.default
         { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }

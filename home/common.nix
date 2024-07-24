@@ -23,6 +23,7 @@
     "git.autofetch" = true;
     "git.confirmSync" = false;
     "git.enableSmartCommit" = true;
+    "explorer.confirmDelete" = false;
   };
   programs.vscode.extensions = with pkgs.vscode-marketplace; [
     ms-python.python

@@ -24,6 +24,8 @@
     "git.confirmSync" = false;
     "git.enableSmartCommit" = true;
     "explorer.confirmDelete" = false;
+    "workbench.startupEditor" = "none";
+    "gitlens.showWelcomeOnInstall" = false;
   };
   programs.vscode.extensions = with pkgs.vscode-marketplace; [
     ms-python.python

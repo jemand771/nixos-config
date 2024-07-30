@@ -31,6 +31,7 @@
     ms-python.python
     bbenoist.nix
     gamunu.opentofu
+    redhat.vscode-yaml
   ];
 
   programs.ssh = {

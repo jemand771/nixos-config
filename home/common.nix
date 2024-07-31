@@ -35,6 +35,7 @@
     bbenoist.nix
     gamunu.opentofu
     redhat.vscode-yaml
+    ms-azuretools.vscode-docker
   ];
 
   programs.ssh = {

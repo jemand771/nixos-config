@@ -9,6 +9,9 @@
         autoSetupRemote = true;
       };
     };
+    ignores = [
+      ".venv"
+    ];
   };
 
   # TODO htop's own config menu can still overwrite (delete and recreate) this file - how to prevent this?

@@ -139,4 +139,6 @@
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
   services.openssh.enable = true;
+
+  zramSwap.enable = true;
 }

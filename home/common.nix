@@ -29,6 +29,7 @@
     "explorer.confirmDelete" = false;
     "workbench.startupEditor" = "none";
     "gitlens.showWelcomeOnInstall" = false;
+    "explorer.confirmDragAndDrop" = false;
   };
   programs.vscode.extensions = with pkgs.vscode-marketplace; [
     ms-python.python

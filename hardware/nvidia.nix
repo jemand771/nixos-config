@@ -35,13 +35,6 @@
     # accessible via `nvidia-settings`.
     nvidiaSettings = true;
 
-    package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-      version = "555.52.04";
-      sha256_64bit = "sha256-nVOubb7zKulXhux9AruUTVBQwccFFuYGWrU1ZiakRAI=";
-      sha256_aarch64 = "";
-      openSha256 = "sha256-wDimW8/rJlmwr1zQz8+b1uvxxxbOf3Bpk060lfLKuy0=";
-      settingsSha256 = "sha256-m2rNASJp0i0Ez2OuqL+JpgEF0Yd8sYVCyrOoo/ln2a4=";
-      persistencedSha256 = "";
-    };
+    package = (pkgs.unstable.linuxPackagesFor config.boot.kernelPackages.kernel).nvidiaPackages.latest;
   };
 }

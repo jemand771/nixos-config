@@ -5,6 +5,7 @@
   config.environment.systemPackages = with pkgs; lib.mkIf config.jemand771.dev-infra.enable [
     kubernetes-helm
     kubectl
+    unstable.kubectl-df-pv
     kubeseal
     minikube
     # TODO headlamp desktop file

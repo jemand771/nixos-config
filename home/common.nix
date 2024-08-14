@@ -37,6 +37,7 @@
     gamunu.opentofu
     redhat.vscode-yaml
     ms-azuretools.vscode-docker
+    editorconfig.editorconfig
   ];
 
   programs.ssh = {

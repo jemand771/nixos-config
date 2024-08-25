@@ -20,6 +20,7 @@
   # I don't really feel up for that task at the moment.
   # Instead, I let thunderbird prompt me for the password on first launch (and first time sending an email)
   # and tick the "save password" checkbox. Not entirely declarative, but good enough for now.
+  # TODO deduplicate much? imap/smtp/thunderbird.enable are all shared
   accounts.email.accounts."willy.hille@d39s.de" = {
     address = "willy.hille@d39s.de";
     userName = "willy.hille@d39s.de";
@@ -34,6 +35,20 @@
     };
     # TODO not really
     primary = true;
+    thunderbird.enable = true;
+  };
+  accounts.email.accounts."info@d39s.de" = {
+    address = "info@d39s.de";
+    userName = "info@d39s.de";
+    realName = "info";
+    imap = {
+      host = "mail.d39s.de";
+      port = 993;
+    };
+    smtp = {
+      host = "mail.d39s.de";
+      port = 465;
+    };
     thunderbird.enable = true;
   };
 }

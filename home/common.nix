@@ -11,6 +11,8 @@
     };
     ignores = [
       ".venv"
+      ".direnv"
+      ".envrc"
     ];
   };
 
@@ -81,6 +83,20 @@
       };
     };
   };
+
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+      set fish_greeting
+    '';
+  };
+  programs.starship = {
+    enable = true;
+    settings = {
+      gcloud.disabled = true;
+    };
+  };
+  programs.direnv.enable = true;
 
   programs.home-manager.enable = true;
 }

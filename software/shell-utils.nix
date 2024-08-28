@@ -13,6 +13,7 @@
         ncdu
         nmap
         pv
+        rclone
         yt-dlp
     ];
 

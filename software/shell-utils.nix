@@ -5,6 +5,7 @@
     config.environment.systemPackages = with pkgs; lib.mkIf config.jemand771.shell-utils.enable [
         curl
         bc
+        file
         dig
         ffmpeg
         jq

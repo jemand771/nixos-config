@@ -93,8 +93,13 @@
   };
   programs.starship = {
     enable = true;
+    package = pkgs.unstable.starship;
     settings = {
       gcloud.disabled = true;
+      kubernetes = {
+        disabled = false;
+        detect_env_vars = [ "STARSHIP_KUBERNETES" ];
+      };
     };
   };
   programs.direnv.enable = true;

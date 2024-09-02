@@ -56,9 +56,6 @@
     extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" ];
     packages = with pkgs; [
       gpu-screen-recorder-gtk
-      tetrio-desktop
-      prismlauncher
-      jre8
       lutris
       jetbrains-toolbox
       firefox

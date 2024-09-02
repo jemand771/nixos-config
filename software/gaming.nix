@@ -4,6 +4,8 @@
   config = lib.mkIf config.jemand771.gaming.enable {
     environment.systemPackages = with pkgs; [
       heroic
+      tetrio-desktop
+      prismlauncher
     ];
 
     programs.steam = {

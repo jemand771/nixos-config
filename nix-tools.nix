@@ -20,6 +20,10 @@
     "nixpkgs=${inputs.nixpkgs}"
   ];
 
+  environment.systemPackages = with pkgs; [
+    nix-output-monitor
+  ];
+
   nix.gc = {
     automatic = true;
     options = "--delete-older-than 30d";

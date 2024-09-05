@@ -41,6 +41,7 @@
     ms-azuretools.vscode-docker
     editorconfig.editorconfig
     astro-build.astro-vscode
+    mkhl.direnv
   ];
 
   programs.ssh = {

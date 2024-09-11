@@ -50,40 +50,27 @@
       "github.com" = {
         identityFile = "~/.ssh/id_github";
       };
-
-      # TODO make these generic-ish per key/host group
-      "d39s-old" = {
-        hostname = "138.201.134.54";
-        user = "root";
-        identityFile = "~/.ssh/id_d39s";
-      };
-      "d39s-sx" = {
-        hostname = "88.99.58.198";
-        user = "root";
-        identityFile = "~/.ssh/id_d39s";
-      };
-      "d39s-sxvm" = {
-        hostname = "88.99.58.196";
-        user = "root";
-        identityFile = "~/.ssh/id_d39s";
-      };
+      # not part of the magic loop below because of special proxyJump
       "d39s-sxlh" = {
         hostname = "10.0.2.4";
         user = "root";
         identityFile = "~/.ssh/id_d39s";
         proxyJump = "d39s-sx";
       };
-      "d39s-spg" = {
-        hostname = "168.119.251.136";
+    } // builtins.listToAttrs ( map ( { name, ip }: {
+      name = "d39s-${name}";
+      value = {
+        hostname = ip;
         user = "root";
         identityFile = "~/.ssh/id_d39s";
       };
-      "d39s-innung" = {
-        hostname = "159.69.35.76";
-        user = "root";
-        identityFile = "~/.ssh/id_d39s";
-      };
-    };
+    } ) [
+      { name = "old"; ip = "138.201.134.54"; }
+      { name = "sx"; ip = "88.99.58.198"; }
+      { name = "sxvm"; ip = "88.99.58.196"; }
+      { name = "spg"; ip = "168.119.251.136"; }
+      { name = "innung"; ip = "159.69.35.76"; }
+    ]);
   };
 
   programs.fish = {

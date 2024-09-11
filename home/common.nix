@@ -70,6 +70,14 @@
       { name = "sxvm"; ip = "88.99.58.196"; }
       { name = "spg"; ip = "168.119.251.136"; }
       { name = "innung"; ip = "159.69.35.76"; }
+      { name = "buildbox"; ip = "95.217.233.49"; }
+      { name = "control-1"; ip = "162.55.169.122"; }
+      { name = "control-2"; ip = "167.235.242.88"; }
+      { name = "control-3"; ip = "5.75.226.245"; }
+      { name = "worker-1"; ip = "78.46.237.164"; }
+      { name = "worker-2"; ip = "167.235.229.191"; }
+      { name = "worker-3"; ip = "168.119.96.92"; }
+      { name = "worker-4"; ip = "5.75.242.73"; }
     ]);
   };
 

@@ -97,6 +97,7 @@
         ./hardware/keyboard.nix
         ./hardware/fans.nix
         ./hardware/mouse.nix
+        ./hardware/printer.nix
         ./mounts.nix
       ];
       stateVersion = "23.11";

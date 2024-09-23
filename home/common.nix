@@ -81,6 +81,12 @@
       { name = "worker-2"; ip = "167.235.229.191"; }
       { name = "worker-3"; ip = "168.119.96.92"; }
       { name = "worker-4"; ip = "5.75.242.73"; }
+      { name = "wp-control-1"; ip = "49.12.78.242"; }
+      { name = "wp-control-2"; ip = "195.201.20.201"; }
+      { name = "wp-control-3"; ip = "116.203.99.54"; }
+      { name = "wp-worker-1"; ip = "157.90.160.195"; }
+      { name = "wp-worker-2"; ip = "49.13.237.69"; }
+      { name = "wp-worker-3"; ip = "128.140.97.2"; }
     ]);
   };
 

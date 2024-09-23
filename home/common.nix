@@ -32,6 +32,9 @@
     "workbench.startupEditor" = "none";
     "gitlens.showWelcomeOnInstall" = false;
     "explorer.confirmDragAndDrop" = false;
+    "vs-kubernetes" = {
+      "vs-kubernetes.crd-code-completion" = "enabled";
+    };
   };
   programs.vscode.extensions = with pkgs.vscode-marketplace; [
     ms-python.python

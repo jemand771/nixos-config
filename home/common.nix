@@ -60,6 +60,12 @@
         identityFile = "~/.ssh/id_d39s";
         proxyJump = "d39s-sx";
       };
+      "d39s-wp-shopdata" = {
+        hostname = "10.0.121.50";
+        user = "root";
+        identityFile = "~/.ssh/id_d39s";
+        port = 30022;
+      };
     } // builtins.listToAttrs ( map ( { name, ip }: {
       name = "d39s-${name}";
       value = {

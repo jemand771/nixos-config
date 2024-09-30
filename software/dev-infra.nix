@@ -4,6 +4,7 @@
   options.jemand771.dev-infra.enable = lib.mkEnableOption "infra development";
   config.environment.systemPackages = with pkgs; lib.mkIf config.jemand771.dev-infra.enable [
     argocd
+    cilium-cli
     k9s
     kubernetes-helm
     kubectl

@@ -93,6 +93,8 @@
       { name = "wp-worker-1"; ip = "157.90.160.195"; }
       { name = "wp-worker-2"; ip = "49.13.237.69"; }
       { name = "wp-worker-3"; ip = "128.140.97.2"; }
+      { name = "wp-worker-4"; ip = "188.245.68.87"; }
+      { name = "wp-worker-5"; ip = "49.13.230.248"; }
     ]);
   };
 

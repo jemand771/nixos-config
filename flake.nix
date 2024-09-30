@@ -100,6 +100,11 @@
         ./hardware/printer.nix
         ./mounts.nix
       ];
+      homeModules = [
+        {
+          jemand771.desktopLagFix.enable = true;
+        }
+      ];
       stateVersion = "23.11";
     };
     nixosConfigurations.nixtique = nixosSystem {

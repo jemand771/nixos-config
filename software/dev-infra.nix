@@ -3,10 +3,13 @@
 {
   options.jemand771.dev-infra.enable = lib.mkEnableOption "infra development";
   config.environment.systemPackages = with pkgs; lib.mkIf config.jemand771.dev-infra.enable [
+    argocd
+    k9s
     kubernetes-helm
     kubectl
     unstable.kubectl-df-pv
     kubeseal
+    kustomize
     minikube
     # TODO headlamp desktop file
     (pkgs.appimageTools.wrapType1 {

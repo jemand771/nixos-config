@@ -103,6 +103,11 @@
     interactiveShellInit = ''
       set fish_greeting
     '';
+    shellAbbrs = {
+      k = "kubectl";
+      kc = "kubectl config use-context";
+      kn = "kubectl config set-context --current --namespace";
+    };
   };
   programs.starship = {
     enable = true;

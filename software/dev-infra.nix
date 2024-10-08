@@ -8,6 +8,7 @@
     k9s
     kubernetes-helm
     kubectl
+    kubectl-cnpg
     unstable.kubectl-df-pv
     kubeseal
     kustomize

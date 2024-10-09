@@ -45,6 +45,7 @@
     editorconfig.editorconfig
     astro-build.astro-vscode
     mkhl.direnv
+    unifiedjs.vscode-mdx
   ];
 
   programs.ssh = {

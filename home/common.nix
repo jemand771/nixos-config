@@ -91,11 +91,11 @@
       { name = "wp-control-1"; ip = "49.12.78.242"; }
       { name = "wp-control-2"; ip = "195.201.20.201"; }
       { name = "wp-control-3"; ip = "116.203.99.54"; }
-      { name = "wp-worker-1"; ip = "157.90.160.195"; }
-      { name = "wp-worker-2"; ip = "49.13.237.69"; }
-      { name = "wp-worker-3"; ip = "128.140.97.2"; }
       { name = "wp-worker-4"; ip = "188.245.68.87"; }
       { name = "wp-worker-5"; ip = "49.13.230.248"; }
+      { name = "wp-worker-6"; ip = "188.245.174.105"; }
+      { name = "wp-worker-7"; ip = "188.245.174.104"; }
+      { name = "wp-worker-8"; ip = "188.245.177.7"; }
     ]);
   };
 

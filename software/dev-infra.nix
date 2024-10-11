@@ -6,6 +6,7 @@
     argocd
     cilium-cli
     k9s
+    kube-capacity
     kube-linter
     kubernetes-helm
     kubectl

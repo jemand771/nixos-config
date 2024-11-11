@@ -110,8 +110,7 @@
     nixosConfigurations.nixbook = nixosSystem {
       modules = [
         {
-          # jemand771.meta.personal-system = true;
-          jemand771.home-manager.enable = true;
+          jemand771.meta.personal-system = true;
         }
         ./hosts/nixbook.nix
         ./hardware/nixbook.nix
@@ -125,9 +124,6 @@
         {
           jemand771.meta.personal-system = true;
         }
-        # agenix.nixosModules.default
-        # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
-        # ./secrets-nixos.nix
         ./hosts/nixtique.nix
         ./hardware/nixtique.nix
         ./hardware/mouse.nix
@@ -142,9 +138,6 @@
         {
           jemand771.meta.personal-system = true;
         }
-        # agenix.nixosModules.default
-        # { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
-        # ./secrets-nixos.nix
         ./hosts/nixbox2.nix
         ./hardware/nixbox2.nix
         ./hardware/mouse.nix

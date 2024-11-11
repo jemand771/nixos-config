@@ -5,6 +5,8 @@
 { config, pkgs, ... }:
 
 {
+  services.fprintd.enable = true;
+  hardware.keyboard.qmk.enable = true;
   imports =
     [ # Include the results of the hardware scan.
       # ./hardware-configuration.nix

@@ -107,6 +107,19 @@
       ];
       stateVersion = "23.11";
     };
+    nixosConfigurations.nixbook = nixosSystem {
+      modules = [
+        {
+          # jemand771.meta.personal-system = true;
+          jemand771.home-manager.enable = true;
+        }
+        ./hosts/nixbook.nix
+        ./hardware/nixbook.nix
+        ./hardware/mouse.nix
+        ./hardware/printer.nix
+      ];
+      stateVersion = "24.05";
+    };
     nixosConfigurations.nixtique = nixosSystem {
       modules = [
         {

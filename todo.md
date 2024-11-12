@@ -15,7 +15,6 @@
 * keyboard remapping
 * keyboard backlight
 * better sleep states (see nixos-hardware)
-* init syncthing
 
 ## secrets
 * revive agenix

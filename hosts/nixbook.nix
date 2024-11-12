@@ -8,6 +8,7 @@
   # framework specific stuff
   services.fprintd.enable = true;
   hardware.keyboard.qmk.enable = true;
+  services.fwupd.enable = true;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;

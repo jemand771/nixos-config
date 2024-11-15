@@ -31,6 +31,10 @@ in
           path = "/home/willy/repos";
           inherit devices;
         };
+        "data" = {
+          path = "/home/willy/data";
+          inherit devices;
+        };
         "PrismLauncher" = {
           path = "/home/willy/.local/share/PrismLauncher";
           inherit devices;

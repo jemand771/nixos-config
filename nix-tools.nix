@@ -25,6 +25,11 @@
     attic-client
   ];
 
+  nix.settings.substituters = [
+    # TODO: only as long as all my NixOS systems are physically at home
+    "http://10.7.5.4:8080/cache"
+  ];
+
   nix.gc = {
     automatic = true;
     options = "--delete-older-than 30d";

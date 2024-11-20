@@ -41,7 +41,9 @@
 
 # TODO nix-ify this config?
 # manual setup:
-# server: atticd-atticadm make-token --sub nixbox --validity 100y
-# or maybe.. atticd-atticadm  make-token --sub nixbox --validity 100y --pull '*' --push '*' --delete '*' --create-cache '*' --configure-cache '*' --configure-cache-retention '*' --destroy-cache '*'
-# client: attic login home http://10.7.5.4 ey... (copy paste)
-# 
+# create token: atticd-atticadm  make-token --sub nixbox --validity 10y --pull '*' --push '*' --delete '*' --create-cache '*' --configure-cache '*' --configure-cache-retention '*' --destroy-cache '*'
+# client: attic login home http://10.7.5.4:8080/ ey... (copy paste)
+# create and configure the cache:
+# attic cache create cache
+# attic cache configure cache --public
+# attic cache configure cache --public

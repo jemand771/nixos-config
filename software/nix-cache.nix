@@ -48,3 +48,4 @@
 # attic cache configure cache --public
 # attic cache configure cache --retention-period "1 month"
 # attic cache configure cache --priority 30
+# attic cache configure cache --upstream-cache-key-name ""

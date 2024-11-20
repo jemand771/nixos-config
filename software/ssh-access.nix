@@ -5,9 +5,5 @@ let keys = [
 in
 {
   # if I have a user, allow ssh as that, otherwise root
-  # TODO broken
-  # users.users.willy = lib.mkIf (lib.hasAttr "willy" config.users.users) {
-  #   openssh.authorizedKeys.keys = keys;
-  # };
-  users.users.root.openssh.authorizedKeys.keys = lib.mkIf (!lib.hasAttr "willy" config.users.users) keys;
+  users.users.root.openssh.authorizedKeys.keys = lib.mkIf (!config.jemand771.meta.personal-system) keys;
 }

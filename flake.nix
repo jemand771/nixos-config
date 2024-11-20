@@ -36,6 +36,7 @@
     home-manager,
     plasma-manager,
     nix-vscode-extensions,
+    attic,
     ...
   }: let nixosSystem = { modules ? [], homeModules ? [], system ? "x86_64-linux", stateVersion }: nixpkgs.lib.nixosSystem {
     inherit system;

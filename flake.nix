@@ -22,6 +22,10 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    attic = {
+      url = "github:zhaofengli/attic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{
@@ -169,6 +173,8 @@
       modules = [
         # TODO this is probably bad, how to modulesPath ?
         ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+        ./software/nix-cache
+        attic.nixosModules.atticd
         {
           jemand771.auto-upgrade.enable = true;
         }

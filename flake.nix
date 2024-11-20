@@ -165,5 +165,15 @@
       ];
       stateVersion = "24.05";
     };
+    nixosConfigurations.nix-cache = nixosSystem {
+      modules = [
+        # TODO this is probably bad, how to modulesPath ?
+        ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+        {
+          jemand771.auto-upgrade.enable = true;
+        }
+      ];
+      stateVersion = "24.05";
+    };
   };
 }

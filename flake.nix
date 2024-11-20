@@ -82,6 +82,7 @@
       ./software/gaming.nix
       ./software/auto-upgrade.nix
       ./sync.nix
+      ./software/ssh-access.nix
       { system = { inherit stateVersion; }; }
     ] ++ modules;
   };

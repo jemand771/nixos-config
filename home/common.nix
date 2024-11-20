@@ -68,6 +68,16 @@
         port = 30022;
       };
     } // builtins.listToAttrs ( map ( { name, ip }: {
+      inherit name;
+      value = {
+        hostname = ip;
+        user = "root";
+      };
+    } ) [
+      { name = "apt-cache"; ip = "10.7.5.2"; }
+      { name = "syncthing-arbiter"; ip = "10.7.5.3"; }
+      { name = "nix-cache"; ip = "10.7.5.4"; }
+    ]) // builtins.listToAttrs ( map ( { name, ip }: {
       name = "d39s-${name}";
       value = {
         hostname = ip;

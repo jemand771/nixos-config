@@ -4,7 +4,7 @@
     enable = true;
 
     # TODO this should ideally live in /etc and be managed by agenix
-    environmentFile = "/root/atticd.env";
+    environmentFile = "/attic/atticd.env";
     
     # defaults from https://docs.attic.rs/admin-guide/deployment/nixos.html
     settings = {
@@ -37,3 +37,9 @@
     };
   };
 }
+
+# TODO nix-ify this config?
+# manual setup:
+# server: atticd-atticadm make-token --sub nixbox --validity 100y
+# client: attic login home http://10.7.5.4 ey... (copy paste)
+# 

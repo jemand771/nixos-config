@@ -46,4 +46,5 @@
 # create and configure the cache:
 # attic cache create cache
 # attic cache configure cache --public
-# attic cache configure cache --public
+# attic cache configure cache --retention-period "1 month"
+# attic cache configure cache --priority 30

@@ -29,6 +29,9 @@
     # TODO: only as long as all my NixOS systems are physically at home
     "http://10.7.5.4:8080/cache"
   ];
+  nix.settings.trusted-public-keys = [
+    "cache:tYBQfUirWSN3x1H31lKbKHEBQn4xCWGf56dfbEgMDnQ="
+  ];
 
   nix.gc = {
     automatic = true;

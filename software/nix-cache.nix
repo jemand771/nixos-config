@@ -44,7 +44,7 @@
 # create token: atticd-atticadm  make-token --sub nixbox --validity 10y --pull '*' --push '*' --delete '*' --create-cache '*' --configure-cache '*' --configure-cache-retention '*' --destroy-cache '*'
 # client: attic login home http://10.7.5.4:8080/ ey... (copy paste)
 # create and configure the cache:
-# attic cache create cache
+# attic cache create cache (also remember to update the public key in nix.conf)
 # attic cache configure cache --public
 # attic cache configure cache --retention-period "1 month"
 # attic cache configure cache --priority 30

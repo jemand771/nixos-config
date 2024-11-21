@@ -64,4 +64,10 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings.General.Experimental = true;
+  };
 }

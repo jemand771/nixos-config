@@ -5,6 +5,7 @@
     environment.systemPackages = with pkgs; [
       heroic
       tetrio-desktop
+      obs-studio
       prismlauncher
     ];
 

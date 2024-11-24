@@ -63,7 +63,6 @@
       (google-cloud-sdk.withExtraComponents( with pkgs.google-cloud-sdk.components; [
         gke-gcloud-auth-plugin
       ]))
-      obs-studio
       (blender.override {
         cudaSupport = true;
       })

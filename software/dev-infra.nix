@@ -27,6 +27,7 @@
       opentofu
       spice-gtk
       quickemu
+      virt-viewer
     ];
     virtualisation.spiceUSBRedirection.enable = true;
   };

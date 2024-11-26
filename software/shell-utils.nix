@@ -14,6 +14,7 @@
         nmap
         pv
         rclone
+        usbutils
         yt-dlp
     ];
 

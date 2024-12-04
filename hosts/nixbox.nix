@@ -105,7 +105,6 @@
     wineWow64Packages.full
     winetricks
     protontricks
-    nodejs_20
     qpwgraph
   ];
   hardware.xone.enable = true;

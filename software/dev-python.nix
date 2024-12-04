@@ -8,5 +8,6 @@
       requests
       tabulate
     ]))
+    nodejs_20
   ];
 }

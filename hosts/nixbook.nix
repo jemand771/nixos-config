@@ -10,6 +10,8 @@
   hardware.keyboard.qmk.enable = true;
   services.fwupd.enable = true;
   services.power-profiles-daemon.enable = true;
+  # TODO move me
+  environment.systemPackages = with pkgs; [ blender ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;

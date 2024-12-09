@@ -54,7 +54,7 @@
   users.users.willy = {
     isNormalUser = true;
     description = "willy";
-    extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" "dialout" ];
     packages = with pkgs; [
       gpu-screen-recorder-gtk
       lutris

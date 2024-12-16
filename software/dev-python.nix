@@ -9,5 +9,7 @@
       tabulate
     ]))
     nodejs_20
+    # TODO move me
+    prusa-slicer
   ];
 }

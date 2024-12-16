@@ -2,7 +2,7 @@
   description = "Willy's NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     agenix = {
       url = "github:ryantm/agenix";
@@ -10,7 +10,7 @@
       inputs.darwin.follows = "";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     plasma-manager = {
@@ -20,10 +20,6 @@
     };
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    attic = {
-      url = "github:zhaofengli/attic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -36,7 +32,6 @@
     home-manager,
     plasma-manager,
     nix-vscode-extensions,
-    attic,
     ...
   }: let nixosSystem = { modules ? [], homeModules ? [], system ? "x86_64-linux", stateVersion }: nixpkgs.lib.nixosSystem {
     inherit system;
@@ -176,7 +171,6 @@
         # TODO this is probably bad, how to modulesPath ?
         ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
         ./software/nix-cache.nix
-        attic.nixosModules.atticd
         {
           jemand771.auto-upgrade.enable = true;
         }

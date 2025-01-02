@@ -102,6 +102,7 @@
         ./mounts.nix
       ];
       homeModules = [
+        ./hardware/keyboard-user.nix
         {
           jemand771.desktopLagFix.enable = true;
         }

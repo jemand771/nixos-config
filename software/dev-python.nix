@@ -11,5 +11,7 @@
     nodejs_20
     # TODO move me
     prusa-slicer
+    platformio
+    platformio-core
   ];
 }

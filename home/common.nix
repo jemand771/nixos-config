@@ -35,7 +35,10 @@
     "vs-kubernetes" = {
       "vs-kubernetes.crd-code-completion" = "enabled";
     };
+    "platformio-ide.useBuiltinPIOCore" = false;
   };
+  # TODO enable me when cpp extension is available again
+  # programs.vscode.mutableExtensionsDir = false;
   programs.vscode.extensions = with pkgs.vscode-marketplace; [
     ms-python.python
     bbenoist.nix
@@ -46,6 +49,9 @@
     astro-build.astro-vscode
     mkhl.direnv
     unifiedjs.vscode-mdx
+    # ms-vscode.cpptools
+    platformio.platformio-ide
+    marlinfirmware.auto-build
   ];
 
   programs.ssh = {
@@ -105,7 +111,8 @@
       { name = "wp-worker-5"; ip = "49.13.230.248"; }
       { name = "wp-worker-6"; ip = "188.245.174.105"; }
       { name = "wp-worker-7"; ip = "188.245.174.104"; }
-      { name = "wp-worker-8"; ip = "188.245.177.7"; }
+      { name = "wp-worker-9"; ip = "49.13.237.69"; }
+      { name = "wp-worker-10"; ip = "188.245.187.252"; }
     ]);
   };
 

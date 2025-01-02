@@ -25,6 +25,7 @@
         };
       })
       opentofu
+      samba
       spice-gtk
       quickemu
       virt-viewer

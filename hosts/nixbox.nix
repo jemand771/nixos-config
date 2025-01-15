@@ -131,7 +131,10 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    daemon.settings.features.containerd-snapshotter = true;
+  };
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
   services.openssh.enable = true;

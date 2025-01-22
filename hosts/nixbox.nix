@@ -138,6 +138,7 @@
   boot.binfmt.emulatedSystems = [
     "aarch64-linux"
   ];
+  boot.binfmt.preferStaticEmulators = true;
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
   services.openssh.enable = true;

@@ -22,6 +22,14 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-minecraft = {
+      url = "github:Infinidoge/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-vanillatweaks = {
+      url = "github:jemand771/nix-vanillatweaks";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{
@@ -32,6 +40,8 @@
     home-manager,
     plasma-manager,
     nix-vscode-extensions,
+    nix-minecraft,
+    nix-vanillatweaks,
     ...
   }: let nixosSystem = { modules ? [], homeModules ? [], system ? "x86_64-linux", stateVersion }: nixpkgs.lib.nixosSystem {
     inherit system;
@@ -100,6 +110,7 @@
         ./hardware/mouse.nix
         ./hardware/printer.nix
         ./mounts.nix
+        ./playground/minecraft.nix
       ];
       homeModules = [
         ./hardware/keyboard-user.nix

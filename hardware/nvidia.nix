@@ -34,7 +34,7 @@
     # accessible via `nvidia-settings`.
     nvidiaSettings = true;
 
-    package = (pkgs.unstable.linuxPackagesFor config.boot.kernelPackages.kernel).nvidiaPackages.latest;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
 
   # https://github.com/NixOS/nixpkgs/issues/334180

@@ -30,6 +30,11 @@
       url = "github:jemand771/nix-vanillatweaks";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-utils.url = "github:numtide/flake-utils";
+    colmena = {
+      url = "github:zhaofengli/colmena";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{
@@ -42,6 +47,8 @@
     nix-vscode-extensions,
     nix-minecraft,
     nix-vanillatweaks,
+    flake-utils,
+    colmena,
     ...
   }: let nixosSystem = { modules ? [], homeModules ? [], system ? "x86_64-linux", stateVersion }: nixpkgs.lib.nixosSystem {
     inherit system;
@@ -90,6 +97,8 @@
       ./software/ssh-access.nix
       { system = { inherit stateVersion; }; }
     ] ++ modules;
+    # https://github.com/zhaofengli/colmena/issues/60#issuecomment-1047199551
+    extraModules = [ colmena.nixosModules.deploymentOptions ];
   };
   in {
     nixosConfigurations.nixbox = nixosSystem {
@@ -161,6 +170,7 @@
       modules = [
         ./software/apt-cache.nix
         {
+          deployment.tags = [ "homelab" ];
           jemand771.auto-upgrade.enable = true;
         }
       ];
@@ -171,6 +181,7 @@
         # TODO this is probably bad, how to modulesPath ?
         ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
         {
+          deployment.tags = [ "homelab" ];
           users.users.willy.isNormalUser = true;
           jemand771.syncthing.enable = true;
           jemand771.auto-upgrade.enable = true;
@@ -184,10 +195,37 @@
         ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
         ./software/nix-cache.nix
         {
+          deployment.tags = [ "homelab" ];
           jemand771.auto-upgrade.enable = true;
         }
       ];
       stateVersion = "24.05";
     };
-  };
+    colmenaHive = colmena.lib.makeHive ({
+      meta = {
+        # TODO how to make this work on whatever system you're running this from?
+        nixpkgs = (import nixpkgs { system = "x86_64-linux"; });
+        nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) self.nixosConfigurations;
+        nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) self.nixosConfigurations;
+        allowApplyAll = false;
+      };
+    } // builtins.mapAttrs (name: value: { imports = value._module.args.modules; }) self.nixosConfigurations);
+  } // flake-utils.lib.eachDefaultSystem (system: 
+    let pkgs = nixpkgs.legacyPackages.${system}; in
+    {
+      devShells.default = pkgs.mkShell {
+        nativeBuildInputs = [ 
+          (pkgs.symlinkJoin {
+            name = "colmena";
+            paths = [ colmena.packages.${system}.colmena ];
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+            postBuild = ''
+              wrapProgram $out/bin/colmena \
+                --add-flags "--experimental-flake-eval"
+            '';
+          })
+        ];
+      };
+    }
+  );
 }

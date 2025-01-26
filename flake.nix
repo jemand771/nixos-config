@@ -226,6 +226,7 @@
           })
         ];
       };
+      formatter = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
     }
   );
 }

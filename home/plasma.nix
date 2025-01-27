@@ -1,4 +1,10 @@
-{ config, osConfig, lib, pkgs, ... }:
+{
+  config,
+  osConfig,
+  lib,
+  pkgs,
+  ...
+}:
 {
   programs.plasma = lib.mkIf osConfig.jemand771.plasma.enable {
     enable = true;

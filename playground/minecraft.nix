@@ -43,8 +43,9 @@
           # TODO that's not how you do it
           inputs.nix-vanillatweaks.legacyPackages.x86_64-linux.datapacks."1.21".decorative-cosmetic.name-colors
         ];
-        mods = pkgs.linkFarmFromDrvs "mods" (builtins.attrValues {
-          # TODO all mods
+        mods = pkgs.linkFarmFromDrvs "mods" (
+          builtins.attrValues {
+            # TODO all mods
             #     https://media.forgecdn.net/files/3559/638/cloth-config-6.1.48-fabric.jar,
             #     https://media.forgecdn.net/files/3549/539/bettersleeping-0.5.1%2B1.18.jar,
             #     https://media.forgecdn.net/files/3577/46/fabric-api-0.45.0%2B1.18.jar,
@@ -69,8 +70,12 @@
             #     https://media.forgecdn.net/files/3541/799/ledger-1.2.0.jar,
             #     https://media.forgecdn.net/files/3585/804/beenfo-1.18.1-fabric0.45.0-1.3.3.jar,
             #     https://media.forgecdn.net/files/3545/767/LuckPerms-Fabric-5.3.86.jar
-          ClothConfig = pkgs.fetchurl { url = "https://cdn.modrinth.com/data/9s6osm5g/versions/2deYQULk/cloth-config-13.0.138-fabric.jar"; sha256 = "0spmq7b0b54b3r050hjip1rmshznxc95zzzxdpdff8kqgwmxrc54"; };
-        });
+            ClothConfig = pkgs.fetchurl {
+              url = "https://cdn.modrinth.com/data/9s6osm5g/versions/2deYQULk/cloth-config-13.0.138-fabric.jar";
+              sha256 = "0spmq7b0b54b3r050hjip1rmshznxc95zzzxdpdff8kqgwmxrc54";
+            };
+          }
+        );
       };
     };
   };

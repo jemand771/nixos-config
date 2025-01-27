@@ -18,7 +18,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixbook"; # Define your hostname.
-  
+
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -56,7 +56,10 @@
   users.users.willy = {
     isNormalUser = true;
     description = "willy";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
     ];
   };

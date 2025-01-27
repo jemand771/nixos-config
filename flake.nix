@@ -37,196 +37,223 @@
     };
   };
 
-  outputs = inputs@{
-    self,
-    nixpkgs,
-    nixpkgs-unstable,
-    agenix,
-    home-manager,
-    plasma-manager,
-    nix-vscode-extensions,
-    nix-minecraft,
-    nix-vanillatweaks,
-    flake-utils,
-    colmena,
-    ...
-  }: let nixosSystem = { modules ? [], homeModules ? [], system ? "x86_64-linux", stateVersion }: nixpkgs.lib.nixosSystem {
-    inherit system;
-    specialArgs = { inherit inputs; };
-    modules = [
-      {
-        # make unstable packages available as pkgs.unstable
-        nixpkgs.overlays = [
-          (_: prev: ({
-            unstable = import inputs.nixpkgs-unstable { config.allowUnfree = true; inherit (prev.stdenv.hostPlatform) system; };
-          }))
-          nix-vscode-extensions.overlays.default
-        ];
-      }
-      ./meta-options.nix
-      ./home/options.nix
-      home-manager.nixosModules.home-manager
-      ({ config, ...}:
-      {
-        options.jemand771.home-manager.enable = nixpkgs.lib.mkEnableOption "home-manager";
-        config.home-manager = nixpkgs.lib.mkIf config.jemand771.home-manager.enable {
-          useGlobalPkgs = true;
-          useUserPackages = true;
-          sharedModules = [
-            plasma-manager.homeManagerModules.plasma-manager
-          ];
-          users.willy.imports = [
-            ./home/common.nix
-            ./home/desktop-lag-fix.nix
-            ./home/plasma.nix
-            ./home/thunderbird.nix
-            { home = { inherit stateVersion; }; }
-          ] ++ homeModules;
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      nixpkgs-unstable,
+      agenix,
+      home-manager,
+      plasma-manager,
+      nix-vscode-extensions,
+      nix-minecraft,
+      nix-vanillatweaks,
+      flake-utils,
+      colmena,
+      ...
+    }:
+    let
+      nixosSystem =
+        {
+          modules ? [ ],
+          homeModules ? [ ],
+          system ? "x86_64-linux",
+          stateVersion,
+        }:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs; };
+          modules = [
+            {
+              # make unstable packages available as pkgs.unstable
+              nixpkgs.overlays = [
+                (_: prev: ({
+                  unstable = import inputs.nixpkgs-unstable {
+                    config.allowUnfree = true;
+                    inherit (prev.stdenv.hostPlatform) system;
+                  };
+                }))
+                nix-vscode-extensions.overlays.default
+              ];
+            }
+            ./meta-options.nix
+            ./home/options.nix
+            home-manager.nixosModules.home-manager
+            (
+              { config, ... }:
+              {
+                options.jemand771.home-manager.enable = nixpkgs.lib.mkEnableOption "home-manager";
+                config.home-manager = nixpkgs.lib.mkIf config.jemand771.home-manager.enable {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  sharedModules = [
+                    plasma-manager.homeManagerModules.plasma-manager
+                  ];
+                  users.willy.imports = [
+                    ./home/common.nix
+                    ./home/desktop-lag-fix.nix
+                    ./home/plasma.nix
+                    ./home/thunderbird.nix
+                    { home = { inherit stateVersion; }; }
+                  ] ++ homeModules;
+                };
+              }
+            )
+            ./nix-tools.nix
+            ./software/basics.nix
+            ./software/locale.nix
+            ./software/shell-utils.nix
+            ./software/office-utils.nix
+            ./software/dev-infra.nix
+            ./software/dev-python.nix
+            ./software/gaming.nix
+            ./software/auto-upgrade.nix
+            ./sync.nix
+            ./software/ssh-access.nix
+            { system = { inherit stateVersion; }; }
+          ] ++ modules;
+          # https://github.com/zhaofengli/colmena/issues/60#issuecomment-1047199551
+          extraModules = [ colmena.nixosModules.deploymentOptions ];
         };
-      })
-      ./nix-tools.nix
-      ./software/basics.nix
-      ./software/locale.nix
-      ./software/shell-utils.nix
-      ./software/office-utils.nix
-      ./software/dev-infra.nix
-      ./software/dev-python.nix
-      ./software/gaming.nix
-      ./software/auto-upgrade.nix
-      ./sync.nix
-      ./software/ssh-access.nix
-      { system = { inherit stateVersion; }; }
-    ] ++ modules;
-    # https://github.com/zhaofengli/colmena/issues/60#issuecomment-1047199551
-    extraModules = [ colmena.nixosModules.deploymentOptions ];
-  };
-  in {
-    nixosConfigurations.nixbox = nixosSystem {
-      modules = [
-        {
-          jemand771.meta.personal-system = true;
-        }
-        agenix.nixosModules.default
-        { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
-        ./secrets-nixos.nix
-        ./backups.nix
-        ./hosts/nixbox.nix
-        ./hardware/nixbox.nix
-        ./hardware/nvidia.nix
-        ./hardware/nic.nix
-        ./hardware/keyboard.nix
-        ./hardware/fans.nix
-        ./hardware/mouse.nix
-        ./hardware/printer.nix
-        ./mounts.nix
-        ./playground/minecraft.nix
-      ];
-      homeModules = [
-        ./hardware/keyboard-user.nix
-        {
-          jemand771.desktopLagFix.enable = true;
-        }
-      ];
-      stateVersion = "23.11";
-    };
-    nixosConfigurations.nixbook = nixosSystem {
-      modules = [
-        {
-          jemand771.meta.personal-system = true;
-        }
-        ./hosts/nixbook.nix
-        ./hardware/nixbook.nix
-        ./hardware/mouse.nix
-        ./hardware/printer.nix
-      ];
-      stateVersion = "24.05";
-    };
-    nixosConfigurations.nixtique = nixosSystem {
-      modules = [
-        {
-          jemand771.meta.personal-system = true;
-        }
-        ./hosts/nixtique.nix
-        ./hardware/nixtique.nix
-        ./hardware/mouse.nix
-        {
-          jemand771.plasma.enable = true;
-        }
-      ];
-      stateVersion = "24.05";
-    };
-    nixosConfigurations.nixbox2 = nixosSystem {
-      modules = [
-        {
-          jemand771.meta.personal-system = true;
-        }
-        ./hosts/nixbox2.nix
-        ./hardware/nixbox2.nix
-        ./hardware/mouse.nix
-      ];
-      stateVersion = "24.05";
-    };
-    nixosConfigurations.apt-cache = nixosSystem {
-      modules = [
-        ./software/apt-cache.nix
-        {
-          deployment.tags = [ "homelab" ];
-          jemand771.auto-upgrade.enable = true;
-        }
-      ];
-      stateVersion = "23.11";
-    };
-    nixosConfigurations.syncthing-arbiter = nixosSystem {
-      modules = [
-        # TODO this is probably bad, how to modulesPath ?
-        ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
-        {
-          deployment.tags = [ "homelab" ];
-          users.users.willy.isNormalUser = true;
-          jemand771.syncthing.enable = true;
-          jemand771.auto-upgrade.enable = true;
-        }
-      ];
-      stateVersion = "24.05";
-    };
-    nixosConfigurations.nix-cache = nixosSystem {
-      modules = [
-        # TODO this is probably bad, how to modulesPath ?
-        ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
-        ./software/nix-cache.nix
-        {
-          deployment.tags = [ "homelab" ];
-          jemand771.auto-upgrade.enable = true;
-        }
-      ];
-      stateVersion = "24.05";
-    };
-    colmenaHive = colmena.lib.makeHive ({
-      meta = {
-        # TODO how to make this work on whatever system you're running this from?
-        nixpkgs = (import nixpkgs { system = "x86_64-linux"; });
-        nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) self.nixosConfigurations;
-        nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) self.nixosConfigurations;
-        allowApplyAll = false;
-      };
-    } // builtins.mapAttrs (name: value: { imports = value._module.args.modules; }) self.nixosConfigurations);
-  } // flake-utils.lib.eachDefaultSystem (system: 
-    let pkgs = nixpkgs.legacyPackages.${system}; in
+    in
     {
-      devShells.default = pkgs.mkShell {
-        nativeBuildInputs = [ 
-          (pkgs.symlinkJoin {
-            name = "colmena";
-            paths = [ colmena.packages.${system}.colmena ];
-            nativeBuildInputs = [ pkgs.makeWrapper ];
-            postBuild = ''
-              wrapProgram $out/bin/colmena \
-                --add-flags "--experimental-flake-eval"
-            '';
-          })
+      nixosConfigurations.nixbox = nixosSystem {
+        modules = [
+          {
+            jemand771.meta.personal-system = true;
+          }
+          agenix.nixosModules.default
+          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
+          ./secrets-nixos.nix
+          ./backups.nix
+          ./hosts/nixbox.nix
+          ./hardware/nixbox.nix
+          ./hardware/nvidia.nix
+          ./hardware/nic.nix
+          ./hardware/keyboard.nix
+          ./hardware/fans.nix
+          ./hardware/mouse.nix
+          ./hardware/printer.nix
+          ./mounts.nix
+          ./playground/minecraft.nix
         ];
+        homeModules = [
+          ./hardware/keyboard-user.nix
+          {
+            jemand771.desktopLagFix.enable = true;
+          }
+        ];
+        stateVersion = "23.11";
       };
-      formatter = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
+      nixosConfigurations.nixbook = nixosSystem {
+        modules = [
+          {
+            jemand771.meta.personal-system = true;
+          }
+          ./hosts/nixbook.nix
+          ./hardware/nixbook.nix
+          ./hardware/mouse.nix
+          ./hardware/printer.nix
+        ];
+        stateVersion = "24.05";
+      };
+      nixosConfigurations.nixtique = nixosSystem {
+        modules = [
+          {
+            jemand771.meta.personal-system = true;
+          }
+          ./hosts/nixtique.nix
+          ./hardware/nixtique.nix
+          ./hardware/mouse.nix
+          {
+            jemand771.plasma.enable = true;
+          }
+        ];
+        stateVersion = "24.05";
+      };
+      nixosConfigurations.nixbox2 = nixosSystem {
+        modules = [
+          {
+            jemand771.meta.personal-system = true;
+          }
+          ./hosts/nixbox2.nix
+          ./hardware/nixbox2.nix
+          ./hardware/mouse.nix
+        ];
+        stateVersion = "24.05";
+      };
+      nixosConfigurations.apt-cache = nixosSystem {
+        modules = [
+          ./software/apt-cache.nix
+          {
+            deployment.tags = [ "homelab" ];
+            jemand771.auto-upgrade.enable = true;
+          }
+        ];
+        stateVersion = "23.11";
+      };
+      nixosConfigurations.syncthing-arbiter = nixosSystem {
+        modules = [
+          # TODO this is probably bad, how to modulesPath ?
+          ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+          {
+            deployment.tags = [ "homelab" ];
+            users.users.willy.isNormalUser = true;
+            jemand771.syncthing.enable = true;
+            jemand771.auto-upgrade.enable = true;
+          }
+        ];
+        stateVersion = "24.05";
+      };
+      nixosConfigurations.nix-cache = nixosSystem {
+        modules = [
+          # TODO this is probably bad, how to modulesPath ?
+          ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+          ./software/nix-cache.nix
+          {
+            deployment.tags = [ "homelab" ];
+            jemand771.auto-upgrade.enable = true;
+          }
+        ];
+        stateVersion = "24.05";
+      };
+      colmenaHive = colmena.lib.makeHive (
+        {
+          meta = {
+            # TODO how to make this work on whatever system you're running this from?
+            nixpkgs = (import nixpkgs { system = "x86_64-linux"; });
+            nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) self.nixosConfigurations;
+            nodeSpecialArgs = builtins.mapAttrs (
+              name: value: value._module.specialArgs
+            ) self.nixosConfigurations;
+            allowApplyAll = false;
+          };
+        }
+        // builtins.mapAttrs (name: value: {
+          imports = value._module.args.modules;
+        }) self.nixosConfigurations
+      );
     }
-  );
+    // flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          nativeBuildInputs = [
+            (pkgs.symlinkJoin {
+              name = "colmena";
+              paths = [ colmena.packages.${system}.colmena ];
+              nativeBuildInputs = [ pkgs.makeWrapper ];
+              postBuild = ''
+                wrapProgram $out/bin/colmena \
+                  --add-flags "--experimental-flake-eval"
+              '';
+            })
+          ];
+        };
+        formatter = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
+      }
+    );
 }

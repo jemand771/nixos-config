@@ -46,7 +46,10 @@
   users.users.willy = {
     isNormalUser = true;
     description = "willy";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
   };
 
   # Allow unfree packages

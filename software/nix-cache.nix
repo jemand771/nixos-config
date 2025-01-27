@@ -5,7 +5,7 @@
 
     # TODO this should ideally live in /etc and be managed by agenix
     environmentFile = "/attic/atticd.env";
-    
+
     # defaults from https://docs.attic.rs/admin-guide/deployment/nixos.html
     settings = {
       listen = "[::]:8080";

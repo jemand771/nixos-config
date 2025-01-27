@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   options.jemand771.gaming.enable = lib.mkEnableOption "gaming";
   config = lib.mkIf config.jemand771.gaming.enable {

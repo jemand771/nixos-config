@@ -53,15 +53,24 @@
   users.users.willy = {
     isNormalUser = true;
     description = "willy";
-    extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" "dialout" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "libvirtd"
+      "dialout"
+    ];
     packages = with pkgs; [
       gpu-screen-recorder-gtk
       lutris
       jetbrains-toolbox
       firefox
-      (google-cloud-sdk.withExtraComponents( with pkgs.google-cloud-sdk.components; [
-        gke-gcloud-auth-plugin
-      ]))
+      (google-cloud-sdk.withExtraComponents (
+        with pkgs.google-cloud-sdk.components;
+        [
+          gke-gcloud-auth-plugin
+        ]
+      ))
       (blender.override {
         cudaSupport = true;
       })
@@ -72,11 +81,13 @@
 
   security.sudo.extraRules = [
     {
-      users = ["willy"];
-      commands = [{
-        command = "ALL";
-        options = ["NOPASSWD"];
-      }];
+      users = [ "willy" ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
     }
   ];
 

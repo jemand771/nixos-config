@@ -30,6 +30,9 @@
     description = "apt-cacher-ng";
     serviceConfig = {
       ExecStart = "${pkgs.apt-cacher-ng}/bin/apt-cacher-ng -c /etc/nixos/acng/";
+      Restart = "always";
+      RestartSec = 5;
     };
+    wantedBy = [ "multi-user.target" ]; 
   };
 }

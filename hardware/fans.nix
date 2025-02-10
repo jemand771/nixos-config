@@ -11,14 +11,14 @@
   # so I'll have to look into that some more.
   hardware.fancontrol.config = ''
     INTERVAL=1
-    DEVPATH=hwmon1=devices/pci0000:00/0000:00:18.3 hwmon6=devices/platform/nct6775.656
-    DEVNAME=hwmon1=k10temp hwmon6=nct6799
-    FCTEMPS=hwmon6/pwm2=hwmon1/temp1_input hwmon6/pwm4=hwmon6/temp2_input hwmon6/pwm6=hwmon6/temp2_input
-    FCFANS=hwmon6/pwm2=hwmon6/fan2_input hwmon6/pwm4=hwmon6/fan4_input hwmon6/pwm6=hwmon6/fan6_input
-    MINTEMP=hwmon6/pwm2=60 hwmon6/pwm4=40 hwmon6/pwm6=40
-    MAXTEMP=hwmon6/pwm2=90 hwmon6/pwm4=50 hwmon6/pwm6=50
-    MINSTART=hwmon6/pwm2=50 hwmon6/pwm4=50 hwmon6/pwm6=50
-    MINSTOP=hwmon6/pwm2=50 hwmon6/pwm4=50 hwmon6/pwm6=50
-    MINPWM=hwmon6/pwm2=50 hwmon6/pwm4=50 hwmon6/pwm6=50
+    DEVPATH=hwmon1=devices/pci0000:00/0000:00:18.3 hwmon4=devices/platform/nct6775.656
+    DEVNAME=hwmon1=k10temp hwmon4=nct6799
+    FCTEMPS=hwmon4/pwm2=hwmon1/temp1_input hwmon4/pwm4=hwmon4/temp2_input hwmon4/pwm6=hwmon4/temp2_input
+    FCFANS=hwmon4/pwm2=hwmon4/fan2_input hwmon4/pwm4=hwmon4/fan4_input hwmon4/pwm6=hwmon4/fan6_input
+    MINTEMP=hwmon4/pwm2=60 hwmon4/pwm4=30 hwmon4/pwm6=30
+    MAXTEMP=hwmon4/pwm2=90 hwmon4/pwm4=50 hwmon4/pwm6=50
+    MINSTART=hwmon4/pwm2=50 hwmon4/pwm4=50 hwmon4/pwm6=50
+    MINSTOP=hwmon4/pwm2=50 hwmon4/pwm4=50 hwmon4/pwm6=50
+    MINPWM=hwmon4/pwm2=50 hwmon4/pwm4=50 hwmon4/pwm6=50
   '';
 }

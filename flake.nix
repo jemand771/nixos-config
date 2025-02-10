@@ -35,6 +35,10 @@
       url = "github:zhaofengli/colmena";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    microvm = {
+      url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -50,6 +54,7 @@
       nix-vanillatweaks,
       flake-utils,
       colmena,
+      microvm,
       ...
     }:
     let
@@ -136,6 +141,8 @@
           ./hardware/printer.nix
           ./mounts.nix
           ./playground/minecraft.nix
+          microvm.nixosModules.host
+          ./playground/vms.nix
         ];
         homeModules = [
           ./hardware/keyboard-user.nix

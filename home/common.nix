@@ -51,6 +51,7 @@
     pkgs.unstable.vscode-extensions.ms-vscode.cpptools
     platformio.platformio-ide
     marlinfirmware.auto-build
+    ms-vsliveshare.vsliveshare
   ];
 
   programs.ssh = {

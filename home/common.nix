@@ -52,6 +52,7 @@
     platformio.platformio-ide
     marlinfirmware.auto-build
     ms-vsliveshare.vsliveshare
+    eamodio.gitlens
   ];
 
   programs.ssh = {

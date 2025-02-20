@@ -37,8 +37,7 @@
     };
     "platformio-ide.useBuiltinPIOCore" = false;
   };
-  # TODO enable me when cpp extension is available again
-  # programs.vscode.mutableExtensionsDir = false;
+  programs.vscode.mutableExtensionsDir = false;
   programs.vscode.extensions = with pkgs.vscode-marketplace; [
     ms-python.python
     bbenoist.nix
@@ -49,7 +48,7 @@
     astro-build.astro-vscode
     mkhl.direnv
     unifiedjs.vscode-mdx
-    # ms-vscode.cpptools
+    pkgs.unstable.vscode-extensions.ms-vscode.cpptools
     platformio.platformio-ide
     marlinfirmware.auto-build
   ];

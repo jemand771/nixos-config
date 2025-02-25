@@ -53,6 +53,7 @@
     marlinfirmware.auto-build
     ms-vsliveshare.vsliveshare
     eamodio.gitlens
+    ms-kubernetes-tools.vscode-kubernetes-tools
   ];
 
   programs.ssh = {

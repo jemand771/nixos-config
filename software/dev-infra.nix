@@ -33,6 +33,7 @@
       samba
       spice-gtk
       quickemu
+      velero
       virt-viewer
     ];
     virtualisation.spiceUSBRedirection.enable = true;

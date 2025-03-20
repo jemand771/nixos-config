@@ -30,6 +30,7 @@
         };
       })
       opentofu
+      rancher
       samba
       spice-gtk
       quickemu

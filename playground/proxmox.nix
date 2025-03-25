@@ -13,6 +13,7 @@ inputs.nixpkgs.lib.nixosSystem {
       boot.loader.grub.device = "/dev/vda";
       boot.loader.grub.useOSProber = true;
       networking.hostName = "proxmox-test-${builtins.toString id}";
+      networking.hostId = if id == 1 then "b6f8760a" else if id == 2 then "9d8521db" else if id == 3 then "34a9b41a" else "";
       networking.useDHCP = false;
       fileSystems."/" = {
         device = if id == 1 then "/dev/disk/by-uuid/b96b5b53-f1f6-4ea8-a84c-ab3dd14a4146"
@@ -21,7 +22,6 @@ inputs.nixpkgs.lib.nixosSystem {
             else "";
         fsType = "ext4";
       };
-
 
       boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
       boot.initrd.kernelModules = [ ];
@@ -79,6 +79,7 @@ inputs.nixpkgs.lib.nixosSystem {
       nixpkgs.overlays = [
         inputs.proxmox-nixos.overlays.${system}
       ];
+      boot.supportedFilesystems = [ "zfs" ];
     }
     {
       time.timeZone = "Europe/Berlin";
@@ -99,3 +100,6 @@ inputs.nixpkgs.lib.nixosSystem {
   ];
   extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
 }
+# create cluster:
+# pvecm create test-cluster
+# pvesh create /cluster/config/join --hostname 10.7.7.201 --password root --fingerprint bla

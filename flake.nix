@@ -39,6 +39,8 @@
       url = "github:astro/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # they tell you not to overwrite the nixpkgs input so I won't
+    proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
   };
 
   outputs =
@@ -224,6 +226,9 @@
         ];
         stateVersion = "24.05";
       };
+      nixosConfigurations.proxmoxTest1 = import ./playground/proxmox.nix { inherit inputs; pkgs = import nixpkgs { system = "x86_64-linux"; }; id = 1; };
+      nixosConfigurations.proxmoxTest2 = import ./playground/proxmox.nix { inherit inputs; pkgs = import nixpkgs { system = "x86_64-linux"; }; id = 2; };
+      nixosConfigurations.proxmoxTest3 = import ./playground/proxmox.nix { inherit inputs; pkgs = import nixpkgs { system = "x86_64-linux"; }; id = 3; };
       colmenaHive = colmena.lib.makeHive (
         {
           meta = {

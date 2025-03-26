@@ -93,11 +93,6 @@
     solaar
     # TODO broken
     # streamdeck-ui
-    config.boot.kernelPackages.xone
-    qt6.qtwebsockets
-    libsForQt5.qt5.qtwebsockets
-    libsForQt5.qt5.qtwebchannel
-    libsForQt5.qt5.qtwebchannel
     nvtopPackages.nvidia
     nfs-utils
     wineWowPackages.full

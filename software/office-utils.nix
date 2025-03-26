@@ -15,7 +15,6 @@
       spotify
       spotify-tray
       texliveFull
-      unstable.vesktop
       vlc
     ];
     fonts.packages = with pkgs; [

@@ -60,6 +60,7 @@ inputs.nixpkgs.lib.nixosSystem {
           DNS = ["10.7.7.250"];
           DHCP = "no";
           Address = ["${ip}/24"];
+          VXLAN = "vxlan1";
         };
       };
       services.proxmox-ve.ipAddress = ip;
@@ -73,6 +74,9 @@ inputs.nixpkgs.lib.nixosSystem {
           auto vmbr0
           iface vmbr0 inet static
             bridge_ports none
+          auto vmbr1
+          iface vmbr1 inet static
+            bridge_ports none
         '';
       };
       services.proxmox-ve.enable = true;
@@ -80,6 +84,37 @@ inputs.nixpkgs.lib.nixosSystem {
         inputs.proxmox-nixos.overlays.${system}
       ];
       boot.supportedFilesystems = [ "zfs" ];
+      systemd.network.netdevs."vxlan1" = {
+        netdevConfig = {
+          Kind = "vxlan";
+          Name = "vxlan1";
+        };
+        vxlanConfig = {
+          VNI = 1;
+          Group = "239.1.1.1"; # what is this?
+          Local = ip;
+          DestinationPort = 4789;
+          # Independent = true;
+        };
+      };
+      systemd.network.networks."20-vxlan1" = {
+        matchConfig.Name = "vxlan1";
+        networkConfig = {
+          # Address = "10.23.0.${builtins.toString id}/24";
+          Bridge = "vmbr1";
+        };
+      };
+      networking.firewall.allowedTCPPorts = [ 4789 ];
+      systemd.network.netdevs."vmbr1".netdevConfig = {
+        Name = "vmbr1";
+        Kind = "bridge";
+      };
+      systemd.network.networks."10-vxlan-bridge" = {
+        matchConfig.Name = "vmbr1";
+        networkConfig = {
+          Address = "10.23.0.${builtins.toString id}/24";
+         };
+      };
     }
     {
       time.timeZone = "Europe/Berlin";

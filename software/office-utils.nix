@@ -9,7 +9,7 @@
   options.jemand771.office-utils.enable = lib.mkEnableOption "office utils";
   config = lib.mkIf config.jemand771.office-utils.enable {
     environment.systemPackages = with pkgs; [
-      kcalc
+      kdePackages.kcalc
       libreoffice-qt
       pinta
       spotify

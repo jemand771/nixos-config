@@ -12,6 +12,6 @@
     lib.mkIf config.jemand771.basics.enable [
       git
       google-chrome
-      unstable.vesktop
+      vesktop
     ];
 }

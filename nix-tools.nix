@@ -23,11 +23,6 @@
     '';
   };
 
-  nix.registry.nixpkgs.flake = inputs.nixpkgs;
-  nix.nixPath = [
-    "nixpkgs=${inputs.nixpkgs}"
-  ];
-
   environment.systemPackages = with pkgs; [
     nix-output-monitor
     attic-client

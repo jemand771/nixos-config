@@ -23,7 +23,7 @@
   };
 
   programs.vscode.enable = true;
-  programs.vscode.userSettings = {
+  programs.vscode.profiles.default.userSettings = {
     "files.simpleDialog.enable" = true;
     "git.autofetch" = true;
     "git.confirmSync" = false;
@@ -38,7 +38,7 @@
     "platformio-ide.useBuiltinPIOCore" = false;
   };
   programs.vscode.mutableExtensionsDir = false;
-  programs.vscode.extensions = with pkgs.vscode-marketplace; [
+  programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [
     ms-python.python
     bbenoist.nix
     gamunu.opentofu
@@ -48,7 +48,7 @@
     astro-build.astro-vscode
     mkhl.direnv
     unifiedjs.vscode-mdx
-    pkgs.unstable.vscode-extensions.ms-vscode.cpptools
+    pkgs.vscode-extensions.ms-vscode.cpptools
     platformio.platformio-ide
     marlinfirmware.auto-build
     ms-vsliveshare.vsliveshare
@@ -227,7 +227,6 @@
   };
   programs.starship = {
     enable = true;
-    package = pkgs.unstable.starship;
     settings = {
       gcloud.disabled = true;
       kubernetes = {

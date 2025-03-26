@@ -13,6 +13,10 @@
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    home-manager-unstable = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -50,6 +54,7 @@
       nixpkgs-unstable,
       agenix,
       home-manager,
+      home-manager-unstable,
       plasma-manager,
       nix-vscode-extensions,
       nix-minecraft,
@@ -66,14 +71,16 @@
           homeModules ? [ ],
           system ? "x86_64-linux",
           stateVersion,
+          nixpkgs ? nixpkgs,
+          home-manager ? home-manager
         }:
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
           modules = [
             {
-              # make unstable packages available as pkgs.unstable
               nixpkgs.overlays = [
+                # make unstable packages available as pkgs.unstable
                 (_: prev: ({
                   unstable = import inputs.nixpkgs-unstable {
                     config.allowUnfree = true;
@@ -125,6 +132,8 @@
     in
     {
       nixosConfigurations.nixbox = nixosSystem {
+        nixpkgs = nixpkgs-unstable;
+        home-manager = home-manager-unstable;
         modules = [
           {
             jemand771.meta.personal-system = true;
@@ -155,6 +164,8 @@
         stateVersion = "23.11";
       };
       nixosConfigurations.nixbook = nixosSystem {
+        nixpkgs = nixpkgs-unstable;
+        home-manager = home-manager-unstable;
         modules = [
           {
             jemand771.meta.personal-system = true;
@@ -167,6 +178,8 @@
         stateVersion = "24.05";
       };
       nixosConfigurations.nixtique = nixosSystem {
+        nixpkgs = nixpkgs-unstable;
+        home-manager = home-manager-unstable;
         modules = [
           {
             jemand771.meta.personal-system = true;
@@ -181,6 +194,8 @@
         stateVersion = "24.05";
       };
       nixosConfigurations.nixbox2 = nixosSystem {
+        nixpkgs = nixpkgs-unstable;
+        home-manager = home-manager-unstable;
         modules = [
           {
             jemand771.meta.personal-system = true;

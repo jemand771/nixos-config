@@ -12,6 +12,9 @@
     lib.mkIf config.jemand771.basics.enable [
       git
       google-chrome
-      vesktop
+      (discord.override {
+        withOpenASAR = true;
+        withVencord = true;
+      })
     ];
 }

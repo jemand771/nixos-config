@@ -49,9 +49,19 @@ inputs.nixpkgs.lib.nixosSystem {
         matchConfig.Type = "ether";
         networkConfig.Bridge = "vmbr0";
       };
-      systemd.network.netdevs."vmbr0".netdevConfig = {
-        Name = "vmbr0";
-        Kind = "bridge";
+      systemd.network.netdevs."vmbr0" = {
+        netdevConfig = {
+          Name = "vmbr0";
+          Kind = "bridge";
+          MACAddress = if id == 1 then "52:54:00:e4:a2:e9"
+            else if id == 2 then "52:54:00:64:d7:77"
+            else if id == 3 then "52:54:00:ea:40:ce"
+            else "";
+        };
+        bridgeConfig = {
+          STP = false;
+          ForwardDelaySec = 0;
+        };
       };
       systemd.network.networks."10-lan-bridge" = {
         matchConfig.Name = "vmbr0";
@@ -60,7 +70,12 @@ inputs.nixpkgs.lib.nixosSystem {
           DNS = ["10.7.7.250"];
           DHCP = "no";
           Address = ["${ip}/24"];
-          VXLAN = "vxlan1";
+          # VXLAN = "vxlan1";
+        };
+        bridgeConfig = {
+          HairPin = true;
+          ProxyARP = true;
+          Learning = false;
         };
       };
       services.proxmox-ve.ipAddress = ip;
@@ -85,38 +100,39 @@ inputs.nixpkgs.lib.nixosSystem {
         inputs.proxmox-nixos.overlays.${system}
       ];
       boot.supportedFilesystems = [ "zfs" ];
-      systemd.network.netdevs."vxlan1" = {
-        netdevConfig = {
-          Kind = "vxlan";
-          Name = "vxlan1";
-        };
-        vxlanConfig = {
-          VNI = 1;
-          Group = "239.1.1.1"; # what is this?
-          Local = ip;
-          DestinationPort = 4789;
-          # Independent = true;
-        };
-      };
-      systemd.network.networks."20-vxlan1" = {
-        matchConfig.Name = "vxlan1";
-        networkConfig = {
-          # Address = "10.23.0.${builtins.toString id}/24";
-          Bridge = "vmbr1";
-        };
-      };
-      networking.firewall.allowedTCPPorts = [ 4789 ];
-      networking.firewall.enable = false;
-      systemd.network.netdevs."vmbr1".netdevConfig = {
-        Name = "vmbr1";
-        Kind = "bridge";
-      };
-      systemd.network.networks."10-vxlan-bridge" = {
-        matchConfig.Name = "vmbr1";
-        networkConfig = {
-          Address = "10.23.0.${builtins.toString id}/24";
-         };
-      };
+      # systemd.network.netdevs."vxlan1" = {
+      #   netdevConfig = {
+      #     Kind = "vxlan";
+      #     Name = "vxlan1";
+      #   };
+      #   vxlanConfig = {
+      #     VNI = 1;
+      #     Group = "239.1.1.1"; # what is this?
+      #     Local = ip;
+      #     DestinationPort = 4789;
+      #     # Independent = true;
+      #   };
+      # };
+      # systemd.network.networks."20-vxlan1" = {
+      #   matchConfig.Name = "vxlan1";
+      #   networkConfig = {
+      #     # Address = "10.23.0.${builtins.toString id}/24";
+      #     Bridge = "vmbr1";
+      #   };
+      # };
+      # networking.firewall.allowedTCPPorts = [ 4789 ];
+      # networking.firewall.enable = false;
+      # systemd.network.netdevs."vmbr1".netdevConfig = {
+      #   Name = "vmbr1";
+      #   Kind = "bridge";
+      # };
+      # systemd.network.networks."10-vxlan-bridge" = {
+      #   matchConfig.Name = "vmbr1";
+      #   networkConfig = {
+      #     Address = "10.23.0.${builtins.toString id}/24";
+      #     ConfigureWithoutCarrier = true;
+      #    };
+      # };
     }
     {
       time.timeZone = "Europe/Berlin";

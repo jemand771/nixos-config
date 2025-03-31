@@ -106,6 +106,7 @@ inputs.nixpkgs.lib.nixosSystem {
         };
       };
       networking.firewall.allowedTCPPorts = [ 4789 ];
+      networking.firewall.enable = false;
       systemd.network.netdevs."vmbr1".netdevConfig = {
         Name = "vmbr1";
         Kind = "bridge";

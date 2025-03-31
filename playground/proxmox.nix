@@ -66,6 +66,7 @@ inputs.nixpkgs.lib.nixosSystem {
       services.proxmox-ve.ipAddress = ip;
       deployment.targetHost = ip;
       deployment.tags = [ "proxmox-test" ];
+      deployment.buildOnTarget = true;
       # cluster join from the ui doesn't work either way, but this at least makes the bridge show up on the networking page
       # https://github.com/SaumonNet/proxmox-nixos/pull/65
       environment.etc."network/interfaces" = {

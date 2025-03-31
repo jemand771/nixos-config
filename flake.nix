@@ -71,8 +71,8 @@
           homeModules ? [ ],
           system ? "x86_64-linux",
           stateVersion,
-          nixpkgs ? nixpkgs,
-          home-manager ? home-manager
+          nixpkgs ? inputs.nixpkgs,
+          home-manager ? inputs.home-manager
         }:
         nixpkgs.lib.nixosSystem {
           inherit system;

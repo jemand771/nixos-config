@@ -46,17 +46,13 @@ inputs.nixpkgs.lib.nixosSystem {
       users.users.root.password = "root";
       systemd.network.enable = true;
       systemd.network.networks."10-lan" = {
-        matchConfig.Type = "ether";
+        matchConfig.Name = "enp*";
         networkConfig.Bridge = "vmbr0";
       };
       systemd.network.netdevs."vmbr0" = {
         netdevConfig = {
           Name = "vmbr0";
           Kind = "bridge";
-          MACAddress = if id == 1 then "52:54:00:e4:a2:e9"
-            else if id == 2 then "52:54:00:64:d7:77"
-            else if id == 3 then "52:54:00:ea:40:ce"
-            else "";
         };
         bridgeConfig = {
           STP = false;
@@ -71,11 +67,6 @@ inputs.nixpkgs.lib.nixosSystem {
           DHCP = "no";
           Address = ["${ip}/24"];
           # VXLAN = "vxlan1";
-        };
-        bridgeConfig = {
-          HairPin = true;
-          ProxyARP = true;
-          Learning = false;
         };
       };
       services.proxmox-ve.ipAddress = ip;

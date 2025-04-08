@@ -8,6 +8,7 @@ inputs.nixpkgs.lib.nixosSystem {
   modules = [
     (inputs.nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
     inputs.proxmox-nixos.nixosModules.proxmox-ve
+    inputs.disko.nixosModules.disko
     {
       boot.loader.grub.enable = true;
       boot.loader.grub.device = "/dev/vda";

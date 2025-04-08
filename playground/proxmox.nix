@@ -16,7 +16,7 @@ inputs.nixpkgs.lib.nixosSystem {
       networking.hostId = if id == 1 then "b6f8760a" else if id == 2 then "9d8521db" else if id == 3 then "34a9b41a" else "";
       networking.useDHCP = false;
       fileSystems."/" = {
-        device = if id == 1 then "/dev/disk/by-uuid/b96b5b53-f1f6-4ea8-a84c-ab3dd14a4146"
+        device = if id == 1 then "/dev/disk/by-uuid/7e95f117-da22-4c9f-92ae-1ac6c4ab7b7b"
             else if id == 2 then "/dev/disk/by-uuid/5d40556b-5ee1-4704-ba1d-129035d5c9b8"
             else if id == 3 then "/dev/disk/by-uuid/77f64ef6-2568-4032-bff5-3ffa7ab4facd"
             else "";

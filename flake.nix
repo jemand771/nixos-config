@@ -45,6 +45,10 @@
     };
     # they tell you not to overwrite the nixpkgs input so I won't
     proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
+    disko = {
+      url = "github:nix-community/disko/latest";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -62,6 +66,7 @@
       flake-utils,
       colmena,
       microvm,
+      disko,
       ...
     }:
     let
@@ -124,6 +129,7 @@
             ./software/auto-upgrade.nix
             ./sync.nix
             ./software/ssh-access.nix
+            disko.nixosModules.disko
             { system = { inherit stateVersion; }; }
           ] ++ modules;
           # https://github.com/zhaofengli/colmena/issues/60#issuecomment-1047199551

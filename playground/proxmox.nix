@@ -11,7 +11,7 @@ inputs.nixpkgs.lib.nixosSystem {
     inputs.disko.nixosModules.disko
     {
       boot.loader.grub.enable = true;
-      boot.loader.grub.device = "/dev/vda";
+      boot.loader.grub.devices = [ "/dev/vda" ];
       boot.loader.grub.useOSProber = true;
       networking.hostName = "proxmox-test-${builtins.toString id}";
       networking.hostId = if id == 1 then "b6f8760a" else if id == 2 then "9d8521db" else if id == 3 then "34a9b41a" else "";

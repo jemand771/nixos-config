@@ -31,6 +31,7 @@
         };
       })
       opentofu
+      pv-migrate
       rancher
       samba
       spice-gtk

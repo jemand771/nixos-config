@@ -54,6 +54,7 @@
     ms-vsliveshare.vsliveshare
     eamodio.gitlens
     ms-kubernetes-tools.vscode-kubernetes-tools
+    ms-python.vscode-pylance
   ];
 
   programs.ssh = {

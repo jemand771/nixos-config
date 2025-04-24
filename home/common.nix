@@ -36,6 +36,10 @@
       "vs-kubernetes.crd-code-completion" = "enabled";
     };
     "platformio-ide.useBuiltinPIOCore" = false;
+    "extensions.ignoreRecommendations" = true;
+    "git.openRepositoryInParentFolders" = "always";
+    "update.mode" = "none";
+    "python.analysis.typeCheckingMode" = "strict";
   };
   programs.vscode.mutableExtensionsDir = false;
   programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [

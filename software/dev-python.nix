@@ -22,5 +22,6 @@
       prusa-slicer
       platformio
       platformio-core
+      nixpkgs-review
     ];
 }

@@ -275,15 +275,7 @@
       {
         devShells.default = pkgs.mkShell {
           nativeBuildInputs = [
-            (pkgs.symlinkJoin {
-              name = "colmena";
-              paths = [ colmena.packages.${system}.colmena ];
-              nativeBuildInputs = [ pkgs.makeWrapper ];
-              postBuild = ''
-                wrapProgram $out/bin/colmena \
-                  --add-flags "--experimental-flake-eval"
-              '';
-            })
+            colmena.packages.${system}.colmena
           ];
         };
         formatter = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;

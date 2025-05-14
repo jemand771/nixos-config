@@ -128,10 +128,14 @@
     enable = true;
     daemon.settings.features.containerd-snapshotter = true;
   };
-  boot.binfmt.emulatedSystems = [
-    "aarch64-linux"
-  ];
-  boot.binfmt.preferStaticEmulators = true;
+  # temporarily disabled because the build is failing
+  # PR: https://github.com/NixOS/nixpkgs/pull/402027 (to staging)
+  # staging-next PR: https://github.com/NixOS/nixpkgs/pull/404858
+  # TODO revert me
+  # boot.binfmt.emulatedSystems = [
+  #   "aarch64-linux"
+  # ];
+  # boot.binfmt.preferStaticEmulators = true;
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
   virtualisation.waydroid.enable = true;

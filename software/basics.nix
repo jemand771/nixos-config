@@ -12,7 +12,7 @@
     lib.mkIf config.jemand771.basics.enable [
       git
       google-chrome
-      (discord.override {
+      (unstable-small.discord.override {
         withOpenASAR = true;
         withVencord = true;
       })

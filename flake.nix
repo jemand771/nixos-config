@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-unstable-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -88,6 +89,10 @@
                 # make unstable packages available as pkgs.unstable
                 (_: prev: ({
                   unstable = import inputs.nixpkgs-unstable {
+                    config.allowUnfree = true;
+                    inherit (prev.stdenv.hostPlatform) system;
+                  };
+                  unstable-small = import inputs.nixpkgs-unstable-small {
                     config.allowUnfree = true;
                     inherit (prev.stdenv.hostPlatform) system;
                   };

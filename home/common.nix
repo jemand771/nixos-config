@@ -59,6 +59,7 @@
     eamodio.gitlens
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-python.vscode-pylance
+    ms-vscode-remote.remote-containers
   ];
 
   programs.ssh = {

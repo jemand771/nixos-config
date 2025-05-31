@@ -11,6 +11,7 @@
     environment.systemPackages = with pkgs; [
       argocd
       cilium-cli
+      dive
       k9s
       kube-capacity
       kube-linter
@@ -31,6 +32,7 @@
         };
       })
       opentofu
+      postgresql
       pv-migrate
       rancher
       samba

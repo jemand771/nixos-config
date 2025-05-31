@@ -10,17 +10,22 @@
   config.environment.systemPackages =
     with pkgs;
     lib.mkIf config.jemand771.shell-utils.enable [
+      aria2
       curl
+      bat
       bc
-      file
+      btop
       dig
+      file
       ffmpeg
+      iperf3
       jq
       nano
       ncdu
       nmap
       pv
       rclone
+      unzip
       usbutils
       yt-dlp
     ];

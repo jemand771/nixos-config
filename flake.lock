@@ -405,6 +405,18 @@
         "type": "github"
       }
     },
+    "nixpkgs-patch-vencord": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-rER/6T/R61JvXV7McdovAJ5iPstw2YJhHUy2cGMJHms=",
+        "type": "file",
+        "url": "https://github.com/NixOS/nixpkgs/pull/422168.diff"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/NixOS/nixpkgs/pull/422168.diff"
+      }
+    },
     "nixpkgs-patcher": {
       "locked": {
         "lastModified": 1750881771,
@@ -539,6 +551,7 @@
         "nix-vanillatweaks": "nix-vanillatweaks",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-patch-vencord": "nixpkgs-patch-vencord",
         "nixpkgs-patcher": "nixpkgs-patcher",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixpkgs-unstable-small": "nixpkgs-unstable-small",

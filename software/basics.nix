@@ -11,7 +11,7 @@
     with pkgs;
     lib.mkIf config.jemand771.basics.enable [
       google-chrome
-      (unstable-small.discord.override {
+      (discord.override {
         withOpenASAR = true;
         withVencord = true;
       })

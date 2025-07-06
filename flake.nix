@@ -50,6 +50,7 @@
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";
   };
 
   outputs =
@@ -68,6 +69,7 @@
       colmena,
       microvm,
       disko,
+      nixpkgs-patcher,
       ...
     }:
     let
@@ -80,9 +82,11 @@
           nixpkgs ? inputs.nixpkgs,
           home-manager ? inputs.home-manager
         }:
-        nixpkgs.lib.nixosSystem {
+        nixpkgs-patcher.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
+          nixpkgsPatcher.inputs = inputs;
+          nixpkgsPatcher.nixpkgs = nixpkgs;
           modules = [
             {
               nixpkgs.overlays = [

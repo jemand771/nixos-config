@@ -405,6 +405,21 @@
         "type": "github"
       }
     },
+    "nixpkgs-patcher": {
+      "locked": {
+        "lastModified": 1750881771,
+        "narHash": "sha256-akLjappCXzfloplv7r6mtrWzXxdBHlzP3pA69uMt7UU=",
+        "owner": "gepbird",
+        "repo": "nixpkgs-patcher",
+        "rev": "6f7036ca9a501f40a0b22e5e6ca3b8cf74ae3cf2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gepbird",
+        "repo": "nixpkgs-patcher",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1748437600,
@@ -524,6 +539,7 @@
         "nix-vanillatweaks": "nix-vanillatweaks",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-patcher": "nixpkgs-patcher",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixpkgs-unstable-small": "nixpkgs-unstable-small",
         "plasma-manager": "plasma-manager",

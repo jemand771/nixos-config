@@ -45,7 +45,7 @@
   programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [
     ms-python.python
     bbenoist.nix
-    gamunu.opentofu
+    opentofu.vscode-opentofu
     redhat.vscode-yaml
     ms-azuretools.vscode-docker
     editorconfig.editorconfig

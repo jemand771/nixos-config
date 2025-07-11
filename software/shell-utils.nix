@@ -25,6 +25,7 @@
       nmap
       pv
       rclone
+      ripgrep
       unzip
       usbutils
       yt-dlp

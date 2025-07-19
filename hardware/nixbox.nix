@@ -39,6 +39,20 @@
     fsType = "vfat";
   };
 
+  fileSystems."/mnt/data" = {
+    device = "/dev/disk/by-uuid/c0e876b6-f0f8-4e6f-bdd1-43f01aa32606";
+    fsType = "btrfs";
+    options = [
+      "nofail"
+      "compress=zstd"
+    ];
+  };
+  systemd.tmpfiles.settings."mnt-data"."/mnt/data".z = {
+    user = "willy";
+    group = "users";
+    mode = "770";
+  };
+
   swapDevices = [ ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

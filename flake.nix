@@ -51,10 +51,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";
-    nixpkgs-patch-vencord = {
-      url = "https://github.com/NixOS/nixpkgs/pull/422168.diff";
-      flake = false;
-    };
   };
 
   outputs =

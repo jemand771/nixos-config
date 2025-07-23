@@ -405,6 +405,18 @@
         "type": "github"
       }
     },
+    "nixpkgs-patch-renovate": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-NiFTmGRNOZKny8k8XFp/7ksb9jBjvEbZb9oraCSJgaY=",
+        "type": "file",
+        "url": "https://github.com/NixOS/nixpkgs/pull/426407.diff"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/NixOS/nixpkgs/pull/426407.diff"
+      }
+    },
     "nixpkgs-patcher": {
       "locked": {
         "lastModified": 1750881771,
@@ -539,6 +551,7 @@
         "nix-vanillatweaks": "nix-vanillatweaks",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-patch-renovate": "nixpkgs-patch-renovate",
         "nixpkgs-patcher": "nixpkgs-patcher",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixpkgs-unstable-small": "nixpkgs-unstable-small",

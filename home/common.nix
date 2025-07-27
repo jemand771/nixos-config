@@ -60,6 +60,7 @@
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-python.vscode-pylance
     ms-vscode-remote.remote-containers
+    grafana.vscode-jsonnet
   ];
 
   programs.ssh = {

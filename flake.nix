@@ -50,6 +50,10 @@
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lix-module = {
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.93.3-1.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";
     nixpkgs-patch-platformio = {
       url = "https://github.com/NixOS/nixpkgs/pull/429157.diff";
@@ -74,6 +78,7 @@
       microvm,
       disko,
       nixpkgs-patcher,
+      lix-module,
       ...
     }:
     let
@@ -143,6 +148,7 @@
             ./sync.nix
             ./software/ssh-access.nix
             disko.nixosModules.disko
+            lix-module.nixosModules.default
             { system = { inherit stateVersion; }; }
           ] ++ modules;
           # https://github.com/zhaofengli/colmena/issues/60#issuecomment-1047199551

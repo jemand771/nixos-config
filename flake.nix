@@ -51,6 +51,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs-patcher.url = "github:gepbird/nixpkgs-patcher";
+    nixpkgs-patch-platformio = {
+      url = "https://github.com/NixOS/nixpkgs/pull/429157.diff";
+      flake = false;
+    };
   };
 
   outputs =

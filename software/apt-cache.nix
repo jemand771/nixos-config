@@ -14,8 +14,6 @@
       AdminAuth: admin:admin
       ForeGround: 1
       ForceManaged: 1
-      Remap-debian: /debian ; http://ftp.debian.org/debian/
-      Remap-debian-security: /debian-security ; http://security.debian.org/debian-security
     '';
   };
 

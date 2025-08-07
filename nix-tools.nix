@@ -41,4 +41,5 @@
     automatic = true;
     options = "--delete-older-than 30d";
   };
+  nix.package = pkgs.lixPackageSets.latest.lix;
 }

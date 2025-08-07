@@ -2,7 +2,6 @@
   description = "Willy's NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-unstable-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     agenix = {
@@ -11,12 +10,8 @@
       inputs.darwin.follows = "";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    home-manager-unstable = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
@@ -57,10 +52,8 @@
     inputs@{
       self,
       nixpkgs,
-      nixpkgs-unstable,
       agenix,
       home-manager,
-      home-manager-unstable,
       plasma-manager,
       nix-vscode-extensions,
       nix-minecraft,
@@ -90,12 +83,8 @@
           modules = [
             {
               nixpkgs.overlays = [
-                # make unstable packages available as pkgs.unstable
+                # make unstable-small packages available as pkgs.unstable-small
                 (_: prev: ({
-                  unstable = import inputs.nixpkgs-unstable {
-                    config.allowUnfree = true;
-                    inherit (prev.stdenv.hostPlatform) system;
-                  };
                   unstable-small = import inputs.nixpkgs-unstable-small {
                     config.allowUnfree = true;
                     inherit (prev.stdenv.hostPlatform) system;
@@ -147,8 +136,6 @@
     in
     {
       nixosConfigurations.nixbox = nixosSystem {
-        nixpkgs = nixpkgs-unstable;
-        home-manager = home-manager-unstable;
         modules = [
           {
             jemand771.meta.personal-system = true;
@@ -179,8 +166,6 @@
         stateVersion = "23.11";
       };
       nixosConfigurations.nixbook = nixosSystem {
-        nixpkgs = nixpkgs-unstable;
-        home-manager = home-manager-unstable;
         modules = [
           {
             jemand771.meta.personal-system = true;
@@ -193,8 +178,6 @@
         stateVersion = "24.05";
       };
       nixosConfigurations.nixtique = nixosSystem {
-        nixpkgs = nixpkgs-unstable;
-        home-manager = home-manager-unstable;
         modules = [
           {
             jemand771.meta.personal-system = true;
@@ -209,8 +192,6 @@
         stateVersion = "24.05";
       };
       nixosConfigurations.nixbox2 = nixosSystem {
-        nixpkgs = nixpkgs-unstable;
-        home-manager = home-manager-unstable;
         modules = [
           {
             jemand771.meta.personal-system = true;

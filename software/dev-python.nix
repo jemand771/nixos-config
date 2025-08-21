@@ -9,6 +9,8 @@
   config.environment.systemPackages =
     with pkgs;
     lib.mkIf config.jemand771.dev-python.enable [
+      black
+      mypy
       (python3.withPackages (
         ps: with ps; [
           beautifulsoup4
@@ -17,6 +19,7 @@
           tabulate
         ]
       ))
+      ruff
       nodejs_20
       # TODO move me
       prusa-slicer

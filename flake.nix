@@ -104,7 +104,7 @@
                   useGlobalPkgs = true;
                   useUserPackages = true;
                   sharedModules = [
-                    plasma-manager.homeManagerModules.plasma-manager
+                    plasma-manager.homeModules.plasma-manager
                   ];
                   users.willy.imports = [
                     ./home/common.nix

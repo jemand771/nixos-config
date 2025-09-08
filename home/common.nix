@@ -61,6 +61,7 @@
     ms-python.vscode-pylance
     ms-vscode-remote.remote-containers
     grafana.vscode-jsonnet
+    harrydowning.yaml-embedded-languages
   ];
 
   programs.ssh = {

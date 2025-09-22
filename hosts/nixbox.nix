@@ -128,6 +128,7 @@
     enable = true;
     daemon.settings.features.containerd-snapshotter = true;
   };
+  virtualisation.podman.enable = true;
   boot.binfmt.emulatedSystems = [
     "aarch64-linux"
   ];

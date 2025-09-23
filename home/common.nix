@@ -40,6 +40,7 @@
     "git.openRepositoryInParentFolders" = "always";
     "update.mode" = "none";
     "python.analysis.typeCheckingMode" = "strict";
+    "diffEditor.ignoreTrimWhitespace" = false;
   };
   programs.vscode.mutableExtensionsDir = false;
   programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [

@@ -2,7 +2,7 @@
   description = "Willy's NixOS configuration";
 
   inputs = {
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-unstable-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     agenix = {
       url = "github:ryantm/agenix";

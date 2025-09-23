@@ -7,7 +7,10 @@
 
   # inspired by https://astro.github.io/microvm.nix/simple-network.html
   systemd.network.networks."10-lan" = {
-    matchConfig.Name = ["eno1" "vm-*"];
+    matchConfig.Name = [
+      "eno1"
+      "vm-*"
+    ];
     networkConfig = {
       Bridge = "br0";
     };

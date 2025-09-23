@@ -31,6 +31,6 @@
       Restart = "always";
       RestartSec = 5;
     };
-    wantedBy = [ "multi-user.target" ]; 
+    wantedBy = [ "multi-user.target" ];
   };
 }

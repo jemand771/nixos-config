@@ -73,7 +73,7 @@
           system ? "x86_64-linux",
           stateVersion,
           nixpkgs ? inputs.nixpkgs,
-          home-manager ? inputs.home-manager
+          home-manager ? inputs.home-manager,
         }:
         nixpkgs-patcher.lib.nixosSystem {
           inherit system;
@@ -112,7 +112,8 @@
                     ./home/plasma.nix
                     ./home/thunderbird.nix
                     { home = { inherit stateVersion; }; }
-                  ] ++ homeModules;
+                  ]
+                  ++ homeModules;
                 };
               }
             )
@@ -129,7 +130,8 @@
             ./software/ssh-access.nix
             disko.nixosModules.disko
             { system = { inherit stateVersion; }; }
-          ] ++ modules;
+          ]
+          ++ modules;
           # https://github.com/zhaofengli/colmena/issues/60#issuecomment-1047199551
           extraModules = [ colmena.nixosModules.deploymentOptions ];
         };
@@ -237,9 +239,21 @@
         ];
         stateVersion = "24.05";
       };
-      nixosConfigurations.proxmoxTest1 = import ./playground/proxmox.nix { inherit inputs; pkgs = import nixpkgs { system = "x86_64-linux"; }; id = 1; };
-      nixosConfigurations.proxmoxTest2 = import ./playground/proxmox.nix { inherit inputs; pkgs = import nixpkgs { system = "x86_64-linux"; }; id = 2; };
-      nixosConfigurations.proxmoxTest3 = import ./playground/proxmox.nix { inherit inputs; pkgs = import nixpkgs { system = "x86_64-linux"; }; id = 3; };
+      nixosConfigurations.proxmoxTest1 = import ./playground/proxmox.nix {
+        inherit inputs;
+        pkgs = import nixpkgs { system = "x86_64-linux"; };
+        id = 1;
+      };
+      nixosConfigurations.proxmoxTest2 = import ./playground/proxmox.nix {
+        inherit inputs;
+        pkgs = import nixpkgs { system = "x86_64-linux"; };
+        id = 2;
+      };
+      nixosConfigurations.proxmoxTest3 = import ./playground/proxmox.nix {
+        inherit inputs;
+        pkgs = import nixpkgs { system = "x86_64-linux"; };
+        id = 3;
+      };
       colmenaHive = colmena.lib.makeHive (
         {
           meta = {

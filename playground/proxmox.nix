@@ -1,4 +1,9 @@
-{ pkgs, inputs, id, ... }:
+{
+  pkgs,
+  inputs,
+  id,
+  ...
+}:
 let
   system = "x86_64-linux";
   ip = "10.7.7.20${builtins.toString id}";
@@ -14,7 +19,15 @@ inputs.nixpkgs.lib.nixosSystem {
       boot.loader.grub.devices = [ "/dev/vda" ];
       boot.loader.grub.useOSProber = true;
       networking.hostName = "proxmox-test-${builtins.toString id}";
-      networking.hostId = if id == 1 then "b6f8760a" else if id == 2 then "9d8521db" else if id == 3 then "34a9b41a" else "";
+      networking.hostId =
+        if id == 1 then
+          "b6f8760a"
+        else if id == 2 then
+          "9d8521db"
+        else if id == 3 then
+          "34a9b41a"
+        else
+          "";
       networking.useDHCP = false;
       disko.devices = {
         disk = {
@@ -59,7 +72,14 @@ inputs.nixpkgs.lib.nixosSystem {
       #   fsType = "ext4";
       # };
 
-      boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
+      boot.initrd.availableKernelModules = [
+        "ahci"
+        "xhci_pci"
+        "virtio_pci"
+        "virtio_scsi"
+        "sd_mod"
+        "sr_mod"
+      ];
       boot.initrd.kernelModules = [ ];
       boot.kernelModules = [ "kvm-amd" ];
       boot.extraModulePackages = [ ];
@@ -73,7 +93,10 @@ inputs.nixpkgs.lib.nixosSystem {
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFjygB98U3+QUD24oga93Lej5ZCtSah9KI/DneSQgVjL willy@nixbox"
       ];
       nix = {
-        settings.experimental-features = [ "nix-command" "flakes" ];
+        settings.experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
         registry.nixpkgs.flake = inputs.nixpkgs;
         nixPath = [
           "nixpkgs=${inputs.nixpkgs}"
@@ -99,9 +122,9 @@ inputs.nixpkgs.lib.nixosSystem {
         matchConfig.Name = "vmbr0";
         networkConfig = {
           Gateway = "10.7.7.250";
-          DNS = ["10.7.7.250"];
+          DNS = [ "10.7.7.250" ];
           DHCP = "no";
-          Address = ["${ip}/24"];
+          Address = [ "${ip}/24" ];
           # VXLAN = "vxlan1";
         };
       };

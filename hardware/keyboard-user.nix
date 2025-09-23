@@ -1,4 +1,9 @@
-{ config, osConfig, pkgs, ... }:
+{
+  config,
+  osConfig,
+  pkgs,
+  ...
+}:
 
 {
   home.file."${config.xdg.configHome}/autostart/ckb-next.desktop".source = "${

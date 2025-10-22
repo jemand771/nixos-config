@@ -5,11 +5,12 @@
   ...
 }:
 {
+  imports = [
+    inputs.nixos-wsl.nixosModules.default
+  ];
+
   options.jemand771.wsl.enable = lib.mkEnableOption "Enable WSL stuffs";
   config = lib.mkIf config.jemand771.wsl.enable {
-    imports = [
-      inputs.nixos-wsl.nixosModules.default
-    ];
     wsl = {
       enable = true;
       defaultUser = "willy";

@@ -2,6 +2,7 @@
 {
   imports = [
     ./nix
+    ./wsl
 
     ./basics.nix
     ./locale.nix

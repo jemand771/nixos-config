@@ -421,6 +421,18 @@
         "type": "github"
       }
     },
+    "nixpkgs-patch-cibuildwheel": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-JT6mdVNfVPyI1psdLFplCQk6xsWlnxwaY+hz1Ha++jU=",
+        "type": "file",
+        "url": "https://github.com/NixOS/nixpkgs/pull/423815.diff"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/NixOS/nixpkgs/pull/423815.diff"
+      }
+    },
     "nixpkgs-patcher": {
       "locked": {
         "lastModified": 1759419904,
@@ -539,6 +551,7 @@
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-patch-cibuildwheel": "nixpkgs-patch-cibuildwheel",
         "nixpkgs-patcher": "nixpkgs-patcher",
         "nixpkgs-unstable-small": "nixpkgs-unstable-small",
         "plasma-manager": "plasma-manager",

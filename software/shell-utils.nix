@@ -17,18 +17,27 @@
       btop
       dig
       file
+      findutils
       ffmpeg
+      gnutar
+      inotify-tools
       iperf3
       jq
+      minicom
       nano
       ncdu
       nmap
+      openssl
       pv
       rclone
       ripgrep
+      screen
+      sqlite
+      traceroute
       unzip
       usbutils
       yt-dlp
+      yq
     ];
 
   config.programs.fish.enable = true;

@@ -9,6 +9,7 @@
   options.jemand771.dev-infra.enable = lib.mkEnableOption "infra development";
   config = lib.mkIf config.jemand771.dev-infra.enable {
     environment.systemPackages = with pkgs; [
+      apacheHttpd # for htpasswd
       argocd
       cilium-cli
       dive

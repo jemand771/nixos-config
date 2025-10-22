@@ -16,7 +16,6 @@ inputs.nixpkgs.lib.nixosSystem {
     inputs.disko.nixosModules.disko
     {
       boot.loader.grub.enable = true;
-      boot.loader.grub.devices = [ "/dev/vda" ];
       boot.loader.grub.useOSProber = true;
       networking.hostName = "proxmox-test-${builtins.toString id}";
       networking.hostId =

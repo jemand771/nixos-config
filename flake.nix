@@ -117,17 +117,8 @@
                 };
               }
             )
-            ./nix-tools.nix
-            ./software/basics.nix
-            ./software/locale.nix
-            ./software/shell-utils.nix
-            ./software/office-utils.nix
-            ./software/dev-infra.nix
-            ./software/dev-python.nix
-            ./software/gaming.nix
-            ./software/auto-upgrade.nix
+            ./software
             ./sync.nix
-            ./software/ssh-access.nix
             disko.nixosModules.disko
             { system = { inherit stateVersion; }; }
           ]

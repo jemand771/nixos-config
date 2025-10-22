@@ -5,7 +5,7 @@
   ...
 }:
 {
-  options.jemand771.home-attic = lib.mkEnableOption "Use attic at home";
+  options.jemand771.home-attic = lib.mkEnableOption "attic at home";
   config = lib.mkIf config.jemand771.home-attic {
     environment.systemPackages = with pkgs; [
       attic-client

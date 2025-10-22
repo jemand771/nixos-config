@@ -9,7 +9,7 @@
     inputs.nixos-wsl.nixosModules.default
   ];
 
-  options.jemand771.wsl.enable = lib.mkEnableOption "Enable WSL stuffs";
+  options.jemand771.wsl.enable = lib.mkEnableOption "WSL stuffs";
   config = lib.mkIf config.jemand771.wsl.enable {
     wsl = {
       enable = true;

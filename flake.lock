@@ -424,7 +424,7 @@
     "nixpkgs-patch-cibuildwheel": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-JT6mdVNfVPyI1psdLFplCQk6xsWlnxwaY+hz1Ha++jU=",
+        "narHash": "sha256-6883accDef6scOOQYK7i8YQHS6NdAemXg4THuCOdnyM=",
         "type": "file",
         "url": "https://github.com/NixOS/nixpkgs/pull/423815.diff"
       },

@@ -11,7 +11,8 @@
     lib.mkIf config.jemand771.dev-python.enable [
       black
       cibuildwheel
-      hatch
+      # TODO broken
+      # hatch
       mypy
       (python3.withPackages (
         ps: with ps; [

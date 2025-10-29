@@ -55,7 +55,8 @@
     unifiedjs.vscode-mdx
     pkgs.vscode-extensions.ms-vscode.cpptools
     platformio.platformio-ide
-    marlinfirmware.auto-build
+    # TODO hash mismatch
+    # marlinfirmware.auto-build
     ms-vsliveshare.vsliveshare
     eamodio.gitlens
     ms-kubernetes-tools.vscode-kubernetes-tools

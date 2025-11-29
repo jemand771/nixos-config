@@ -31,5 +31,6 @@
       platformio-core
       nixpkgs-review
       debian-devscripts
+      qlcplus
     ];
 }

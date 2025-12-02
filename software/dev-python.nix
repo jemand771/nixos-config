@@ -43,7 +43,8 @@
         name = "write-time";
         text = ''
           while true; do
-            date +"%H:%M:%S" > /run/current-time.txt
+            date +"%H:%M:%S" > /run/current-time.txt.tmp
+            mv /run/current-time.txt.tmp /run/current-time.txt
             sleep 0.1
           done
         '';

@@ -34,4 +34,5 @@
       qlcplus
       kdePackages.kdenlive
     ];
+  config.services.flatpak.enable = lib.mkIf config.jemand771.dev-python.enable true;
 }

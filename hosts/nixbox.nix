@@ -54,12 +54,13 @@
       lutris
       jetbrains-toolbox
       firefox
-      (google-cloud-sdk.withExtraComponents (
-        with pkgs.google-cloud-sdk.components;
-        [
-          gke-gcloud-auth-plugin
-        ]
-      ))
+      # TODO broken
+      # (google-cloud-sdk.withExtraComponents (
+      #   with pkgs.google-cloud-sdk.components;
+      #   [
+      #     gke-gcloud-auth-plugin
+      #   ]
+      # ))
       (blender.override {
         cudaSupport = true;
       })

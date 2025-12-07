@@ -2,9 +2,11 @@
 {
   programs.git = {
     enable = true;
-    userName = "Willy";
-    userEmail = "jemand771@gmx.net";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Willy";
+        email = "jemand771@gmx.net";
+      };
       push = {
         autoSetupRemote = true;
       };
@@ -68,6 +70,7 @@
 
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     matchBlocks = {
       "github.com" = {
         identityFile = "~/.ssh/id_github";

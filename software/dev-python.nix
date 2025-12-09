@@ -34,7 +34,6 @@
       qlcplus
       kdePackages.kdenlive
     ];
-  config.services.flatpak.enable = lib.mkIf config.jemand771.dev-python.enable true;
   config.systemd.services.write-current-time = lib.mkIf config.jemand771.dev-python.enable {
     description = "Write current time to /run/current-time.txt every second";
     wantedBy = [ "multi-user.target" ];

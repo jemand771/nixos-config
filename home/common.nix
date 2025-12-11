@@ -76,6 +76,9 @@
         identityFile = "~/.ssh/id_github";
       };
       # not part of the magic loop below because of special proxyJump
+      "gl.hanwis.com" = {
+        identityFile = "~/.ssh/id_hanwis";
+      };
       "d39s-sxlh" = {
         hostname = "10.0.2.4";
         user = "root";

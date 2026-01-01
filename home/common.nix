@@ -43,6 +43,7 @@
     "update.mode" = "none";
     "python.analysis.typeCheckingMode" = "strict";
     "diffEditor.ignoreTrimWhitespace" = false;
+    "java.jdt.ls.java.home" = pkgs.javaPackages.compiler.openjdk25;
   };
   programs.vscode.mutableExtensionsDir = false;
   programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [
@@ -66,6 +67,11 @@
     grafana.vscode-jsonnet
     harrydowning.yaml-embedded-languages
     golang.go
+    redhat.java
+    vscjava.vscode-maven
+    vscjava.vscode-java-debug
+    vscjava.vscode-java-test
+    vscjava.vscode-gradle
   ];
 
   programs.ssh = {

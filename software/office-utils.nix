@@ -17,9 +17,9 @@
       texliveFull
       vlc
     ];
-    fonts.packages = with pkgs; [
-      comic-neue
-      jetbrains-mono
+    fonts.packages = [
+      pkgs.comic-neue
+      pkgs.nerd-fonts.jetbrains-mono
     ];
   };
 }

@@ -128,6 +128,7 @@
                     ./home/desktop-lag-fix.nix
                     ./home/plasma.nix
                     ./home/thunderbird.nix
+                    ./home/ssh
                     { home = { inherit stateVersion; }; }
                   ]
                   ++ homeModules;
@@ -171,6 +172,13 @@
           ./hardware/keyboard-user.nix
           {
             jemand771.desktopLagFix.enable = true;
+            jemand771.ssh = {
+              enable = true;
+              hostsets = {
+                d39s.enable = true;
+                homelab.enable = true;
+              };
+            };
           }
         ];
         stateVersion = "23.11";
@@ -199,6 +207,17 @@
             jemand771.plasma.enable = true;
           }
         ];
+        homeModules = [
+          {
+            jemand771.ssh = {
+              enable = true;
+              hostsets = {
+                d39s.enable = true;
+                homelab.enable = true;
+              };
+            };
+          }
+        ];
         stateVersion = "24.05";
       };
       nixosConfigurations.nixbox2 = nixosSystem {
@@ -223,6 +242,17 @@
             jemand771.home-manager.enable = true;
           }
           ./hosts/cnb004.nix
+        ];
+        homeModules = [
+          {
+            jemand771.ssh = {
+              enable = true;
+              hostsets = {
+                homelab.enable = true;
+                intenta.enable = true;
+              };
+            };
+          }
         ];
         stateVersion = "23.11";
       };

@@ -1,5 +1,6 @@
 { ... }:
 {
+  # TODO hide behind option
   programs.thunderbird = {
     enable = true;
     profiles.default.isDefault = true;

@@ -130,9 +130,13 @@
     daemon.settings.features.containerd-snapshotter = true;
   };
   virtualisation.podman.enable = true;
-  boot.binfmt.emulatedSystems = [
-    "aarch64-linux"
-  ];
+  boot.binfmt = {
+    emulatedSystems = [
+      "aarch64-linux"
+      "armv7l-linux"
+    ];
+    preferStaticEmulators = true;
+  };
   boot.binfmt.preferStaticEmulators = true;
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;

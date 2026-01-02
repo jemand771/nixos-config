@@ -9,4 +9,6 @@ in
   users.users.root.openssh.authorizedKeys.keys = lib.mkIf (
     !config.jemand771.meta.personal-system
   ) keys;
+
+  programs.ssh.startAgent = true;
 }

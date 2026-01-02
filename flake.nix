@@ -54,6 +54,10 @@
       url = "https://github.com/NixOS/nixpkgs/pull/475445.diff";
       flake = false;
     };
+    nixpkgs-patch-jenkins-plugins = {
+      url = "https://github.com/NixOS/nixpkgs/compare/master...jemand771:nixpkgs:jenkins.diff";
+      flake = false;
+    };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -207,6 +211,20 @@
           ./hardware/mouse.nix
         ];
         stateVersion = "24.05";
+      };
+      nixosConfigurations.cnb004 = nixosSystem {
+        modules = [
+          {
+            jemand771.wsl.enable = true;
+            jemand771.dev-python.enable = true;
+            jemand771.dev-infra.enable = true;
+            jemand771.shell-utils.enable = true;
+            jemand771.office-utils.enable = true;
+            jemand771.home-manager.enable = true;
+          }
+          ./hosts/cnb004.nix
+        ];
+        stateVersion = "23.11";
       };
       nixosConfigurations.apt-cache = nixosSystem {
         modules = [

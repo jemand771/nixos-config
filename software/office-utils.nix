@@ -19,6 +19,7 @@
     ];
     fonts.packages = with pkgs; [
       comic-neue
+      jetbrains-mono
     ];
   };
 }

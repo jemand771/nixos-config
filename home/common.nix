@@ -1,20 +1,26 @@
-{ config, pkgs, ... }:
+{ config, pkgs, osConfig, ... }:
 {
   programs.git = {
     enable = true;
     settings = {
-      user = {
+      user = if osConfig.networking.hostName == "cnb004" then {
+        name = "Willy Hille";
+        email = "willy.hille@intenta.de";
+      } else {
         name = "Willy";
         email = "jemand771@gmx.net";
       };
       push = {
         autoSetupRemote = true;
+        submodule.recurse = true;
+        pull.rebase = true;
       };
     };
     ignores = [
       ".venv"
       ".direnv"
       ".envrc"
+      "__pycache__"
     ];
   };
 
@@ -38,11 +44,23 @@
       "vs-kubernetes.crd-code-completion" = "enabled";
     };
     "platformio-ide.useBuiltinPIOCore" = false;
+    "editor.fontFamily" = "JetBrainsMono Nerd Font";
+    "editor.fontLigatures" = true;
+    "editor.fontSize" = 15;
     "extensions.ignoreRecommendations" = true;
     "git.openRepositoryInParentFolders" = "always";
     "update.mode" = "none";
     "python.analysis.typeCheckingMode" = "strict";
+    "gitlens.plusFeatures.enabled" = false;
+    "[python]" = {
+      "editor.defaultFormatter" = "charliermarsh.ruff";
+    };
     "diffEditor.ignoreTrimWhitespace" = false;
+    "workbench.secondarySideBar.defaultVisibility" = "hidden";
+    "files.exclude" = {
+      "**/.direnv" = true;
+      "**/__pycache__" = true;
+    };
     "java.jdt.ls.java.home" = pkgs.javaPackages.compiler.openjdk25;
   };
   programs.vscode.mutableExtensionsDir = false;
@@ -56,6 +74,11 @@
     astro-build.astro-vscode
     mkhl.direnv
     unifiedjs.vscode-mdx
+    puppet.puppet-vscode
+    pkgs.vscode-marketplace-release.eamodio.gitlens
+    twxs.cmake
+    tamasfe.even-better-toml
+    hashicorp.hcl
     pkgs.vscode-extensions.ms-vscode.cpptools
     platformio.platformio-ide
     marlinfirmware.auto-build
@@ -72,11 +95,22 @@
     vscjava.vscode-java-debug
     vscjava.vscode-java-test
     vscjava.vscode-gradle
+    ms-vscode.cmake-tools
+    bierner.markdown-mermaid
+    samuelcolvin.jinjahtml
+    charliermarsh.ruff
+    ms-python.black-formatter
+    ms-python.mypy-type-checker
+    pkgs.vscode-extensions.github.copilot
+    pkgs.vscode-extensions.github.copilot-chat
+    buenon.scratchpads
+    tonybaloney.vscode-pets
   ];
 
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
+    # TODO make configurable, import intenta hosts (for non confidential stuff)
     matchBlocks = {
       "github.com" = {
         identityFile = "~/.ssh/id_github";
@@ -273,6 +307,11 @@
       kubernetes = {
         disabled = false;
         detect_env_vars = [ "STARSHIP_KUBERNETES" ];
+      };
+      custom.chroot = {
+        command = "cat /etc/debian_chroot";
+        when = "test -f /etc/debian_chroot";
+        format = "chroot [$output]($style) ";
       };
     };
   };

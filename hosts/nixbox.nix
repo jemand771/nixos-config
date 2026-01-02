@@ -137,7 +137,6 @@
     ];
     preferStaticEmulators = true;
   };
-  boot.binfmt.preferStaticEmulators = true;
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
   virtualisation.waydroid.enable = true;

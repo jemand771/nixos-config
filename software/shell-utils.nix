@@ -18,6 +18,7 @@
       dig
       file
       findutils
+      fd
       ffmpeg
       gnutar
       inotify-tools

@@ -10,6 +10,9 @@
     enable = true;
     enableDefaultConfig = false;
     matchBlocks = {
+      "*" = {
+        addKeysToAgent = "yes";
+      };
       "bitbucket.org" = {
         identityFile = "~/.ssh/id_bitbucket";
       };

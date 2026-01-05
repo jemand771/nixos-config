@@ -26,6 +26,10 @@
     enable = true;
     daemon.settings.features.containerd-snapshotter = true;
   };
+  programs.git = {
+    enable = true;
+    lfs.enable = true;
+  };
   virtualisation.podman.enable = true;
   # TODO security.pki.certificates (or certificateFiles, I guess)
   # TODO network shares (if I can get them to work)

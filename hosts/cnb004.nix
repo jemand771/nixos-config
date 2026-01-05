@@ -22,6 +22,11 @@
       ]
     );
   };
+  virtualisation.docker = {
+    enable = true;
+    daemon.settings.features.containerd-snapshotter = true;
+  };
+  virtualisation.podman.enable = true;
   # TODO security.pki.certificates (or certificateFiles, I guess)
   # TODO network shares (if I can get them to work)
   # TODO svp2 schroot config, or ignore and abandon? (build locally and just reference hardcoded path to avoid delays from IFD?)

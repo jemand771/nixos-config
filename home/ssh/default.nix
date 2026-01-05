@@ -10,6 +10,9 @@
     enable = true;
     enableDefaultConfig = false;
     matchBlocks = {
+      "bitbucket.org" = {
+        identityFile = "~/.ssh/id_bitbucket";
+      };
       "github.com" = {
         identityFile = "~/.ssh/id_github";
       };

@@ -126,6 +126,10 @@
         disabled = false;
         detect_env_vars = [ "STARSHIP_KUBERNETES" ];
       };
+      character = {
+        success_symbol = "[➜](bold green)";
+        error_symbol = "[➜](bold red)";
+      };
       custom.chroot = {
         command = "cat /etc/debian_chroot";
         when = "test -f /etc/debian_chroot";

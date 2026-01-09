@@ -5,6 +5,7 @@
   users.users.willy.extraGroups = [
     "docker"
     "dialout"
+    "libvirtd"
   ];
   services.jenkins = {
     enable = true;
@@ -31,6 +32,8 @@
     lfs.enable = true;
   };
   virtualisation.podman.enable = true;
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
   # TODO security.pki.certificates (or certificateFiles, I guess)
   # TODO network shares (if I can get them to work)
   # TODO svp2 schroot config, or ignore and abandon? (build locally and just reference hardcoded path to avoid delays from IFD?)

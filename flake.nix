@@ -50,10 +50,6 @@
       url = "https://github.com/NixOS/nixpkgs/pull/423815.diff";
       flake = false;
     };
-    nixpkgs-patch-lrzsz = {
-      url = "https://github.com/NixOS/nixpkgs/pull/475445.diff";
-      flake = false;
-    };
     nixpkgs-patch-jenkins-plugins = {
       url = "https://github.com/NixOS/nixpkgs/compare/master...jemand771:nixpkgs:jenkins.diff";
       flake = false;

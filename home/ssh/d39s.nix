@@ -1,7 +1,7 @@
 { config, lib, options, ... }:
 {
   options.jemand771.ssh.hostsets.d39s.enable = lib.mkEnableOption "ssh.hostsets.d39s";
-  config.programs.ssh.matchBlocks = lib.mkIf config.jemand771.ssh.hostsets.d39s.enable {
+  config.programs.ssh.matchBlocks = lib.mkIf config.jemand771.ssh.hostsets.d39s.enable ({
     "gl.hanwis.com" = {
       identityFile = "~/.ssh/id_hanwis";
     };
@@ -146,5 +146,5 @@
           ip = "91.99.223.24";
         }
       ]
-  );
+  ));
 }

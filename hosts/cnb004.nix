@@ -37,4 +37,6 @@
   # TODO security.pki.certificates (or certificateFiles, I guess)
   # TODO network shares (if I can get them to work)
   # TODO svp2 schroot config, or ignore and abandon? (build locally and just reference hardcoded path to avoid delays from IFD?)
+  # TODO warning, dangerous and ugly, see https://github.com/NixOS/nixpkgs/issues/30723
+  nix.settings.extra-sandbox-paths = [ "/docker-auth.json" ];
 }

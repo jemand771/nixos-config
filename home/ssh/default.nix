@@ -12,6 +12,7 @@
     matchBlocks = {
       "*" = {
         addKeysToAgent = "yes";
+        identitiesOnly = true;
       };
       "bitbucket.org" = {
         identityFile = "~/.ssh/id_bitbucket";

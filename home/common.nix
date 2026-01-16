@@ -106,7 +106,8 @@
     pkgs.vscode-extensions.github.copilot
     pkgs.vscode-extensions.github.copilot-chat
     buenon.scratchpads
-    tonybaloney.vscode-pets
+    # tonybaloney.vscode-pets
+    (pkgs.callPackage ./vscode-pets.nix { })
   ];
 
   programs.fish = {

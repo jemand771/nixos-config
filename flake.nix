@@ -329,9 +329,10 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in
       {
-        devShells.default = pkgs.mkShell {
+        devShells.default = pkgs.mkShellNoCC {
           nativeBuildInputs = [
             colmena.packages.${system}.colmena
+            pkgs.nixfmt-rfc-style
           ];
         };
         formatter = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;

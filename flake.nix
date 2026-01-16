@@ -54,6 +54,10 @@
       url = "https://github.com/NixOS/nixpkgs/compare/master...jemand771:nixpkgs:jenkins.diff";
       flake = false;
     };
+    nixpkgs-patch-ckb-next = {
+      url = "https://github.com/NixOS/nixpkgs/pull/446679.diff";
+      flake = false;
+    };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";

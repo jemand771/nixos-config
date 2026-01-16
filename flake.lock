@@ -410,6 +410,18 @@
         "url": "https://github.com/NixOS/nixpkgs/pull/423815.diff"
       }
     },
+    "nixpkgs-patch-ckb-next": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-e9AOjpgGv3TrgL0+zmFNlj5qk6RH+adHyVqT0h5cRyI=",
+        "type": "file",
+        "url": "https://github.com/NixOS/nixpkgs/pull/446679.diff"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/NixOS/nixpkgs/pull/446679.diff"
+      }
+    },
     "nixpkgs-patch-jenkins-plugins": {
       "flake": false,
       "locked": {
@@ -542,6 +554,7 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
         "nixpkgs-patch-cibuildwheel": "nixpkgs-patch-cibuildwheel",
+        "nixpkgs-patch-ckb-next": "nixpkgs-patch-ckb-next",
         "nixpkgs-patch-jenkins-plugins": "nixpkgs-patch-jenkins-plugins",
         "nixpkgs-patcher": "nixpkgs-patcher",
         "nixpkgs-unstable-small": "nixpkgs-unstable-small",

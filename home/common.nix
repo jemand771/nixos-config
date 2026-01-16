@@ -64,6 +64,7 @@
     "java.jdt.ls.java.home" = pkgs.javaPackages.compiler.openjdk25;
     "vscode-pets.petSize" = "medium";
     "vscode-pets.throwBallWithMouse" = true;
+    "vscode-pets.theme" = "winter";
   };
   programs.vscode.mutableExtensionsDir = false;
   programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [

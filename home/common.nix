@@ -85,7 +85,6 @@
     platformio.platformio-ide
     marlinfirmware.auto-build
     ms-vsliveshare.vsliveshare
-    eamodio.gitlens
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-python.vscode-pylance
     ms-vscode-remote.remote-containers

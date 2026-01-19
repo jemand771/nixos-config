@@ -108,6 +108,7 @@
     buenon.scratchpads
     # tonybaloney.vscode-pets
     (pkgs.callPackage ./vscode-pets.nix { })
+    mechatroner.rainbow-csv
   ];
 
   programs.fish = {

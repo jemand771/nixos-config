@@ -40,7 +40,7 @@
       identityFile = "~/.ssh/id_rd";
       proxyJump = "rms";
     };
-    nbptp = {
+    nbptpm = {
       user = "adm_wihi";
       hostname = "217.160.252.63";
       identityFile = "~/.ssh/id_nbptp";
@@ -48,13 +48,13 @@
     nbptpi = {
       user = "adm_wihi";
       hostname = "10.7.224.11";
-      proxyJump = "nbptp";
+      proxyJump = "nbptpm";
       identityFile = "~/.ssh/id_nbptp";
     };
     nbptpo = {
       user = "adm_wihi";
       hostname = "10.7.224.13";
-      proxyJump = "nbptp";
+      proxyJump = "nbptpm";
       identityFile = "~/.ssh/id_nbptp";
     };
   };

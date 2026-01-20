@@ -57,5 +57,9 @@
       proxyJump = "nbptpm";
       identityFile = "~/.ssh/id_nbptp";
     };
+    "192.168.122.*" = {
+      user = "root";
+      identityFile = "~/.ssh/id_virt-manager";
+    };
   };
 }

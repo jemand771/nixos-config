@@ -52,19 +52,22 @@
   };
 
   outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      agenix,
-      home-manager,
-      plasma-manager,
-      nix-vscode-extensions,
-      flake-utils,
-      colmena,
-      microvm,
-      disko,
-      ...
-    }:
+    inputs:
+    let
+      inputs' = (import ./patches.nix) { inherit inputs; };
+      inherit (inputs')
+        self
+        nixpkgs
+        agenix
+        home-manager
+        plasma-manager
+        nix-vscode-extensions
+        flake-utils
+        colmena
+        microvm
+        disko
+        ;
+    in
     {
       # TODO migrate these to colmena aswell
       # nixosConfigurations.proxmoxTest1 = import ./playground/proxmox.nix {
@@ -102,10 +105,10 @@
             ./home/options.nix
             home-manager.nixosModules.home-manager
             (
-              { config, ... }:
+              { config, lib, ... }:
               {
-                options.jemand771.home-manager.enable = nixpkgs.lib.mkEnableOption "home-manager";
-                config.home-manager = nixpkgs.lib.mkIf config.jemand771.home-manager.enable {
+                options.jemand771.home-manager.enable = lib.mkEnableOption "home-manager";
+                config.home-manager = lib.mkIf config.jemand771.home-manager.enable {
                   useGlobalPkgs = true;
                   useUserPackages = true;
                   sharedModules = [
@@ -131,7 +134,6 @@
             ./sync.nix
             disko.nixosModules.disko
           ];
-          inputs' = (import ./patches.nix) { inherit inputs; };
         in
         colmena.lib.makeHive {
           meta = {
@@ -241,7 +243,7 @@
           # TODO for all LXCs: is this the right way to grab this thing?
           apt-cache = {
             imports = defaultModules ++ [
-              ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+              ("${inputs'.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
               ./software/apt-cache.nix
             ];
             deployment.tags = [ "homelab" ];
@@ -250,7 +252,7 @@
           };
           syncthing-arbiter = {
             imports = defaultModules ++ [
-              ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+              ("${inputs'.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
             ];
             deployment.tags = [ "homelab" ];
             users.users.willy.isNormalUser = true;
@@ -260,7 +262,7 @@
           };
           nix-cache = {
             imports = defaultModules ++ [
-              ("${inputs.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+              ("${inputs'.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
               ./software/nix-cache.nix
             ];
             deployment.tags = [ "homelab" ];
@@ -272,17 +274,18 @@
     // flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = (import nixpkgs { inherit system; });
       in
       {
         devShells.default = pkgs.mkShellNoCC {
-          nativeBuildInputs = [
+          nativeBuildInputs = with pkgs; [
             colmena.packages.${system}.colmena
-            pkgs.nixfmt
-            pkgs.nixfmt-tree
+            deadnix
+            nixfmt
+            nixfmt-tree
           ];
         };
-        formatter = nixpkgs.legacyPackages.${system}.nixfmt-tree;
+        formatter = pkgs.nixfmt-tree;
       }
     );
 }

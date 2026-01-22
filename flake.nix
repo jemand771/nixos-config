@@ -303,9 +303,7 @@
             # TODO how to make this work on whatever system you're running this from?
             nixpkgs = (import nixpkgs { system = "x86_64-linux"; });
             nodeNixpkgs = builtins.mapAttrs (_: value: value.pkgs) self.nixosConfigurations;
-            nodeSpecialArgs = builtins.mapAttrs (
-              _: value: value._module.specialArgs
-            ) self.nixosConfigurations;
+            nodeSpecialArgs = builtins.mapAttrs (_: value: value._module.specialArgs) self.nixosConfigurations;
             allowApplyAll = false;
           };
         }

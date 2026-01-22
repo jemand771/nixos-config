@@ -39,16 +39,18 @@
     description = "Write current time to /run/current-time.txt every second";
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.writeShellApplication {
-        name = "write-time";
-        text = ''
-          while true; do
-            date +"%H:%M:%S" > /run/current-time.txt.tmp
-            mv /run/current-time.txt.tmp /run/current-time.txt
-            sleep 0.1
-          done
-        '';
-      }}/bin/write-time";
+      ExecStart = "${
+        pkgs.writeShellApplication {
+          name = "write-time";
+          text = ''
+            while true; do
+              date +"%H:%M:%S" > /run/current-time.txt.tmp
+              mv /run/current-time.txt.tmp /run/current-time.txt
+              sleep 0.1
+            done
+          '';
+        }
+      }/bin/write-time";
       Restart = "always";
       RestartSec = 1;
     };

@@ -3,13 +3,17 @@
   programs.git = {
     enable = true;
     settings = {
-      user = if osConfig.networking.hostName == "cnb004" then {
-        name = "Willy Hille";
-        email = "willy.hille@intenta.de";
-      } else {
-        name = "Willy";
-        email = "jemand771@gmx.net";
-      };
+      user =
+        if osConfig.networking.hostName == "cnb004" then
+          {
+            name = "Willy Hille";
+            email = "willy.hille@intenta.de";
+          }
+        else
+          {
+            name = "Willy";
+            email = "jemand771@gmx.net";
+          };
       push = {
         autoSetupRemote = true;
         submodule.recurse = true;

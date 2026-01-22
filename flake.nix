@@ -52,16 +52,17 @@
   };
 
   outputs =
-    inputs:
+    inputs':
     let
-      inputs' = (import ./patches.nix) { inherit inputs; };
-      inherit (inputs')
+      inputs = (import ./patches.nix) inputs';
+      inherit (inputs)
         self
         nixpkgs
         agenix
         home-manager
         plasma-manager
         nix-vscode-extensions
+        nixpkgs-unstable-small
         flake-utils
         colmena
         microvm
@@ -93,7 +94,7 @@
               nixpkgs.overlays = [
                 # make unstable-small packages available as pkgs.unstable-small
                 (_: prev: ({
-                  unstable-small = import inputs.nixpkgs-unstable-small {
+                  unstable-small = import nixpkgs-unstable-small {
                     config.allowUnfree = true;
                     inherit (prev.stdenv.hostPlatform) system;
                   };
@@ -137,9 +138,9 @@
         in
         colmena.lib.makeHive {
           meta = {
-            nixpkgs = import inputs'.nixpkgs { system = "x86_64-linux"; };
+            nixpkgs = import nixpkgs { system = "x86_64-linux"; };
             specialArgs = {
-              inputs = inputs';
+              inherit inputs;
             };
             allowApplyAll = false;
           };
@@ -243,7 +244,7 @@
           # TODO for all LXCs: is this the right way to grab this thing?
           apt-cache = {
             imports = defaultModules ++ [
-              ("${inputs'.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+              ("${nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
               ./software/apt-cache.nix
             ];
             deployment.tags = [ "homelab" ];
@@ -252,7 +253,7 @@
           };
           syncthing-arbiter = {
             imports = defaultModules ++ [
-              ("${inputs'.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+              ("${nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
             ];
             deployment.tags = [ "homelab" ];
             users.users.willy.isNormalUser = true;
@@ -262,7 +263,7 @@
           };
           nix-cache = {
             imports = defaultModules ++ [
-              ("${inputs'.nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
+              ("${nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
               ./software/nix-cache.nix
             ];
             deployment.tags = [ "homelab" ];

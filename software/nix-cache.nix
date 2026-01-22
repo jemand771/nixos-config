@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   services.atticd = {
     enable = true;

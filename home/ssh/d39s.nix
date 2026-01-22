@@ -1,4 +1,4 @@
-{ config, lib, options, ... }:
+{ config, lib, ... }:
 {
   options.jemand771.ssh.hostsets.d39s.enable = lib.mkEnableOption "ssh.hostsets.d39s";
   config.programs.ssh.matchBlocks = lib.mkIf config.jemand771.ssh.hostsets.d39s.enable ({

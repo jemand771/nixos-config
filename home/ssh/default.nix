@@ -1,4 +1,4 @@
-{ config, lib, options, ... }:
+{ config, lib, ... }:
 {
   imports = [
     ./d39s.nix

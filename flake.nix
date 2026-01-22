@@ -68,14 +68,11 @@
       home-manager,
       plasma-manager,
       nix-vscode-extensions,
-      nix-minecraft,
-      nix-vanillatweaks,
       flake-utils,
       colmena,
       microvm,
       disko,
       nixpkgs-patcher,
-      nixos-wsl,
       ...
     }:
     let
@@ -85,8 +82,6 @@
           homeModules ? [ ],
           system ? "x86_64-linux",
           stateVersion,
-          nixpkgs ? inputs.nixpkgs,
-          home-manager ? inputs.home-manager,
         }:
         nixpkgs-patcher.lib.nixosSystem {
           inherit system;
@@ -307,14 +302,14 @@
           meta = {
             # TODO how to make this work on whatever system you're running this from?
             nixpkgs = (import nixpkgs { system = "x86_64-linux"; });
-            nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) self.nixosConfigurations;
+            nodeNixpkgs = builtins.mapAttrs (_: value: value.pkgs) self.nixosConfigurations;
             nodeSpecialArgs = builtins.mapAttrs (
-              name: value: value._module.specialArgs
+              _: value: value._module.specialArgs
             ) self.nixosConfigurations;
             allowApplyAll = false;
           };
         }
-        // builtins.mapAttrs (name: value: {
+        // builtins.mapAttrs (_: value: {
           imports = value._module.args.modules;
         }) self.nixosConfigurations
       );

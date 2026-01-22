@@ -398,45 +398,6 @@
         "type": "indirect"
       }
     },
-    "nixpkgs-patch-cibuildwheel": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-6883accDef6scOOQYK7i8YQHS6NdAemXg4THuCOdnyM=",
-        "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/pull/423815.diff"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/pull/423815.diff"
-      }
-    },
-    "nixpkgs-patch-jenkins-plugins": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-mrgfn8TyaQSTlx8DOQ/gCsbxEaQVl0YutfbkfR27+Xw=",
-        "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/compare/master...jemand771:nixpkgs:jenkins.diff"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/NixOS/nixpkgs/compare/master...jemand771:nixpkgs:jenkins.diff"
-      }
-    },
-    "nixpkgs-patcher": {
-      "locked": {
-        "lastModified": 1765447685,
-        "narHash": "sha256-H2C5UgIo3nkB2aHnvePZxOMn1GeWM3RTXLjBUT1z/I0=",
-        "owner": "gepbird",
-        "repo": "nixpkgs-patcher",
-        "rev": "fd95467b7f4452b95a0eb610fc96af572149c7d9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gepbird",
-        "repo": "nixpkgs-patcher",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1761016216,
@@ -541,9 +502,6 @@
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-patch-cibuildwheel": "nixpkgs-patch-cibuildwheel",
-        "nixpkgs-patch-jenkins-plugins": "nixpkgs-patch-jenkins-plugins",
-        "nixpkgs-patcher": "nixpkgs-patcher",
         "nixpkgs-unstable-small": "nixpkgs-unstable-small",
         "plasma-manager": "plasma-manager",
         "proxmox-nixos": "proxmox-nixos"

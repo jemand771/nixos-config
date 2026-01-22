@@ -324,9 +324,10 @@
           nativeBuildInputs = [
             colmena.packages.${system}.colmena
             pkgs.nixfmt
+            pkgs.nixfmt-tree
           ];
         };
-        formatter = nixpkgs.legacyPackages.${system}.nixfmt;
+        formatter = nixpkgs.legacyPackages.${system}.nixfmt-tree;
       }
     );
 }

@@ -16,6 +16,12 @@
       "root"
       "@wheel"
     ];
+    substituters = [
+      "https://cache.saumon.network/proxmox-nixos"
+    ];
+    trusted-public-keys = [
+      "proxmox-nixos:D9RYSWpQQC/msZUWphOY2I5RLH5Dd6yQcaHIuug7dWM="
+    ];
   };
   nixpkgs.config.allowUnfree = true;
   nix.package = pkgs.lixPackageSets.latest.lix;

@@ -65,6 +65,7 @@
     "vscode-pets.petSize" = "medium";
     "vscode-pets.throwBallWithMouse" = true;
     "vscode-pets.theme" = "winter";
+    "update.showReleaseNotes" = false;
   };
   programs.vscode.mutableExtensionsDir = false;
   programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [

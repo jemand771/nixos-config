@@ -67,25 +67,10 @@
         colmena
         microvm
         disko
+        proxmox-nixos
         ;
     in
     {
-      # TODO migrate these to colmena aswell
-      # nixosConfigurations.proxmoxTest1 = import ./playground/proxmox.nix {
-      #   inherit inputs;
-      #   pkgs = import nixpkgs { system = "x86_64-linux"; };
-      #   id = 1;
-      # };
-      # nixosConfigurations.proxmoxTest2 = import ./playground/proxmox.nix {
-      #   inherit inputs;
-      #   pkgs = import nixpkgs { system = "x86_64-linux"; };
-      #   id = 2;
-      # };
-      # nixosConfigurations.proxmoxTest3 = import ./playground/proxmox.nix {
-      #   inherit inputs;
-      #   pkgs = import nixpkgs { system = "x86_64-linux"; };
-      #   id = 3;
-      # };
       nixosConfigurations = self.colmenaHive.nodes;
       colmenaHive =
         let
@@ -100,6 +85,13 @@
                   };
                 }))
                 nix-vscode-extensions.overlays.default
+                (
+                  final: prev:
+                  if builtins.hasAttr prev.stdenv.hostPlatform.system proxmox-nixos.overlays then
+                    proxmox-nixos.overlays.${prev.stdenv.hostPlatform.system} final prev
+                  else
+                    { }
+                )
               ];
             }
             ./meta-options.nix
@@ -269,6 +261,21 @@
             deployment.tags = [ "homelab" ];
             jemand771.auto-upgrade.enable = true;
             system.stateVersion = "24.05";
+          };
+          proxmoxTest1 = {
+            imports = defaultModules ++ [
+              ((import ./playground/proxmox.nix) 1)
+            ];
+          };
+          proxmoxTest2 = {
+            imports = defaultModules ++ [
+              ((import ./playground/proxmox.nix) 2)
+            ];
+          };
+          proxmoxTest3 = {
+            imports = defaultModules ++ [
+              ((import ./playground/proxmox.nix) 3)
+            ];
           };
         };
     }

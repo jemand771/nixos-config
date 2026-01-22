@@ -182,6 +182,9 @@ inputs.nixpkgs.lib.nixosSystem {
       #     ConfigureWithoutCarrier = true;
       #    };
       # };
+
+      # TODO remove once upstream fix is merged: https://github.com/SaumonNet/proxmox-nixos/pull/213
+      services.openssh.settings.AcceptEnv = pkgs.lib.mkForce [ "LANG" "LC_*" ];
     }
     {
       time.timeZone = "Europe/Berlin";

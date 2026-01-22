@@ -24,7 +24,7 @@
       ))
       ruff
       twine
-      nodejs_20
+      nodejs_24
       # TODO move me
       prusa-slicer
       platformio

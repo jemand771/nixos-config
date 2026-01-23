@@ -25,6 +25,7 @@
   nixpkgs.config.allowUnfree = true;
   nix.package = pkgs.lixPackageSets.latest.lix;
 
+  # sudo rm -rf /root/.nix-defexpr/channels /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels /home/willy/.nix-defexpr/channels
   nix.channel.enable = false;
   nixpkgs.flake.source = nixpkgs;
 

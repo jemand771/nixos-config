@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   # Bootloader.
@@ -149,4 +149,37 @@
     powerOnBoot = true;
     settings.General.Experimental = true;
   };
+
+  imports = [
+    inputs.agenix.nixosModules.default
+    { environment.systemPackages = [ inputs.agenix.packages.x86_64-linux.default ]; }
+    ../secrets-nixos.nix
+    ../backups.nix
+    ../hardware/nixbox.nix
+    ../hardware/nvidia.nix
+    ../hardware/nic.nix
+    ../hardware/keyboard.nix
+    ../hardware/fans.nix
+    ../hardware/mouse.nix
+    ../hardware/printer.nix
+    ../mounts.nix
+    ../playground/minecraft.nix
+    inputs.microvm.nixosModules.host
+    ../playground/vms.nix
+  ];
+  home-manager.users.willy.imports = [
+    ../hardware/keyboard-user.nix
+    {
+      jemand771.desktopLagFix.enable = true;
+      jemand771.ssh = {
+        enable = true;
+        hostsets = {
+          d39s.enable = true;
+          homelab.enable = true;
+        };
+      };
+    }
+  ];
+  jemand771.meta.personal-system = true;
+  system.stateVersion = "23.11";
 }

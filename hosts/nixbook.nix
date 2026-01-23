@@ -74,4 +74,12 @@
     powerOnBoot = true;
     settings.General.Experimental = true;
   };
+
+  imports = [
+    ../hardware/nixbook.nix
+    ../hardware/mouse.nix
+    ../hardware/printer.nix
+  ];
+  jemand771.meta.personal-system = true;
+  system.stateVersion = "24.05";
 }

@@ -127,157 +127,25 @@
             ./sync.nix
             disko.nixosModules.disko
           ];
+          pkgs = import nixpkgs { system = "x86_64-linux"; };
         in
-        colmena.lib.makeHive {
-          meta = {
-            nixpkgs = import nixpkgs { system = "x86_64-linux"; };
-            specialArgs = {
-              inherit inputs;
+        colmena.lib.makeHive (
+          {
+            meta = {
+              nixpkgs = pkgs;
+              specialArgs = {
+                inherit inputs;
+              };
+              allowApplyAll = false;
             };
-            allowApplyAll = false;
-          };
-          nixbox = {
-            imports = defaultModules ++ [
-              agenix.nixosModules.default
-              { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
-              ./secrets-nixos.nix
-              ./backups.nix
-              ./hosts/nixbox.nix
-              ./hardware/nixbox.nix
-              ./hardware/nvidia.nix
-              ./hardware/nic.nix
-              ./hardware/keyboard.nix
-              ./hardware/fans.nix
-              ./hardware/mouse.nix
-              ./hardware/printer.nix
-              ./mounts.nix
-              ./playground/minecraft.nix
-              microvm.nixosModules.host
-              ./playground/vms.nix
+          }
+          // (pkgs.lib.mapAttrs' (n: v: {
+            name = inputs'.nixpkgs.lib.removeSuffix ".nix" n;
+            value.imports = defaultModules ++ [
+              ./hosts/${n}
             ];
-            home-manager.users.willy.imports = [
-              ./hardware/keyboard-user.nix
-              {
-                jemand771.desktopLagFix.enable = true;
-                jemand771.ssh = {
-                  enable = true;
-                  hostsets = {
-                    d39s.enable = true;
-                    homelab.enable = true;
-                  };
-                };
-              }
-            ];
-            jemand771.meta.personal-system = true;
-            system.stateVersion = "23.11";
-          };
-          nixbook = {
-            imports = defaultModules ++ [
-              ./hosts/nixbook.nix
-              ./hardware/nixbook.nix
-              ./hardware/mouse.nix
-              ./hardware/printer.nix
-            ];
-            jemand771.meta.personal-system = true;
-            system.stateVersion = "24.05";
-          };
-          nixtique = {
-            imports = defaultModules ++ [
-              ./hosts/nixtique.nix
-              ./hardware/nixtique.nix
-              ./hardware/mouse.nix
-            ];
-            jemand771.meta.personal-system = true;
-            home-manager.users.willy.imports = [
-              {
-                jemand771.ssh = {
-                  enable = true;
-                  hostsets = {
-                    d39s.enable = true;
-                    homelab.enable = true;
-                  };
-                };
-              }
-            ];
-            system.stateVersion = "24.05";
-          };
-          nixbox2 = {
-            imports = defaultModules ++ [
-              ./hosts/nixbox2.nix
-              ./hardware/nixbox2.nix
-              ./hardware/mouse.nix
-            ];
-            jemand771.meta.personal-system = true;
-            system.stateVersion = "24.05";
-          };
-          cnb004 = {
-            imports = defaultModules ++ [
-              ./hosts/cnb004.nix
-            ];
-            jemand771.wsl.enable = true;
-            jemand771.dev-python.enable = true;
-            jemand771.dev-infra.enable = true;
-            jemand771.shell-utils.enable = true;
-            jemand771.office-utils.enable = true;
-            jemand771.home-manager.enable = true;
-            home-manager.users.willy.imports = [
-              {
-                jemand771.ssh = {
-                  enable = true;
-                  hostsets = {
-                    homelab.enable = true;
-                    intenta.enable = true;
-                  };
-                };
-              }
-            ];
-            system.stateVersion = "23.11";
-          };
-          # TODO for all LXCs: is this the right way to grab this thing?
-          apt-cache = {
-            imports = defaultModules ++ [
-              ("${nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
-              ./software/apt-cache.nix
-            ];
-            deployment.tags = [ "homelab" ];
-            jemand771.auto-upgrade.enable = true;
-            system.stateVersion = "23.11";
-          };
-          syncthing-arbiter = {
-            imports = defaultModules ++ [
-              ("${nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
-            ];
-            deployment.tags = [ "homelab" ];
-            users.users.willy.isNormalUser = true;
-            jemand771.syncthing.enable = true;
-            jemand771.auto-upgrade.enable = true;
-            system.stateVersion = "24.05";
-          };
-          nix-cache = {
-            imports = defaultModules ++ [
-              ("${nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix")
-              ./software/nix-cache.nix
-            ];
-            deployment.tags = [ "homelab" ];
-            jemand771.auto-upgrade.enable = true;
-            system.stateVersion = "24.05";
-          };
-          proxmoxTest1 = {
-            imports = defaultModules ++ [
-              ((import ./playground/proxmox.nix) 1)
-            ];
-          };
-          proxmoxTest2 = {
-            imports = defaultModules ++ [
-              ((import ./playground/proxmox.nix) 2)
-            ];
-          };
-          proxmoxTest3 = {
-            imports = defaultModules ++ [
-              ((import ./playground/proxmox.nix) 3)
-            ];
-          };
-        };
+          }) (builtins.readDir ./hosts))
+        );
     }
     // flake-utils.lib.eachDefaultSystem (
       system:

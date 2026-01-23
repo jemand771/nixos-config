@@ -49,4 +49,22 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  imports = [
+    ../hardware/nixtique.nix
+    ../hardware/mouse.nix
+  ];
+  jemand771.meta.personal-system = true;
+  home-manager.users.willy.imports = [
+    {
+      jemand771.ssh = {
+        enable = true;
+        hostsets = {
+          d39s.enable = true;
+          homelab.enable = true;
+        };
+      };
+    }
+  ];
+  system.stateVersion = "24.05";
 }

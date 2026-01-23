@@ -40,4 +40,23 @@
   # TODO warning, dangerous and ugly, see https://github.com/NixOS/nixpkgs/issues/30723
   nix.settings.extra-sandbox-paths = [ "/docker-auth.json" ];
   zramSwap.enable = true;
+
+  jemand771.wsl.enable = true;
+  jemand771.dev-python.enable = true;
+  jemand771.dev-infra.enable = true;
+  jemand771.shell-utils.enable = true;
+  jemand771.office-utils.enable = true;
+  jemand771.home-manager.enable = true;
+  home-manager.users.willy.imports = [
+    {
+      jemand771.ssh = {
+        enable = true;
+        hostsets = {
+          homelab.enable = true;
+          intenta.enable = true;
+        };
+      };
+    }
+  ];
+  system.stateVersion = "23.11";
 }

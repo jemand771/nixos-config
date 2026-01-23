@@ -2,7 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ inputs, pkgs, ... }:
+{
+  agenix,
+  microvm,
+  pkgs,
+  ...
+}:
 
 {
   # Bootloader.
@@ -151,8 +156,8 @@
   };
 
   imports = [
-    inputs.agenix.nixosModules.default
-    { environment.systemPackages = [ inputs.agenix.packages.x86_64-linux.default ]; }
+    agenix.nixosModules.default
+    { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
     ../secrets-nixos.nix
     ../backups.nix
     ../hardware/nixbox.nix
@@ -164,7 +169,7 @@
     ../hardware/printer.nix
     ../mounts.nix
     ../playground/minecraft.nix
-    inputs.microvm.nixosModules.host
+    microvm.nixosModules.host
     ../playground/vms.nix
   ];
   home-manager.users.willy.imports = [

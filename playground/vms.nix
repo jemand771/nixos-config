@@ -1,6 +1,6 @@
-{ inputs, ... }:
+{ microvm, ... }:
 {
-  imports = [ inputs.microvm.nixosModules.host ];
+  imports = [ microvm.nixosModules.host ];
 
   systemd.network.enable = true;
   networking.useDHCP = false;

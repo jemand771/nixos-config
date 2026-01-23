@@ -1,7 +1,10 @@
 id:
 {
   pkgs,
-  inputs,
+  modulesPath,
+  nixpkgs,
+  disko,
+  proxmox-nixos,
   ...
 }:
 let
@@ -9,9 +12,9 @@ let
 in
 {
   imports = [
-    (inputs.nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
-    inputs.proxmox-nixos.nixosModules.proxmox-ve
-    inputs.disko.nixosModules.disko
+    (modulesPath + "/profiles/qemu-guest.nix")
+    proxmox-nixos.nixosModules.proxmox-ve
+    disko.nixosModules.disko
   ];
 
   boot.loader.grub.enable = true;
@@ -95,9 +98,9 @@ in
       "nix-command"
       "flakes"
     ];
-    registry.nixpkgs.flake = inputs.nixpkgs;
+    registry.nixpkgs.flake = nixpkgs;
     nixPath = [
-      "nixpkgs=${inputs.nixpkgs}"
+      "nixpkgs=${nixpkgs}"
     ];
   };
   users.users.root.password = "root";

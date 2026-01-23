@@ -1,7 +1,12 @@
-{ inputs, pkgs, ... }:
 {
-  imports = [ inputs.nix-minecraft.nixosModules.minecraft-servers ];
-  nixpkgs.overlays = [ inputs.nix-minecraft.overlay ];
+  nix-minecraft,
+  nix-vanillatweaks,
+  pkgs,
+  ...
+}:
+{
+  imports = [ nix-minecraft.nixosModules.minecraft-servers ];
+  nixpkgs.overlays = [ nix-minecraft.overlay ];
 
   services.minecraft-servers = {
     enable = true;
@@ -41,7 +46,7 @@
         "allowed_symlinks.txt" = pkgs.writeText "allowed_symlinks" "/nix/store";
         "world/datapacks" = pkgs.linkFarmFromDrvs "datapacks" [
           # TODO that's not how you do it
-          inputs.nix-vanillatweaks.legacyPackages.x86_64-linux.datapacks."1.21".decorative-cosmetic.name-colors
+          nix-vanillatweaks.legacyPackages.x86_64-linux.datapacks."1.21".decorative-cosmetic.name-colors
         ];
         mods = pkgs.linkFarmFromDrvs "mods" (
           builtins.attrValues {

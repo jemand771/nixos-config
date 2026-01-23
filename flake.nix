@@ -58,14 +58,12 @@
       inherit (inputs)
         self
         nixpkgs
-        agenix
         home-manager
         plasma-manager
         nix-vscode-extensions
         nixpkgs-unstable-small
         flake-utils
         colmena
-        microvm
         disko
         proxmox-nixos
         ;
@@ -133,13 +131,11 @@
           {
             meta = {
               nixpkgs = pkgs;
-              specialArgs = {
-                inherit inputs;
-              };
+              specialArgs = inputs;
               allowApplyAll = false;
             };
           }
-          // (pkgs.lib.mapAttrs' (n: v: {
+          // (pkgs.lib.mapAttrs' (n: _: {
             name = inputs'.nixpkgs.lib.removeSuffix ".nix" n;
             value.imports = defaultModules ++ [
               ./hosts/${n}

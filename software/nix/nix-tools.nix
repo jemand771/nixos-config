@@ -1,5 +1,6 @@
 {
   config,
+  nixpkgs,
   pkgs,
   ...
 }:
@@ -23,6 +24,9 @@
   };
   nixpkgs.config.allowUnfree = true;
   nix.package = pkgs.lixPackageSets.latest.lix;
+
+  nix.channel.enable = false;
+  nixpkgs.flake.source = nixpkgs;
 
   nix.gc = {
     automatic = true;

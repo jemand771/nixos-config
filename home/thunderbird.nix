@@ -22,34 +22,39 @@
   # Instead, I let thunderbird prompt me for the password on first launch (and first time sending an email)
   # and tick the "save password" checkbox. Not entirely declarative, but good enough for now.
   # TODO deduplicate much? imap/smtp/thunderbird.enable are all shared
-  accounts.email.accounts."willy.hille@d39s.de" = {
-    address = "willy.hille@d39s.de";
-    userName = "willy.hille@d39s.de";
-    realName = "Willy Hille";
-    imap = {
-      host = "mail.d39s.de";
-      port = 993;
-    };
-    smtp = {
-      host = "mail.d39s.de";
-      port = 465;
-    };
-    # TODO not really
-    primary = true;
-    thunderbird.enable = true;
-  };
-  accounts.email.accounts."info@d39s.de" = {
-    address = "info@d39s.de";
-    userName = "info@d39s.de";
-    realName = "info";
-    imap = {
-      host = "mail.d39s.de";
-      port = 993;
-    };
-    smtp = {
-      host = "mail.d39s.de";
-      port = 465;
-    };
-    thunderbird.enable = true;
-  };
+  accounts.email.accounts =
+    let
+      d39s = {
+        imap = {
+          host = "mail.d39s.de";
+          port = 993;
+        };
+        smtp = {
+          host = "mail.d39s.de";
+          port = 465;
+        };
+      };
+    in
+    builtins.mapAttrs
+      (
+        name: value:
+        value
+        // {
+          address = name;
+          userName = name;
+          thunderbird.enable = true;
+        }
+      )
+      {
+        "willy.hille@d39s.de" = {
+          inherit (d39s) imap smtp;
+          realName = "Willy Hille";
+          # TODO not really
+          primary = true;
+        };
+        "info@d39s.de" = {
+          inherit (d39s) imap smtp;
+          realName = "info";
+        };
+      };
 }

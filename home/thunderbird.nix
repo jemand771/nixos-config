@@ -34,6 +34,16 @@
           port = 465;
         };
       };
+      gmx = {
+        imap = {
+          host = "imap.gmx.net";
+          port = 993;
+        };
+        smtp = {
+          host = "mail.gmx.net";
+          port = 587;
+        };
+      };
     in
     builtins.mapAttrs
       (
@@ -46,14 +56,18 @@
         }
       )
       {
-        "willy.hille@d39s.de" = {
-          inherit (d39s) imap smtp;
+        "jemand771@gmx.net" = gmx // {
+          realName = "Willy";
+        };
+        "willyhille@gmx.net" = gmx // {
+          realName = "Willy Hille";
+        };
+        "willy.hille@d39s.de" = d39s // {
           realName = "Willy Hille";
           # TODO not really
           primary = true;
         };
-        "info@d39s.de" = {
-          inherit (d39s) imap smtp;
+        "info@d39s.de" = d39s // {
           realName = "info";
         };
       };

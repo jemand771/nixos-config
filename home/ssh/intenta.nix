@@ -16,6 +16,10 @@
     "sstrint001.intop01.de" = lib.hm.dag.entryBefore [ "*.intop01.de" ] {
       user = "adm_wihi";
     };
+    "sspowlstaging001.intop01.de" = lib.hm.dag.entryBefore [ "*.intop01.de" ] {
+      user = "adm_wihi";
+      identityFile = "~/.ssh/id_infra";
+    };
     rms = {
       user = "root";
       hostname = "rms.intenta.de";

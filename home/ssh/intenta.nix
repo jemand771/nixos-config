@@ -22,6 +22,20 @@
       user = "adm_wihi";
       identityFile = "~/.ssh/id_infra";
     };
+    "ssshjump.intop01.de" = {
+      user = "jump_wihi";
+      identityFile = "~/.ssh/id_seinf"; # TODO should be id_infra
+    };
+    "sjenkins001.intop01.de" = {
+      user = "adm_wihi";
+      identityFile = "~/.ssh/id_infra";
+      # proxyJump = "ssshjump.intop01.de";
+    };
+    "sharbor001.intop01.de" = {
+      user = "adm_wihi";
+      identityFile = "~/.ssh/id_infra";
+      # proxyJump = "ssshjump.intop01.de";
+    };
     rms = {
       user = "root";
       hostname = "rms.intenta.de";

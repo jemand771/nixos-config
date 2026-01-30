@@ -2,7 +2,7 @@
 {
   options.jemand771.ssh.hostsets.intenta.enable = lib.mkEnableOption "ssh.hostsets.intenta";
   config.programs.ssh.matchBlocks = lib.mkIf config.jemand771.ssh.hostsets.intenta.enable {
-    "*.intop01.de" = {
+    "spse*.intop01.de" = {
       user = "root";
       identityFile = "~/.ssh/id_seinf";
     };
@@ -10,13 +10,15 @@
       user = "wihi";
       identityFile = "~/.ssh/id_sftp";
     };
-    "sfgz001.intop01.de" = lib.hm.dag.entryBefore [ "*.intop01.de" ] {
+    "sfgz001.intop01.de" = {
       user = "wihi";
+      identityFile = "~/.ssh/id_seinf";
     };
-    "sstrint001.intop01.de" = lib.hm.dag.entryBefore [ "*.intop01.de" ] {
+    "sstrint001.intop01.de" = {
       user = "adm_wihi";
+      identityFile = "~/.ssh/id_seinf";
     };
-    "sspaceowldev001.intop01.de" = lib.hm.dag.entryBefore [ "*.intop01.de" ] {
+    "sspaceowldev001.intop01.de" = {
       user = "adm_wihi";
       identityFile = "~/.ssh/id_infra";
     };

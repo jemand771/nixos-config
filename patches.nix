@@ -11,7 +11,6 @@ let
   patches = {
     nixpkgs = [
       (npr 423815 "sha256-nlR80hiNLmLAOLo4RbIzzcFWTcDykiaz/KWZWJL2l5M") # cibuildwheel
-      (npr 483377 "sha256-Pw4VKtukEkxy1UIOlo2+cnTnfKR61HTwk3n6BkU6OX8=") # vencord
       (pkgs.fetchpatch {
         url = "https://github.com/NixOS/nixpkgs/compare/master...jemand771:nixpkgs:jenkins.diff";
         hash = "sha256-/huCC+rIOPmzxXC5VWyIElTmhuBxWpVWrxR7ct2KowQ=";

@@ -22,6 +22,10 @@
       user = "adm_wihi";
       identityFile = "~/.ssh/id_infra";
     };
+    "sfuldarms001.intop01.de" = {
+      user = "adm_wihi";
+      identityFile = "~/.ssh/id_seinf"; # TODO should be id_infra
+    };
     "ssshjump.intop01.de" = {
       user = "jump_wihi";
       identityFile = "~/.ssh/id_seinf"; # TODO should be id_infra

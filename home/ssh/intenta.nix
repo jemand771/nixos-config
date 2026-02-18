@@ -45,6 +45,10 @@
       hostname = "rms.intenta.de";
       identityFile = "~/.ssh/id_rms";
     };
+    "dodenhof.crosscan.com" = {
+      user = "root";
+      identityFile = "~/.ssh/id_dodenhof";
+    };
     rd3 = {
       user = "ubuntu";
       hostname = "10.153.12.113";

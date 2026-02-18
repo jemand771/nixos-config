@@ -11,6 +11,7 @@ let
   patches = {
     nixpkgs = [
       (npr 423815 "sha256-JwbF7LJuukdQQ2s9t5CMIdqB52ukPO5aX7M1CflwtO4=") # cibuildwheel
+      (npr 490808 "sha256-OLxvGWxxnmbY3403MEQxFgiodNY8S7R4hyVr3nClXgg=") # argocd
       (pkgs.fetchpatch {
         url = "https://github.com/NixOS/nixpkgs/compare/master...jemand771:nixpkgs:jenkins.diff";
         hash = "sha256-/huCC+rIOPmzxXC5VWyIElTmhuBxWpVWrxR7ct2KowQ=";

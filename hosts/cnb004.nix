@@ -32,6 +32,13 @@
     lfs.enable = true;
   };
   virtualisation.podman.enable = true;
+  boot.binfmt = {
+    emulatedSystems = [
+      "aarch64-linux"
+      "armv7l-linux"
+    ];
+    preferStaticEmulators = true;
+  };
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
   # TODO security.pki.certificates (or certificateFiles, I guess)

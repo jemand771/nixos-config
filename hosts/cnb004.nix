@@ -41,7 +41,10 @@
   };
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
-  # TODO security.pki.certificates (or certificateFiles, I guess)
+  security.pki.certificateFiles = [
+    ../certs/intenta-root01.crt
+    ../certs/intenta-sub01.crt
+  ];
   # TODO network shares (if I can get them to work)
   # TODO svp2 schroot config, or ignore and abandon? (build locally and just reference hardcoded path to avoid delays from IFD?)
   # TODO warning, dangerous and ugly, see https://github.com/NixOS/nixpkgs/issues/30723

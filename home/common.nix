@@ -129,17 +129,6 @@
       kc = "kubectl config use-context";
       kn = "kubectl config set-context --current --namespace";
     };
-    plugins = [
-      {
-        name = "fish-completion-sync";
-        src = pkgs.fetchFromGitHub {
-          owner = "pfgray";
-          repo = "fish-completion-sync";
-          rev = "ba70b6457228af520751eab48430b1b995e3e0e2";
-          sha256 = "sha256-JdOLsZZ1VFRv7zA2i/QEZ1eovOym/Wccn0SJyhiP9hI=";
-        };
-      }
-    ];
   };
   programs.starship = {
     enable = true;

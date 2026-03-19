@@ -149,6 +149,10 @@
         pkgs = (import nixpkgs { inherit system; });
       in
       {
+        packages = pkgs.lib.mapAttrs' (n: _: {
+          name = inputs'.nixpkgs.lib.removeSuffix ".nix" n;
+          value = pkgs.callPackage ./pkgs/${n} { };
+        }) (builtins.readDir ./pkgs);
         devShells.default = pkgs.mkShellNoCC {
           nativeBuildInputs = with pkgs; [
             colmena.packages.${system}.colmena

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, self, ... }:
 {
   # TODO this would like to be somewhere else
   networking.hostName = "cnb004";
@@ -50,6 +50,9 @@
   # TODO warning, dangerous and ugly, see https://github.com/NixOS/nixpkgs/issues/30723
   nix.settings.extra-sandbox-paths = [ "/docker-auth.json" ];
   zramSwap.enable = true;
+  environment.systemPackages = [
+    self.packages.${pkgs.system}.play
+  ];
 
   jemand771.wsl.enable = true;
   jemand771.dev-python.enable = true;

@@ -5,7 +5,7 @@ let
   version = "1.34.0";
   # we have to steal the cats from an official release because the author doesn't want vscode-pets to vendor them on github
   # I guess I should maybe pay for the sprite pack if I'm already putting this much effort into getting it?
-  # note that this also applied to some other sprites, but I only care about the cats.
+  # note that this also applies to some other sprites, but I only care about the cats.
   cats =
     pkgs.runCommand "vscode-pets-cats"
       {

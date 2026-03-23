@@ -1,4 +1,4 @@
-{ pkgs, osConfig, ... }:
+{ pkgs, osConfig, self, ... }:
 {
   programs.git = {
     enable = true;
@@ -115,7 +115,7 @@
     pkgs.vscode-extensions.github.copilot-chat
     buenon.scratchpads
     # tonybaloney.vscode-pets
-    (pkgs.callPackage ./vscode-pets.nix { })
+    (self.packages.${pkgs.system}.vscode-pets)
     mechatroner.rainbow-csv
   ];
 

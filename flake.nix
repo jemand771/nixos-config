@@ -102,6 +102,7 @@
                 config.home-manager = lib.mkIf config.jemand771.home-manager.enable {
                   useGlobalPkgs = true;
                   useUserPackages = true;
+                  extraSpecialArgs = inputs;
                   sharedModules = [
                     plasma-manager.homeModules.plasma-manager
                   ];

@@ -119,7 +119,7 @@
     pkgs.vscode-extensions.github.copilot-chat
     buenon.scratchpads
     # tonybaloney.vscode-pets
-    (self.packages.${pkgs.system}.vscode-pets)
+    (self.packages.${pkgs.stdenv.hostPlatform.system}.vscode-pets)
     mechatroner.rainbow-csv
   ];
 

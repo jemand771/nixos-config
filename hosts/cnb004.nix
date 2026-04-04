@@ -51,7 +51,7 @@
   nix.settings.extra-sandbox-paths = [ "/docker-auth.json" ];
   zramSwap.enable = true;
   environment.systemPackages = [
-    self.packages.${pkgs.system}.play
+    self.packages.${pkgs.stdenv.hostPlatform.system}.play
   ];
 
   jemand771.wsl.enable = true;

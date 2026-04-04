@@ -20,6 +20,9 @@
         pull.rebase = true;
       };
     };
+    signing = {
+      format = null;
+    };
     ignores = [
       ".venv"
       ".direnv"

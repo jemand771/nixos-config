@@ -101,7 +101,6 @@
     # streamdeck-ui
     nvtopPackages.nvidia
     nfs-utils
-    wineWowPackages.full
     wineWow64Packages.full
     winetricks
     protontricks

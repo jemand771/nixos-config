@@ -77,6 +77,7 @@
       "!vault scalar"
     ];
     "workbench.editor.empty.hint" = "hidden";
+    "workbench.colorTheme" = "Dark Modern";
   };
   programs.vscode.mutableExtensionsDir = false;
   programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [

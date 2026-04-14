@@ -39,6 +39,7 @@
       usbutils
       yt-dlp
       yq
+      zip
     ];
 
   config.programs.fish.enable = true;

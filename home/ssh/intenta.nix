@@ -40,6 +40,10 @@
       identityFile = "~/.ssh/id_infra";
       # proxyJump = "ssshjump.intop01.de";
     };
+    "seh-sspaceowlrec001.intop01.de" = {
+      user = "adm_wihi";
+      identityFile = "~/.ssh/id_infra";
+    };
     rms = {
       user = "root";
       hostname = "rms.intenta.de";

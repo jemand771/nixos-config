@@ -3,9 +3,16 @@ let
   script = pkgs.writeShellApplication {
     name = "play";
     text = ''
-      playbook=$1
-      shift
-      ansible-playbook "playbooks/$playbook.yaml" "$@"
+      playbooks=()
+      flags=()
+      for arg in "$@"; do
+        if [ -f "playbooks/$arg.yaml" ]; then
+          playbooks+=("playbooks/$arg.yaml")
+        else
+          flags+=("$arg")
+        fi
+      done
+      ansible-playbook "''${flags[@]}" "''${playbooks[@]}"
     '';
   };
   completion = pkgs.writeText "play.fish" ''

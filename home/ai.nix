@@ -18,6 +18,7 @@
           "Bash(nix repl:*)"
           "Read(/nix/store/**)"
           "mcp__plugin_claude-code-home-manager_intenta-jenkins__*"
+          "mcp__plugin_claude-code-home-manager_nixos__*"
         ];
       };
     };
@@ -47,6 +48,9 @@
         intenta-jenkins = lib.mkIf (osConfig.networking.hostName == "cnb004") {
           url = "https://sjenkins001.intop01.de/mcp-server/mcp";
           headers.Authorization = "Basic \${INTENTA_JENKINS_MCP_AUTH}";
+        };
+        nixos = {
+          command = lib.getExe pkgs.mcp-nixos;
         };
       };
     };

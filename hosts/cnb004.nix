@@ -54,6 +54,13 @@
     self.packages.${pkgs.stdenv.hostPlatform.system}.play
   ];
 
+  # no openssh here, so specify whatever it would do manually
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.secrets.intenta-jenkins-mcp-auth = {
+    file = ../secrets/intenta-jenkins-mcp-auth.age;
+    owner = "willy";
+  };
+
   jemand771.wsl.enable = true;
   jemand771.dev-python.enable = true;
   jemand771.dev-infra.enable = true;
@@ -69,6 +76,7 @@
           intenta.enable = true;
         };
       };
+      jemand771.ai.enable = true;
     }
   ];
   system.stateVersion = "23.11";

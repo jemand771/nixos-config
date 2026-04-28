@@ -179,6 +179,7 @@
           homelab.enable = true;
         };
       };
+      jemand771.ai.enable = true;
     }
   ];
   jemand771.meta.personal-system = true;

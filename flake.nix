@@ -108,6 +108,7 @@
                     plasma-manager.homeModules.plasma-manager
                   ];
                   users.willy.imports = [
+                    ./home/ai.nix
                     ./home/common.nix
                     ./home/desktop-lag-fix.nix
                     ./home/plasma.nix

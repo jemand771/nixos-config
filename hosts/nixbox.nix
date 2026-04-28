@@ -55,7 +55,6 @@
     ];
     packages = with pkgs; [
       gpu-screen-recorder-gtk
-      lutris
       jetbrains-toolbox
       firefox
       # TODO broken

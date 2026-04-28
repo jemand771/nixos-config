@@ -66,6 +66,7 @@
         colmena
         disko
         proxmox-nixos
+        agenix
         ;
     in
     {
@@ -125,6 +126,7 @@
             ./software
             ./sync.nix
             disko.nixosModules.disko
+            agenix.nixosModules.default
           ];
           pkgs = import nixpkgs { system = "x86_64-linux"; };
         in
@@ -156,6 +158,7 @@
         }) (builtins.readDir ./pkgs);
         devShells.default = pkgs.mkShellNoCC {
           nativeBuildInputs = with pkgs; [
+            agenix.packages.${system}.default
             colmena.packages.${system}.colmena
             deadnix
             nixfmt

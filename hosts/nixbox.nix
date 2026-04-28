@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 {
-  agenix,
   microvm,
   pkgs,
   ...
@@ -155,8 +154,6 @@
   };
 
   imports = [
-    agenix.nixosModules.default
-    { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
     ../secrets-nixos.nix
     ../backups.nix
     ../hardware/nixbox.nix

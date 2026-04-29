@@ -14,6 +14,7 @@
       pinta
       spotify
       spotify-tray
+      teams-for-linux
       texliveFull
       vlc
     ];

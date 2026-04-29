@@ -2,7 +2,6 @@
 
 {
   # https://nixos.wiki/wiki/NFS
-  services.rpcbind.enable = true; # needed for NFS
   boot.supportedFilesystems = [ "nfs" ];
   systemd.mounts =
     let

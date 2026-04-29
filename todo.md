@@ -17,7 +17,7 @@
 * better sleep states (see nixos-hardware)
 
 ## secrets
-* revive agenix
+* backups for host and ssh keys
 * rethink ssh key strategy
 
 ## cache/attic
@@ -28,5 +28,4 @@
 ## misc
 * ssh from all desktop machines to all other machines
 * host-specific config cleanup
-* switch from chrome to firefox?
 * resolve home-manager options hack

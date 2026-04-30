@@ -7,6 +7,7 @@
       enableMcpIntegration = true;
       package = pkgs.writeShellScriptBin "claude" ''
         export INTENTA_JENKINS_MCP_AUTH=$(</run/agenix/intenta-jenkins-mcp-auth)
+        export GITHUB_MCP_PAT=$(</run/agenix/github-mcp-pat)
         exec ${lib.getExe options.programs.claude-code.package.default} "$@"
       '';
       settings = {
@@ -51,6 +52,10 @@
         };
         nixos = {
           command = lib.getExe pkgs.mcp-nixos;
+        };
+        github = {
+          url = "https://api.githubcopilot.com/mcp/";
+          headers.Authorization = "Bearer \${GITHUB_MCP_PAT}";
         };
       };
     };

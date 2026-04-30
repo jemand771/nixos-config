@@ -60,6 +60,10 @@
     file = ../secrets/intenta-jenkins-mcp-auth.age;
     owner = "willy";
   };
+  age.secrets.github-mcp-pat = {
+    file = ../secrets/github-mcp-pat.age;
+    owner = "willy";
+  };
 
   jemand771.wsl.enable = true;
   jemand771.dev-python.enable = true;

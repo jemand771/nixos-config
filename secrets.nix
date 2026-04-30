@@ -5,4 +5,5 @@ in
 {
   "secrets/restic-password.age".publicKeys = [ nixbox ];
   "secrets/intenta-jenkins-mcp-auth.age".publicKeys = [ cnb004 ];
+  "secrets/github-mcp-pat.age".publicKeys = [ nixbox cnb004 ];
 }

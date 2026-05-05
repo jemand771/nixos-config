@@ -67,8 +67,6 @@
       (blender.override {
         cudaSupport = true;
       })
-      gh
-      insomnia
     ];
   };
 

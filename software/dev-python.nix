@@ -34,6 +34,8 @@
       qlcplus
       kdePackages.kdenlive
       audacity
+      gh
+      insomnia
     ];
   config.systemd.services.write-current-time = lib.mkIf config.jemand771.dev-python.enable {
     description = "Write current time to /run/current-time.txt every second";

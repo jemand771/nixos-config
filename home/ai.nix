@@ -13,6 +13,8 @@
       settings = {
         includeCoAuthoredBy = false;
         permissions.allow = [
+          "WebSearch"
+          "WebFetch"
           "Bash(nix build:*)"
           "Bash(nix-build:*)"
           "Bash(nix eval:*)"

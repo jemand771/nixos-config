@@ -15,6 +15,7 @@ let
         url = "https://github.com/NixOS/nixpkgs/compare/master...jemand771:nixpkgs:jenkins.diff";
         hash = "sha256-/huCC+rIOPmzxXC5VWyIElTmhuBxWpVWrxR7ct2KowQ=";
       }) # jenkins plugins
+      (npr 520078 "sha256-YwGwsn1Cme84SmElbJXCrPWeZg9sSRN7IZR2AIoGoJc=") # discord with openASAR
     ];
   };
 in

@@ -11,8 +11,8 @@
   services.fwupd.enable = true;
   services.power-profiles-daemon.enable = true;
   boot.kernelParams = [
-    # disable panel self-refresh to avoid flickering/artifacts
-    "amdgpu.dcdebugmask=0x10"
+    # disable panel self-refresh (0x10) and panel replay (0x400) to avoid flickering/artifacts
+    "amdgpu.dcdebugmask=0x410"
   ];
   # TODO move me
   environment.systemPackages = with pkgs; [ blender ];

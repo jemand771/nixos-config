@@ -10,6 +10,10 @@
   hardware.keyboard.qmk.enable = true;
   services.fwupd.enable = true;
   services.power-profiles-daemon.enable = true;
+  boot.kernelParams = [
+    # disable panel self-refresh to avoid flickering/artifacts
+    "amdgpu.dcdebugmask=0x10"
+  ];
   # TODO move me
   environment.systemPackages = with pkgs; [ blender ];
 

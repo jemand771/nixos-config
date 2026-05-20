@@ -172,6 +172,7 @@
       jemand771.ssh = {
         enable = true;
         hostsets = {
+          cloudlab.enable = true;
           d39s.enable = true;
           homelab.enable = true;
         };

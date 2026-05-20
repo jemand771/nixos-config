@@ -2,6 +2,7 @@
 {
   imports = [
     ./d39s.nix
+    ./cloudlab.nix
     ./homelab.nix
     ./intenta.nix
   ];

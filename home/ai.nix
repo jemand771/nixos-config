@@ -1,4 +1,11 @@
-{ config, lib, options, osConfig, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  osConfig,
+  pkgs,
+  ...
+}:
 {
   options.jemand771.ai.enable = lib.mkEnableOption "AI tools";
   config = lib.mkIf config.jemand771.ai.enable {

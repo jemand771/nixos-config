@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-unstable-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -61,7 +60,6 @@
         home-manager
         plasma-manager
         nix-vscode-extensions
-        nixpkgs-unstable-small
         flake-utils
         colmena
         disko
@@ -76,13 +74,6 @@
           defaultModules = [
             {
               nixpkgs.overlays = [
-                # make unstable-small packages available as pkgs.unstable-small
-                (_: prev: ({
-                  unstable-small = import nixpkgs-unstable-small {
-                    config.allowUnfree = true;
-                    inherit (prev.stdenv.hostPlatform) system;
-                  };
-                }))
                 nix-vscode-extensions.overlays.default
                 (
                   final: prev:

@@ -141,7 +141,10 @@
     // flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = (import nixpkgs { inherit system; });
+        pkgs = (import nixpkgs {
+          inherit system;
+          overlays = [ colmena.overlays.default ];
+        });
       in
       {
         packages = pkgs.lib.mapAttrs' (n: _: {
@@ -151,7 +154,7 @@
         devShells.default = pkgs.mkShellNoCC {
           nativeBuildInputs = with pkgs; [
             agenix.packages.${system}.default
-            colmena.packages.${system}.colmena
+            pkgs.colmena
             deadnix
             nixfmt
             nixfmt-tree

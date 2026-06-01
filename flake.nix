@@ -66,11 +66,19 @@
         ;
     in
     {
+      lib =
+        let
+          inherit (inputs'.nixpkgs) lib;
+          call = n: import (./lib + "/${n}") { inherit lib; };
+        in
+        call "mapDir.nix" ./lib call;
+      nixosModules = self.lib.mapDir ./modules/nixos (n: ./modules/nixos/${n});
+      homeModules = self.lib.mapDir ./modules/home-manager (n: ./modules/home-manager/${n});
       nixosConfigurations = self.colmenaHive.nodes;
       colmenaHive =
         let
           defaultModules = [
-            ./modules/nixos
+            self.nixosModules.default
             nixos-wsl.nixosModules.default
             {
               nixpkgs.overlays = [
@@ -92,7 +100,7 @@
                     plasma-manager.homeModules.plasma-manager
                   ];
                   users.willy.imports = [
-                    ./modules/home-manager
+                    self.homeModules.default
                     ./home/ai.nix
                     ./home/common.nix
                     ./home/desktop-lag-fix.nix
@@ -124,27 +132,23 @@
               allowApplyAll = false;
             };
           }
-          // (pkgs.lib.mapAttrs' (n: _: {
-            name = inputs'.nixpkgs.lib.removeSuffix ".nix" n;
-            value.imports = defaultModules ++ [
-              ./hosts/${n}
-            ];
-          }) (builtins.readDir ./hosts))
+          // self.lib.mapDir ./hosts (n: {
+            imports = defaultModules ++ [ ./hosts/${n} ];
+          })
         );
     }
     // flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = (import nixpkgs {
-          inherit system;
-          overlays = [ colmena.overlays.default ];
-        });
+        pkgs = (
+          import nixpkgs {
+            inherit system;
+            overlays = [ colmena.overlays.default ];
+          }
+        );
       in
       {
-        packages = pkgs.lib.mapAttrs' (n: _: {
-          name = inputs'.nixpkgs.lib.removeSuffix ".nix" n;
-          value = pkgs.callPackage ./pkgs/${n} { };
-        }) (builtins.readDir ./pkgs);
+        packages = self.lib.mapDir ./pkgs (n: pkgs.callPackage ./pkgs/${n} { });
         devShells.default = pkgs.mkShellNoCC {
           nativeBuildInputs = with pkgs; [
             agenix.packages.${system}.default

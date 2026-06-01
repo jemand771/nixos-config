@@ -1,4 +1,4 @@
+{ self, ... }:
 {
-  imports = [
-  ];
+  imports = self.lib.importModules ./.;
 }

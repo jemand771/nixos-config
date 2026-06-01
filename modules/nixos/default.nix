@@ -1,6 +1,4 @@
+{ self, ... }:
 {
-  imports = [
-    ./nix-config.nix
-    ./wsl.nix
-  ];
+  imports = self.lib.importModules ./.;
 }

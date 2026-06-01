@@ -72,6 +72,7 @@
       colmenaHive =
         let
           defaultModules = [
+            ./modules/nixos
             {
               nixpkgs.overlays = [
                 nix-vscode-extensions.overlays.default
@@ -99,6 +100,7 @@
                     plasma-manager.homeModules.plasma-manager
                   ];
                   users.willy.imports = [
+                    ./modules/home-manager
                     ./home/ai.nix
                     ./home/common.nix
                     ./home/desktop-lag-fix.nix

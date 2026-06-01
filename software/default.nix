@@ -11,7 +11,6 @@
     ./dev-infra.nix
     ./dev-python.nix
     ./gaming.nix
-    ./auto-upgrade.nix
     ./ssh-access.nix
   ];
 }

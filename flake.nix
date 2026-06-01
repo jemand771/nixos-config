@@ -62,6 +62,7 @@
         colmena
         disko
         agenix
+        nixos-wsl
         ;
     in
     {
@@ -70,6 +71,7 @@
         let
           defaultModules = [
             ./modules/nixos
+            nixos-wsl.nixosModules.default
             {
               nixpkgs.overlays = [
                 nix-vscode-extensions.overlays.default

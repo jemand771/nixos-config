@@ -1,14 +1,9 @@
 {
   lib,
   config,
-  nixos-wsl,
   ...
 }:
 {
-  imports = [
-    nixos-wsl.nixosModules.default
-  ];
-
   options.jemand771.wsl.enable = lib.mkEnableOption "WSL stuffs";
   config = lib.mkIf config.jemand771.wsl.enable {
     wsl = {

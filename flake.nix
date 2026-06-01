@@ -38,8 +38,6 @@
       url = "github:astro/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # they tell you not to overwrite the nixpkgs input so I won't
-    proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
     disko = {
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -63,7 +61,6 @@
         flake-utils
         colmena
         disko
-        proxmox-nixos
         agenix
         ;
     in
@@ -76,13 +73,6 @@
             {
               nixpkgs.overlays = [
                 nix-vscode-extensions.overlays.default
-                (
-                  final: prev:
-                  if builtins.hasAttr prev.stdenv.hostPlatform.system proxmox-nixos.overlays then
-                    proxmox-nixos.overlays.${prev.stdenv.hostPlatform.system} final prev
-                  else
-                    { }
-                )
               ];
             }
             ./meta-options.nix

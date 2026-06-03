@@ -153,7 +153,6 @@
   imports = [
     ../secrets-nixos.nix
     ../backups.nix
-    ../hardware/nixbox.nix
     ../hardware/nvidia.nix
     ../hardware/nic.nix
     ../hardware/keyboard.nix

@@ -133,7 +133,10 @@
             };
           }
           // self.lib.mapDir ./hosts (n: {
-            imports = defaultModules ++ [ ./hosts/${n} ];
+            imports =
+              defaultModules
+              ++ [ ./hosts/${n} ]
+              ++ nixpkgs.lib.optional (builtins.pathExists ./hardware/${n}) ./hardware/${n};
           })
         );
     }

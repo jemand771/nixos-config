@@ -55,7 +55,6 @@
   nixpkgs.config.allowUnfree = true;
 
   imports = [
-    ../hardware/nixbox2.nix
     ../hardware/mouse.nix
   ];
   jemand771.meta.personal-system = true;

@@ -80,7 +80,6 @@
   };
 
   imports = [
-    ../hardware/nixbook.nix
     ../hardware/mouse.nix
     ../hardware/printer.nix
   ];

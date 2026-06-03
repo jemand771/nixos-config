@@ -136,7 +136,7 @@
             imports =
               defaultModules
               ++ [ ./hosts/${n} ]
-              ++ nixpkgs.lib.optional (builtins.pathExists ./hardware/${n}) ./hardware/${n};
+              ++ pkgs.lib.optional (builtins.pathExists ./hardware/${n}) ./hardware/${n};
           })
         );
     }

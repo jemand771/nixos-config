@@ -15,7 +15,6 @@ let
         url = "https://github.com/NixOS/nixpkgs/compare/master...jemand771:nixpkgs:jenkins.diff";
         hash = "sha256-/huCC+rIOPmzxXC5VWyIElTmhuBxWpVWrxR7ct2KowQ=";
       }) # jenkins plugins
-      (npr 524985 "sha256-jn+hgkg6Z1bUcIvFdodq9K4FbCSbEkCnU9FX/qTOe8M=") # crates.io http 403
     ];
   };
 in

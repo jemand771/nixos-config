@@ -1,5 +1,4 @@
 {
-  nix-minecraft,
   nix-vanillatweaks,
   pkgs,
   ...

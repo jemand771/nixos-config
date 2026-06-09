@@ -2,7 +2,6 @@
   config,
   lib,
   nixpkgs,
-  options,
   pkgs,
   ...
 }:

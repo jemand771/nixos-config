@@ -10,6 +10,5 @@
     ./dev-infra.nix
     ./dev-python.nix
     ./gaming.nix
-    ./ssh-access.nix
   ];
 }

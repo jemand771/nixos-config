@@ -10,7 +10,8 @@
             inherit name;
             value = {
               hostname = ip;
-              user = "root";
+              user = "willy";
+              identityFile = "~/.ssh/id_homelab";
             };
           }
         )

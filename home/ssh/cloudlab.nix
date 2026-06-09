@@ -11,7 +11,7 @@
             value = {
               hostname = ip;
               user = "willy";
-              identityFile = "~/.ssh/id_servers";
+              identityFile = "~/.ssh/id_cloudlab";
             };
           }
         )

@@ -5,14 +5,17 @@
 }:
 let
   taggedKeys = {
-    # TODO add keys from nixbox and nixbook
+    # TODO add keys from nixbook
     homelab = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOSvXx0+WsuMzZ1y80J8sCFzNqhCB9ZTqeo/Fr4onBi1 willy@nixbox"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOmO89BBLPz+ABHBTrNgF+pTwEhBpE8eWHnHLMsjIDjd willy@cnb004"
     ];
     cloudlab = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOllm4ogq76kDi1n9JiBTlzcgnvHolhtE8PzucClpSL1 willy@nixbox"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILSdCzlCvVT7U0FihSL2qEpJAyk0uk3V8HrXe9da+xBR willy@cnb004"
     ];
     personal = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILVyvZOFj+JRfcUQBpQIoxt1Xae15KGgjpAXM1hsyr+S willy@nixbox"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINMDm0uifArKw4G8u3Hj8h+dgJhmrCovJLuUWUxLabDw willy@cnb004"
     ];
   };

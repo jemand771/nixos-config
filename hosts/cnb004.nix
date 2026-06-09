@@ -2,6 +2,7 @@
 {
   # TODO this would like to be somewhere else
   networking.hostName = "cnb004";
+  deployment.tags = [ "intenta" ];
   services.jenkins = {
     enable = true;
     port = 8040;

@@ -5,6 +5,7 @@
 { pkgs, ... }:
 
 {
+  deployment.tags = [ "personal" ];
   # framework specific stuff
   services.fprintd.enable = true;
   hardware.keyboard.qmk.enable = true;

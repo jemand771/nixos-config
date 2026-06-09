@@ -63,6 +63,7 @@
         disko
         agenix
         nixos-wsl
+        nix-minecraft
         ;
     in
     {
@@ -83,6 +84,7 @@
             {
               nixpkgs.overlays = [
                 nix-vscode-extensions.overlays.default
+                nix-minecraft.overlay
               ];
             }
             ./meta-options.nix
@@ -121,6 +123,7 @@
             ./sync.nix
             disko.nixosModules.disko
             agenix.nixosModules.default
+            nix-minecraft.nixosModules.minecraft-servers
           ];
           pkgs = import nixpkgs { system = "x86_64-linux"; };
         in

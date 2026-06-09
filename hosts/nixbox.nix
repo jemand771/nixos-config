@@ -130,7 +130,6 @@
     ../playground/vms.nix
   ];
   home-manager.users.willy.imports = [
-    ../hardware/keyboard-user.nix
     {
       jemand771.desktopLagFix.enable = true;
       jemand771.ssh = {

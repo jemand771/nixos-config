@@ -124,7 +124,6 @@
   imports = [
     ../secrets-nixos.nix
     ../backups.nix
-    ../hardware/printer.nix
     ../mounts.nix
     ../playground/minecraft.nix
     microvm.nixosModules.host
@@ -145,6 +144,7 @@
       jemand771.ai.enable = true;
     }
   ];
+  jemand771.printer.enable = true;
   jemand771.meta.personal-system = true;
   jemand771.fancontrol = {
     enable = true;

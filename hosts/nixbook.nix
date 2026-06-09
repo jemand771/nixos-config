@@ -65,9 +65,7 @@
     settings.General.Experimental = true;
   };
 
-  imports = [
-    ../hardware/printer.nix
-  ];
+  jemand771.printer.enable = true;
   hardware.logitech.wireless.enable = true;
   jemand771.meta.personal-system = true;
   system.stateVersion = "24.05";

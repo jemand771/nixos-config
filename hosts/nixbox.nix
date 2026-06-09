@@ -130,7 +130,6 @@
     ../hardware/nvidia.nix
     ../hardware/nic.nix
     ../hardware/keyboard.nix
-    ../hardware/fans.nix
     ../hardware/mouse.nix
     ../hardware/printer.nix
     ../mounts.nix
@@ -154,5 +153,9 @@
     }
   ];
   jemand771.meta.personal-system = true;
+  jemand771.fancontrol = {
+    enable = true;
+    enableNixboxProfile = true;
+  };
   system.stateVersion = "23.11";
 }

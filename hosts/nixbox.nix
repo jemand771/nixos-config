@@ -127,7 +127,6 @@
   imports = [
     ../secrets-nixos.nix
     ../backups.nix
-    ../hardware/nvidia.nix
     ../hardware/printer.nix
     ../mounts.nix
     ../playground/minecraft.nix
@@ -161,6 +160,7 @@
     "pcie_port_pm=off"
     "pcie_aspm.policy=performance"
   ];
+  jemand771.nvidiagpu.enable = true;
 
   system.stateVersion = "23.11";
 }

@@ -2,11 +2,6 @@
 {
   # TODO this would like to be somewhere else
   networking.hostName = "cnb004";
-  users.users.willy.extraGroups = [
-    "docker"
-    "dialout"
-    "libvirtd"
-  ];
   services.jenkins = {
     enable = true;
     port = 8040;

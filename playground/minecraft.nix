@@ -81,5 +81,4 @@
       };
     };
   };
-  users.users.willy.extraGroups = [ "minecraft" ];
 }

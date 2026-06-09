@@ -42,46 +42,6 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.willy = {
-    isNormalUser = true;
-    description = "willy";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "docker"
-      "libvirtd"
-      "dialout"
-    ];
-    packages = with pkgs; [
-      gpu-screen-recorder-gtk
-      jetbrains-toolbox
-      firefox
-      # TODO broken
-      # (google-cloud-sdk.withExtraComponents (
-      #   with pkgs.google-cloud-sdk.components;
-      #   [
-      #     gke-gcloud-auth-plugin
-      #   ]
-      # ))
-      (blender.override {
-        cudaSupport = true;
-      })
-    ];
-  };
-
-  security.sudo.extraRules = [
-    {
-      users = [ "willy" ];
-      commands = [
-        {
-          command = "ALL";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    }
-  ];
-
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "willy";
@@ -101,6 +61,19 @@
     winetricks
     protontricks
     qpwgraph
+    gpu-screen-recorder-gtk
+    jetbrains-toolbox
+    firefox
+    # TODO broken
+    # (google-cloud-sdk.withExtraComponents (
+    #   with pkgs.google-cloud-sdk.components;
+    #   [
+    #     gke-gcloud-auth-plugin
+    #   ]
+    # ))
+    (blender.override {
+      cudaSupport = true;
+    })
   ];
   hardware.xone.enable = true;
   programs.kdeconnect.enable = true;

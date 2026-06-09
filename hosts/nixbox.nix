@@ -131,7 +131,6 @@
   ];
   home-manager.users.willy.imports = [
     {
-      jemand771.desktopLagFix.enable = true;
       jemand771.ssh = {
         enable = true;
         hostsets = {

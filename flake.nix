@@ -105,7 +105,6 @@
                     self.homeModules.default
                     ./home/ai.nix
                     ./home/common.nix
-                    ./home/desktop-lag-fix.nix
                     ./home/plasma.nix
                     ./home/thunderbird.nix
                     ./home/ssh

@@ -42,9 +42,6 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   hardware.logitech.wireless.enable = true;
   jemand771.meta.personal-system = true;
   system.stateVersion = "24.05";

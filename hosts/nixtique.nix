@@ -38,9 +38,6 @@
     #media-session.enable = true;
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   hardware.logitech.wireless.enable = true;
   jemand771.meta.personal-system = true;
   home-manager.users.willy.imports = [

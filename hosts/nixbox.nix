@@ -128,9 +128,6 @@
     ../secrets-nixos.nix
     ../backups.nix
     ../hardware/nvidia.nix
-    ../hardware/nic.nix
-    ../hardware/keyboard.nix
-    ../hardware/mouse.nix
     ../hardware/printer.nix
     ../mounts.nix
     ../playground/minecraft.nix
@@ -157,5 +154,13 @@
     enable = true;
     enableNixboxProfile = true;
   };
+  # manual hardware settings
+  hardware.ckb-next.enable = true;
+  hardware.logitech.wireless.enable = true;
+  boot.kernelParams = [
+    "pcie_port_pm=off"
+    "pcie_aspm.policy=performance"
+  ];
+
   system.stateVersion = "23.11";
 }

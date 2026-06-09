@@ -41,9 +41,7 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  imports = [
-    ../hardware/mouse.nix
-  ];
+  hardware.logitech.wireless.enable = true;
   jemand771.meta.personal-system = true;
   home-manager.users.willy.imports = [
     {

@@ -69,9 +69,9 @@
   };
 
   imports = [
-    ../hardware/mouse.nix
     ../hardware/printer.nix
   ];
+  hardware.logitech.wireless.enable = true;
   jemand771.meta.personal-system = true;
   system.stateVersion = "24.05";
 }

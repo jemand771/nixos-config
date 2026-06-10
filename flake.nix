@@ -46,11 +46,13 @@
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    preservation.url = "github:nix-community/preservation";
   };
 
   outputs =
     inputs':
     let
+      inherit (inputs'.nixpkgs) lib;
       inputs = (import ./patches.nix) inputs';
       inherit (inputs)
         self
@@ -64,12 +66,13 @@
         agenix
         nixos-wsl
         nix-minecraft
+        preservation
         ;
     in
     {
       lib =
         let
-          inherit (inputs'.nixpkgs) lib;
+          inherit lib;
           call = n: import (./lib + "/${n}") { inherit lib; };
         in
         call "mapDir.nix" ./lib call;
@@ -123,6 +126,7 @@
             disko.nixosModules.disko
             agenix.nixosModules.default
             nix-minecraft.nixosModules.minecraft-servers
+            preservation.nixosModules.default
           ];
           pkgs = import nixpkgs { system = "x86_64-linux"; };
         in

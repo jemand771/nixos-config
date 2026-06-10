@@ -7,6 +7,7 @@
   config = lib.mkIf config.preservation.enable {
     boot.initrd.systemd.enable = true;
     fileSystems."/persist".neededForBoot = true;
+    systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
     boot.initrd.systemd.services.rollback = lib.mkIf config.jemand771.zfs-rpool.enable {
       description = "Roll back ZFS root dataset";
       wantedBy = [ "initrd.target" ];

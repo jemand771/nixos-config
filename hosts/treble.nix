@@ -1,7 +1,13 @@
 { ... }:
 {
+  deployment.tags = [ "cloudlab" ];
+
   networking.hostName = "treble";
   networking.hostId = "ed937e54";
+
+  # TODO is this correct?
+  # boot.kernelParams = [ "console=tty0" "console=ttyS0,115200" ];
+
   networking.interfaces.enp0s31f6.ipv6.addresses = [
     {
       address = "2a01:4f8:10a:2bcd::1";
@@ -28,8 +34,7 @@
   # TODO shared networking module + vswitch config
   networking.useNetworkd = true;
   networking.nftables.enable = true;
-  # TODO shared ssh and user module
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  jemand771.openssh.enable = true;
 
   system.stateVersion = "26.05";
 }

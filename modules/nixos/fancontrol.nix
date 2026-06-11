@@ -110,41 +110,52 @@ in
       # also, keeping them on feels "safer" for now, although stopped fans are a pretty good flex.
       # it feels like I'm still thermal trottling (tops out at 92°C regardless of fan speed),
       # so I'll have to look into that some more.
-      controllers = [
-        # cpu fans, y-splitter
-        {
-          temp = "k10temp/temp1_input";
-          pwm = "nct6799/pwm2";
-          fan = "nct6799/fan2_input";
-          mintemp = 60;
-          maxtemp = 90;
-          minstart = 50;
-          minstop = 50;
-          minpwm = 50;
-        }
-        # back case fan
-        {
-          temp = "nct6799/temp2_input";
-          pwm = "nct6799/pwm4";
-          fan = "nct6799/fan4_input";
-          mintemp = 40;
-          maxtemp = 50;
-          minstart = 50;
-          minstop = 50;
-          minpwm = 50;
-        }
-        # front case fans (daisy chained)
-        {
-          temp = "nct6799/temp2_input";
-          pwm = "nct6799/pwm6";
-          fan = "nct6799/fan6_input";
-          mintemp = 40;
-          maxtemp = 50;
-          minstart = 50;
-          minstop = 50;
-          minpwm = 50;
-        }
-      ];
+      controllers =
+        let
+          cpuFanCurve = {
+            mintemp = 60;
+            maxtemp = 90;
+            minstart = 50;
+            minstop = 50;
+            minpwm = 50;
+          };
+          caseFanCurve = {
+            mintemp = 40;
+            maxtemp = 50;
+            minstart = 50;
+            minstop = 50;
+            minpwm = 50;
+          };
+        in
+        [
+          # cpu fans, y-splitter
+          (
+            cpuFanCurve
+            // {
+              temp = "k10temp/temp1_input";
+              pwm = "nct6799/pwm2";
+              fan = "nct6799/fan2_input";
+            }
+          )
+          # back case fan
+          (
+            caseFanCurve
+            // {
+              temp = "nct6799/temp2_input";
+              pwm = "nct6799/pwm4";
+              fan = "nct6799/fan4_input";
+            }
+          )
+          # front case fans (daisy chained)
+          (
+            caseFanCurve
+            // {
+              temp = "nct6799/temp2_input";
+              pwm = "nct6799/pwm6";
+              fan = "nct6799/fan6_input";
+            }
+          )
+        ];
     };
   };
 }

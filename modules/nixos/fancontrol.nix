@@ -127,7 +127,7 @@ in
           temp = "nct6799/temp2_input";
           pwm = "nct6799/pwm4";
           fan = "nct6799/fan4_input";
-          mintemp = 30;
+          mintemp = 40;
           maxtemp = 50;
           minstart = 50;
           minstop = 50;
@@ -138,7 +138,7 @@ in
           temp = "nct6799/temp2_input";
           pwm = "nct6799/pwm6";
           fan = "nct6799/fan6_input";
-          mintemp = 30;
+          mintemp = 40;
           maxtemp = 50;
           minstart = 50;
           minstop = 50;

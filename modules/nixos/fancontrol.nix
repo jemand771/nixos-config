@@ -108,8 +108,6 @@ in
       # setting a minpwm of 50 might seem excessive, but the fans are still almost silent going that speed.
       # that is, quieter than ambient (coil whine).
       # also, keeping them on feels "safer" for now, although stopped fans are a pretty good flex.
-      # it feels like I'm still thermal trottling (tops out at 92°C regardless of fan speed),
-      # so I'll have to look into that some more.
       controllers =
         let
           cpuFanCurve = {

@@ -3,22 +3,7 @@
   # TODO this would like to be somewhere else
   networking.hostName = "cnb004";
   deployment.tags = [ "intenta" ];
-  services.jenkins = {
-    enable = true;
-    port = 8040;
-    plugins = pkgs.jenkins.withPlugins (
-      with pkgs.jenkins.plugins;
-      [
-        ansicolor
-        configuration-as-code
-        dark-theme
-        git
-        pipeline-graph-view
-        timestamper
-        workflow-aggregator
-      ]
-    );
-  };
+
   virtualisation.docker = {
     enable = true;
     daemon.settings.features.containerd-snapshotter = true;

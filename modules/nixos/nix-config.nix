@@ -21,6 +21,8 @@
         "@wheel"
       ];
       fallback = true;
+      initial-connect-timeout = 1;
+      download-attempts = 2;
     };
     nixpkgs.config.allowUnfree = true;
     nix.package = pkgs.lixPackageSets.latest.lix;

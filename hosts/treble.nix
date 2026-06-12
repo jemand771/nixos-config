@@ -1,12 +1,12 @@
 { ... }:
 {
-  deployment.tags = [ "cloudlab" ];
-
   networking.hostName = "treble";
   networking.hostId = "ed937e54";
 
-  # TODO is this correct?
-  # boot.kernelParams = [ "console=tty0" "console=ttyS0,115200" ];
+  jemand771.unbeatable = {
+    enable = true;
+    ip = "10.5.1.11";
+  };
 
   networking.interfaces.enp0s31f6.ipv6.addresses = [
     {
@@ -19,22 +19,12 @@
     interface = "enp0s31f6";
   };
 
-  jemand771.zfs-rpool = {
-    enable = true;
-    disks = [
-      "/dev/disk/by-id/ata-Micron_1100_MTFDDAK512TBN_18301DC6962D"
-      "/dev/disk/by-id/ata-Micron_1100_MTFDDAK512TBN_171416BD471F"
-      "/dev/disk/by-id/ata-Micron_1100_MTFDDAK512TBN_18301DC6961F"
-      "/dev/disk/by-id/ata-Micron_1100_MTFDDAK512TBN_18291D998032"
-    ];
-    createIncusDatasets = true;
-  };
-  preservation.enable = true;
-  jemand771.incus.enable = true;
-  # TODO shared networking module + vswitch config
-  networking.useNetworkd = true;
-  networking.nftables.enable = true;
-  jemand771.openssh.enable = true;
+  jemand771.zfs-rpool.disks = [
+    "/dev/disk/by-id/ata-Micron_1100_MTFDDAK512TBN_18301DC6962D"
+    "/dev/disk/by-id/ata-Micron_1100_MTFDDAK512TBN_171416BD471F"
+    "/dev/disk/by-id/ata-Micron_1100_MTFDDAK512TBN_18301DC6961F"
+    "/dev/disk/by-id/ata-Micron_1100_MTFDDAK512TBN_18291D998032"
+  ];
 
   system.stateVersion = "26.05";
 }

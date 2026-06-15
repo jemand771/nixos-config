@@ -46,6 +46,7 @@
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    preservation.url = "github:nix-community/preservation";
   };
 
   outputs =
@@ -64,6 +65,7 @@
         agenix
         nixos-wsl
         nix-minecraft
+        preservation
         ;
     in
     {
@@ -123,6 +125,7 @@
             disko.nixosModules.disko
             agenix.nixosModules.default
             nix-minecraft.nixosModules.minecraft-servers
+            preservation.nixosModules.default
           ];
           pkgs = import nixpkgs { system = "x86_64-linux"; };
         in

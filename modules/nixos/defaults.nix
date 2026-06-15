@@ -13,6 +13,7 @@
     jemand771 = {
       ckb-next-autostart.enable = true;
       nix-config.enable = true;
+      user.enable = true;
     };
   };
 }

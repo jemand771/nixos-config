@@ -24,7 +24,8 @@ let
   keysFor = tags: builtins.concatMap (tag: taggedKeys.${tag} or [ ]) tags;
 in
 {
-  config = {
+  options.jemand771.user.enable = lib.mkEnableOption "willy user (+ssh +sudo)";
+  config = lib.mkIf config.jemand771.user.enable {
     users.users.willy = {
       isNormalUser = true;
       description = "willy";

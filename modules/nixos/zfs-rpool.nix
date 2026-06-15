@@ -14,11 +14,17 @@
       "/dev/disk/by-id/def"
     ];
   };
-  options.jemand771.zfs-rpool.createIncusDatasets = lib.mkOption {
-    type = lib.types.bool;
+  options.jemand771.zfs-rpool.extraDatasets = lib.mkOption {
+    type = lib.types.attrsOf lib.types.anything;
     description = "whether to create incus-local and incus-linstor datasets (zfs_fs, canmount=off, mountpoint=none)";
-    default = false;
-    example = true;
+    default = { };
+    example = {
+      home = {
+        type = "zfs_fs";
+        mountpoint = "/home";
+        options.mountpoint = "legacy";
+      };
+    };
   };
   config = lib.mkIf config.jemand771.zfs-rpool.enable {
     disko.devices.disk = builtins.listToAttrs (
@@ -87,22 +93,7 @@
           options.mountpoint = "legacy";
         };
       }
-      // lib.optionalAttrs config.jemand771.zfs-rpool.createIncusDatasets {
-        "incus-local" = {
-          type = "zfs_fs";
-          options = {
-            canmount = "off";
-            mountpoint = "none";
-          };
-        };
-        "incus-linstor" = {
-          type = "zfs_fs";
-          options = {
-            canmount = "off";
-            mountpoint = "none";
-          };
-        };
-      };
+      // config.jemand771.zfs-rpool.extraDatasets;
     };
 
     boot.loader.grub.enable = true;

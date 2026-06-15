@@ -83,8 +83,22 @@
       preservation.enable = true;
       zfs-rpool = {
         enable = true;
-        # TODO this option is garbage
-        createIncusDatasets = !config.jemand771.unbeatable.isCloud;
+        extraDatasets = lib.mkIf (!config.jemand771.unbeatable.isCloud) {
+          "incus-local" = {
+            type = "zfs_fs";
+            options = {
+              canmount = "off";
+              mountpoint = "none";
+            };
+          };
+          "incus-linstor" = {
+            type = "zfs_fs";
+            options = {
+              canmount = "off";
+              mountpoint = "none";
+            };
+          };
+        };
       };
       # TODO import incus
       # TODO import ovn

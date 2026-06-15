@@ -80,7 +80,7 @@
       zfs-rpool = {
         enable = true;
         # TODO this option is garbage
-        createIncusDatasets = true;
+        createIncusDatasets = !config.jemand771.unbeatable.isCloud;
       };
       incus.enable = true;
       openssh.enable = true;

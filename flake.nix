@@ -52,6 +52,7 @@
   outputs =
     inputs':
     let
+      inherit (inputs'.nixpkgs) lib;
       inputs = (import ./patches.nix) inputs';
       inherit (inputs)
         self
@@ -71,7 +72,6 @@
     {
       lib =
         let
-          inherit (inputs'.nixpkgs) lib;
           call = n: import (./lib + "/${n}") { inherit lib; };
         in
         call "mapDir.nix" ./lib call;

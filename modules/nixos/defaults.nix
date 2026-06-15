@@ -11,6 +11,7 @@
     # forces using usernames from local ssh config
     deployment.targetUser = null;
     jemand771 = {
+      ckb-next-autostart.enable = true;
       nix-config.enable = true;
     };
   };

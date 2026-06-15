@@ -7,9 +7,7 @@
 }:
 
 {
-  options.jemand771.nix-config.enable = lib.mkEnableOption "Standard nix config" // {
-    default = true;
-  };
+  options.jemand771.nix-config.enable = lib.mkEnableOption "Standard nix config";
   config = lib.mkIf config.jemand771.nix-config.enable {
     nix.settings = {
       experimental-features = [

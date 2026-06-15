@@ -5,7 +5,6 @@
 }:
 let
   taggedKeys = {
-    # TODO add keys from nixbook
     homelab = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOSvXx0+WsuMzZ1y80J8sCFzNqhCB9ZTqeo/Fr4onBi1 willy@nixbox"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII2VFksHIb2Ir7kGNTgX2JpUvRkFG3X9dLoEHFNIFftd willy@nixbook"

@@ -80,6 +80,16 @@
     );
     jemand771 = {
       openssh.enable = true;
+      ovn = {
+        enable = true;
+        localIp = config.jemand771.unbeatable.ip;
+        peers = [
+          "10.5.0.2"
+          "10.5.1.11"
+          "10.5.1.12"
+        ];
+        chassis.enable = !config.jemand771.unbeatable.isCloud;
+      };
       preservation.enable = true;
       zfs-rpool = {
         enable = true;
@@ -101,7 +111,6 @@
         };
       };
       # TODO import incus
-      # TODO import ovn
       # TODO import linstor
     };
   };

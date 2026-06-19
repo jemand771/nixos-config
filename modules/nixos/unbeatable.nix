@@ -78,7 +78,46 @@
           };
         }
     );
+    virtualisation.incus.preseed.networks = [
+      {
+        name = "cloudlab-ext";
+        type = "physical";
+        config = {
+          "parent" = "br-uplink";
+          "ipv4.gateway" = "46.225.196.57/29";
+          "ipv4.ovn.ranges" = "46.225.196.59-46.225.196.62";
+          "ipv6.gateway" = "2a01:4f8:fff0:18a::1/64";
+          # TODO is this required?
+          # "ipv6.routes" = "2a01:4f8:fff0:18a::/64";
+          "ipv6.ovn.ranges" = "2a01:4f8:fff0:18a::10-2a01:4f8:fff0:18a::1f";
+          # "dns.nameservers" = "185.12.64.1,185.12.64.2,2a01:4ff:ff00::add:1,2a01:4ff:ff00::add:2";
+        };
+      }
+      {
+        # TODO this is all jumbled together - create and manage network ACLs
+        name = "default";
+        type = "ovn";
+        config = {
+          "network" = "cloudlab-ext";
+          "ipv4.address" = "10.6.0.0/16";
+          "ipv4.nat" = "true";
+          "ipv6.address" = "2a01:4f8:fff0:18a::1/64";
+          "ipv6.nat" = "false";
+          "bridge.mtu" = "1342";
+        };
+      }
+    ];
     jemand771 = {
+      incus = {
+        enable = true;
+        projects = {
+          default = {
+            "limits.containers" = "0";
+            "limits.instances" = "0";
+          };
+          infra = { };
+        };
+      };
       openssh.enable = true;
       ovn = {
         enable = true;
@@ -110,7 +149,6 @@
           };
         };
       };
-      # TODO import incus
       # TODO import linstor
     };
   };

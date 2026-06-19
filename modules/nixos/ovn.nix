@@ -150,5 +150,47 @@
 
     # ovn <-> ovs interop
     virtualisation.vswitch.enable = true;
+
+    systemd.services.ovn-ovs-setup = {
+      description = "Hook local OVS into OVN cluster";
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "ovs-vswitchd.service"
+        "systemd-networkd-wait-online.service"
+      ];
+      requires = [ "ovs-vswitchd.service" ];
+      before = [
+        "ovn-controller.service"
+        "incus.service"
+      ];
+      wants = [ "systemd-networkd-wait-online.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script =
+        let
+          vsctl = "${lib.getExe' pkgs.openvswitch "ovs-vsctl"}";
+          ip = "${lib.getExe' pkgs.iproute2 "ip"}";
+        in
+        # br-int is the default name, create and set up before incus starts
+        ''
+          ${vsctl} set open_vswitch . \
+            external_ids:ovn-remote=${
+              lib.concatMapStringsSep "," (host: "tcp:${host}:6642") config.jemand771.ovn.peers
+            } \
+            external_ids:ovn-bridge=br-int
+
+          ${vsctl} --may-exist add-br br-int
+          ${vsctl} set bridge br-int fail_mode=secure
+
+          ${vsctl} --may-exist add-br br-uplink
+        ''
+        # even if it doesn't do anything, it needs to exist. sensible ports only when in use (dedis)
+        + lib.optionalString (config.jemand771.ovn.chassis.enable) ''
+          ${vsctl} --may-exist add-port br-uplink cloudlab-ext
+          ${ip} link set cloudlab-ext up
+        '';
+    };
   };
 }

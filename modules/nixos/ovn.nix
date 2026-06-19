@@ -55,7 +55,7 @@
           --unixctl=/run/ovn/ovnnb_db.ctl \
           --remote=punix:/run/ovn/ovnnb_db.sock \
           --remote=ptcp:6641:${config.jemand771.ovn.localIp} \
-          /var/lib/ovn/ovnnb_db.db \
+          /var/lib/ovn/ovnnb_db.db
       '';
     };
     systemd.services.ovn-sb-ovsdb = {
@@ -74,7 +74,7 @@
           --unixctl=/run/ovn/ovnsb_db.ctl \
           --remote=punix:/run/ovn/ovnsb_db.sock \
           --remote=ptcp:6642:${config.jemand771.ovn.localIp} \
-          /var/lib/ovn/ovnsb_db.db \
+          /var/lib/ovn/ovnsb_db.db
       '';
     };
     systemd.services.ovn-northd = {

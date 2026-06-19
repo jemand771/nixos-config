@@ -7,6 +7,7 @@
     enable = true;
     # dhcp managed
     ip = "10.5.0.2";
+    isCloud = true;
   };
 
   networking.interfaces.enp1s0.ipv6.addresses = [

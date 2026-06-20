@@ -110,6 +110,7 @@
     jemand771 = {
       incus = {
         enable = true;
+        localIp = config.jemand771.unbeatable.ip;
         projects = {
           default = {
             "limits.containers" = "0";

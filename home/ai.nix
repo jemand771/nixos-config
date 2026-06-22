@@ -43,6 +43,7 @@
       * try to use pre-approved tools to avoid unnecessary permission prompts
       * keep changes minimal and focused, don't refactor unless it's required for your task or you're asked to
       * clean up after yourself, e.g. remove temporary files and remove code you just made redundant
+      * do not commit, push, open pull requests, or trigger any other kind of interaction with other humans unless explicitly asked to
 
       # Environment
       * you're running on NixOS, use nix tooling if you need extra software

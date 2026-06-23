@@ -36,6 +36,7 @@ in
       ++ lib.optional config.networking.networkmanager.enable "networkmanager"
       ++ lib.optional config.virtualisation.docker.enable "docker"
       ++ lib.optional config.virtualisation.libvirtd.enable "libvirtd"
+      ++ lib.optional config.virtualisation.incus.enable "incus-admin"
       ++ lib.optional config.services.minecraft-servers.enable "minecraft";
       openssh.authorizedKeys.keys = keysFor config.deployment.tags;
     };

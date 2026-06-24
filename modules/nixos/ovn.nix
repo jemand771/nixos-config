@@ -38,6 +38,23 @@
       ];
     };
 
+    environment.systemPackages = [
+      (pkgs.symlinkJoin {
+        name = "ovn-cli";
+        paths = [ pkgs.ovn ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        postBuild =
+          let
+            remotesOnPort =
+              port: lib.concatMapStringsSep "," (host: "tcp:${host}:${toString port}") config.jemand771.ovn.peers;
+          in
+          ''
+            wrapProgram $out/bin/ovn-nbctl --set-default OVN_NB_DB "${remotesOnPort 6641}"
+            wrapProgram $out/bin/ovn-sbctl --set-default OVN_SB_DB "${remotesOnPort 6642}"
+          '';
+      })
+    ];
+
     # debian calls all these "ovn central" (single entrypoint with "magic inside")
     systemd.services.ovn-nb-ovsdb = {
       description = "OVN Northbound OVSDB";

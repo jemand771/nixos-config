@@ -59,7 +59,7 @@
             };
             eth0 = {
               type = "nic";
-              network = "guests";
+              network = "default";
               name = "eth0";
             };
           };

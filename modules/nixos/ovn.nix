@@ -176,6 +176,7 @@
         # br-int is the default name, create and set up before incus starts
         ''
           ${vsctl} set open_vswitch . \
+            external_ids:system-id=${config.networking.hostName} \
             external_ids:ovn-remote=${
               lib.concatMapStringsSep "," (host: "tcp:${host}:6642") config.jemand771.ovn.peers
             } \
@@ -188,9 +189,35 @@
         ''
         # even if it doesn't do anything, it needs to exist. sensible ports only when in use (dedis)
         + lib.optionalString (config.jemand771.ovn.chassis.enable) ''
+          ${vsctl} set open_vswitch . \
+            external_ids:ovn-encap-ip=${config.jemand771.ovn.localIp} \
+            external_ids:ovn-encap-type=geneve
           ${vsctl} --may-exist add-port br-uplink cloudlab-ext
           ${ip} link set cloudlab-ext up
         '';
+    };
+
+    systemd.services.ovn-controller = lib.mkIf config.jemand771.ovn.chassis.enable {
+      description = "OVN controller";
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "systemd-networkd-wait-online.service"
+        "ovn-ovs-setup.service"
+      ];
+      requires = [
+        "ovn-ovs-setup.service"
+      ];
+      wants = [ "systemd-networkd-wait-online.service" ];
+      environment.OVS_RUNDIR = "/run/openvswitch";
+      serviceConfig = {
+        Restart = "on-failure";
+        RuntimeDirectory = "ovn";
+        RuntimeDirectoryPreserve = "yes";
+        StateDirectory = "ovn";
+      };
+      script = ''
+        exec ${lib.getExe' pkgs.ovn "ovn-controller"} unix:/run/openvswitch/db.sock
+      '';
     };
   };
 }

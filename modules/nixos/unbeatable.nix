@@ -137,7 +137,7 @@
       preservation.enable = true;
       zfs-rpool = {
         enable = true;
-        extraDatasets = lib.mkIf (!config.jemand771.unbeatable.isCloud) {
+        extraDatasets = {
           "incus-local" = {
             type = "zfs_fs";
             options = {
@@ -145,6 +145,8 @@
               mountpoint = "none";
             };
           };
+        }
+        // lib.optionalAttrs (!config.jemand771.unbeatable.isCloud) {
           "incus-linstor" = {
             type = "zfs_fs";
             options = {

@@ -31,7 +31,9 @@
         projects = builtins.map ({ name, value }: {
           inherit name;
           config = {
-            "features.networks" = "false";
+            # true = isolate, false = use default project.
+            # we want common networking, but the default project expects `true` everywhere
+            "features.networks" = lib.boolToString (name == "default");
             "features.profiles" = "true";
             "features.images" = "true";
             "features.storage.volumes" = "true";

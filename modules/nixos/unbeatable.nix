@@ -79,8 +79,9 @@
         }
     );
     virtualisation.incus.preseed.config = {
-      "network.ovn.northbound_connection" =
-        lib.concatMapStringsSep "," (host: "tcp:${host}:6641") config.jemand771.ovn.peers;
+      "network.ovn.northbound_connection" = lib.concatMapStringsSep "," (
+        host: "tcp:${host}:6641"
+      ) config.jemand771.ovn.peers;
     };
     virtualisation.incus.preseed.networks = [
       {

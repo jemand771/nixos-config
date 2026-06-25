@@ -83,6 +83,8 @@
         host: "tcp:${host}:6641"
       ) config.jemand771.ovn.peers;
     };
+    # preseed technically can't create cluster networks this way, but it _can_ maintain them.
+    # creation happens elsewhere, see oneshot in incus.nix. (mapping per-node hardware to cluster-wide abstractions)
     virtualisation.incus.preseed.networks = [
       {
         name = "cloudlab-ext";

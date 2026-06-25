@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 {
@@ -103,6 +102,30 @@
           EOF
           rm -f /run/incus-join-token
         '';
+    };
+
+    systemd.services.incus-preseed-member = {
+      description = "Incus preseed for member specific config";
+      wantedBy = [ "incus.service" ];
+      after = [ "incus.service" ];
+      bindsTo = [ "incus.service" ];
+      partOf = [ "incus.service" ];
+      before = [ "incus-preseed.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script =
+        let
+          incus = lib.getExe' config.virtualisation.incus.clientPackage "incus";
+        in
+        # eventual consistency(tm)
+        # create locally (for this node), then try to register cluster wide (only works when all nodes have completed the local part)
+        # incus-preseed handles updates after that but _can't_ cover the initial creation (neither local nor clustered)
+        lib.concatMapStringsSep "\n" (net: ''
+          ${incus} network create ${net.name} --type ${net.type} --target ${config.networking.hostName} parent=${net.config.parent} || true
+          ${incus} network create ${net.name} --type ${net.type} || true
+        '') (lib.filter (net: net.config ? parent) config.virtualisation.incus.preseed.networks);
     };
   };
 }

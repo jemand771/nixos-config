@@ -94,9 +94,9 @@
           "ipv4.gateway" = "46.225.196.57/29";
           "ipv4.ovn.ranges" = "46.225.196.59-46.225.196.62";
           "ipv6.gateway" = "2a01:4f8:fff0:18a::1/64";
-          # TODO is this required?
-          # "ipv6.routes" = "2a01:4f8:fff0:18a::/64";
+          "ipv6.routes" = "2a01:4f8:fff0:18a::/64";
           "ipv6.ovn.ranges" = "2a01:4f8:fff0:18a::10-2a01:4f8:fff0:18a::1f";
+          # TODO is this required?
           # "dns.nameservers" = "185.12.64.1,185.12.64.2,2a01:4ff:ff00::add:1,2a01:4ff:ff00::add:2";
         };
       }

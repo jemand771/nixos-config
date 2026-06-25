@@ -106,7 +106,7 @@
         type = "ovn";
         config = {
           "network" = "cloudlab-ext";
-          "ipv4.address" = "10.6.0.0/16";
+          "ipv4.address" = "10.6.0.1/16";
           "ipv4.nat" = "true";
           "ipv6.address" = "2a01:4f8:fff0:18a::1/64";
           "ipv6.nat" = "false";

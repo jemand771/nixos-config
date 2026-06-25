@@ -122,6 +122,7 @@
           default = {
             "limits.containers" = "0";
             "limits.instances" = "0";
+            "restricted.networks.uplinks" = "cloudlab-ext";
           };
           infra = { };
         };

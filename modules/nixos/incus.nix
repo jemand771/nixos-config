@@ -24,11 +24,7 @@
     };
   };
   config = lib.mkIf config.jemand771.incus.enable {
-    preservation.preserveAt."/persist" = {
-      directories = [
-        "/var/lib/incus"
-      ];
-    };
+    preservation.preserveAt."/persist".directories = [ "/var/lib/incus" ];
     virtualisation.incus = {
       enable = true;
       ui.enable = true;
@@ -44,7 +40,7 @@
             "restricted" = "true";
           }
           // value;
-        }) (lib.attrsToList (config.jemand771.incus.projects));
+        }) (lib.attrsToList config.jemand771.incus.projects);
         profiles = builtins.map (project: {
           name = "default";
           inherit project;

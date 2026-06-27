@@ -152,6 +152,7 @@
         success_symbol = "[➜](bold green)";
         error_symbol = "[➜](bold red)";
       };
+      cmd_duration.show_notifications = true;
       custom.chroot = {
         command = "cat /etc/debian_chroot";
         when = "test -f /etc/debian_chroot";

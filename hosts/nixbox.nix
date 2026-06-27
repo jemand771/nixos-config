@@ -69,9 +69,7 @@
     #     gke-gcloud-auth-plugin
     #   ]
     # ))
-    (blender.override {
-      cudaSupport = true;
-    })
+    blender
   ];
   hardware.xone.enable = true;
   programs.kdeconnect.enable = true;

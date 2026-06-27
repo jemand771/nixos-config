@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 
@@ -45,5 +46,13 @@
 
     # https://github.com/NixOS/nixpkgs/issues/334180
     boot.kernelModules = [ "nvidia-uvm" ];
+
+    nixpkgs.config = {
+      cudaSupport = true;
+      # https://developer.nvidia.com/cuda/gpus
+      cudaCapabilities = [ "8.9" ];
+      cudaForwardCompat = true;
+      allowUnfreePredicate = pkgs._cuda.lib.allowUnfreeCudaPredicate;
+    };
   };
 }

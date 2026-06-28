@@ -64,6 +64,7 @@
     powerOnBoot = true;
     settings.General.Experimental = true;
   };
+  programs.kdeconnect.enable = true;
 
   jemand771.printer.enable = true;
   hardware.logitech.wireless.enable = true;

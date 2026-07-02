@@ -32,6 +32,16 @@
           "mcp__plugin_claude-code-home-manager_nixos__*"
         ];
       };
+      skills = {
+        caveman = "${
+          pkgs.fetchFromGitHub {
+            owner = "JuliusBrussee";
+            repo = "caveman";
+            rev = "v1.9.0";
+            hash = "sha256-ocWViFf5KO0Lt0yM/vu4barAOCZBlvvj0iu17XCW1GE=";
+          }
+        }/skills/caveman";
+      };
     };
     home.file.".claude/CLAUDE.md".text = ''
       # Goals

@@ -16,7 +16,7 @@
   };
   options.jemand771.zfs-rpool.extraDatasets = lib.mkOption {
     type = lib.types.attrsOf lib.types.anything;
-    description = "whether to create incus-local and incus-linstor datasets (zfs_fs, canmount=off, mountpoint=none)";
+    description = "extra disko datasets for zfs rpool";
     default = { };
     example = {
       home = {

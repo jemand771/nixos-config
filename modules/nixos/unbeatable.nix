@@ -130,8 +130,7 @@
       linstor = {
         enable = true;
         controller.enable = !config.jemand771.unbeatable.isCloud;
-        client.enable = true;
-        client.controllers = [
+        controllers = [
           "linstor://10.5.1.11"
           "linstor://10.5.1.12"
         ];

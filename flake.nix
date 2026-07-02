@@ -47,6 +47,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     preservation.url = "github:nix-community/preservation";
+    # they tell you not to overwrite the nixpkgs input so I won't
+    proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
   };
 
   outputs =
@@ -67,6 +69,7 @@
         nixos-wsl
         nix-minecraft
         preservation
+        proxmox-nixos
         ;
     in
     {
@@ -80,6 +83,7 @@
       nixosConfigurations = self.colmenaHive.nodes;
       colmenaHive =
         let
+          pkgs = import nixpkgs { system = "x86_64-linux"; };
           defaultModules = [
             self.nixosModules.default
             nixos-wsl.nixosModules.default
@@ -87,6 +91,7 @@
               nixpkgs.overlays = [
                 nix-vscode-extensions.overlays.default
                 nix-minecraft.overlay
+                proxmox-nixos.overlays.${pkgs.stdenv.hostPlatform.system}
               ];
             }
             ./meta-options.nix
@@ -127,7 +132,6 @@
             nix-minecraft.nixosModules.minecraft-servers
             preservation.nixosModules.default
           ];
-          pkgs = import nixpkgs { system = "x86_64-linux"; };
         in
         colmena.lib.makeHive (
           {

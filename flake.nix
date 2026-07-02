@@ -162,8 +162,11 @@
             agenix.packages.${system}.default
             pkgs.colmena
             deadnix
+            nix-diff
+            nix-update
             nixfmt
             nixfmt-tree
+            nixos-anywhere
           ];
         };
         formatter = pkgs.nixfmt-tree;

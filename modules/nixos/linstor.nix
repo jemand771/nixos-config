@@ -39,5 +39,22 @@
       [global]
       controllers = ${lib.concatStringsSep "," config.jemand771.linstor.controllers}
     '';
+
+    services.drbd = {
+      enable = true;
+      config = ''
+        include "/var/lib/linstor.d/*.res";
+        global {
+          usage-count no;
+          udev-always-use-vnr;
+        }
+      '';
+    };
+    # we just want the system config goodies, not the actual service (it runs `drbdadm up all`, ugh)
+    systemd.suppressedSystemUnits = [ "drbd.service" ];
+
+    # satellite
+    # controller
+    # reactor (+promoters)
   };
 }

@@ -53,7 +53,18 @@
     # we just want the system config goodies, not the actual service (it runs `drbdadm up all`, ugh)
     systemd.suppressedSystemUnits = [ "drbd.service" ];
 
-    # satellite
+    systemd.services.linstor-satellite = {
+      description = "LINSTOR satellite";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      serviceConfig = {
+        ExecStart = lib.getExe' pkgs.linstor-server "linstor-satellite";
+        Restart = "on-failure";
+        StateDirectory = "linstor.d";
+      };
+    };
+
     # controller
     # reactor (+promoters)
   };

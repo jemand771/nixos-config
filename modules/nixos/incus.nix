@@ -24,6 +24,7 @@
   };
   config = lib.mkIf config.jemand771.incus.enable {
     preservation.preserveAt."/persist".directories = [ "/var/lib/incus" ];
+    networking.nftables.enable = true;
     virtualisation.incus = {
       enable = true;
       ui.enable = true;

@@ -28,7 +28,6 @@
     # boot.kernelParams = [ "console=tty0" "console=ttyS0,115200" ];
     networking = {
       useNetworkd = true;
-      nftables.enable = true;
     }
     // (
       if config.jemand771.unbeatable.isCloud then

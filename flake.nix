@@ -161,6 +161,9 @@
       in
       {
         packages = self.lib.mapDir ./pkgs (n: pkgs.callPackage ./pkgs/${n} { });
+        checks = lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux (
+          self.lib.mapDir ./checks (n: import ./checks/${n} (inputs // { inherit pkgs self; }))
+        );
         devShells.default = pkgs.mkShellNoCC {
           nativeBuildInputs = with pkgs; [
             agenix.packages.${system}.default

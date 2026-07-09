@@ -1,7 +1,7 @@
 { config, lib, ... }:
 {
   options.jemand771.ssh.hostsets.cloudlab.enable = lib.mkEnableOption "ssh.hostsets.cloudlab";
-  config.programs.ssh.matchBlocks = lib.mkIf config.jemand771.ssh.hostsets.cloudlab.enable (
+  config.programs.ssh.settings = lib.mkIf config.jemand771.ssh.hostsets.cloudlab.enable (
     builtins.listToAttrs (
       map
         (

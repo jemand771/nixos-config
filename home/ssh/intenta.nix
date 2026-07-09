@@ -1,7 +1,7 @@
 { config, lib, ... }:
 {
   options.jemand771.ssh.hostsets.intenta.enable = lib.mkEnableOption "ssh.hostsets.intenta";
-  config.programs.ssh.matchBlocks = lib.mkIf config.jemand771.ssh.hostsets.intenta.enable {
+  config.programs.ssh.settings = lib.mkIf config.jemand771.ssh.hostsets.intenta.enable {
     "spse*.intop01.de" = {
       user = "root";
       identityFile = "~/.ssh/id_seinf";

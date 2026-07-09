@@ -10,7 +10,7 @@
   config.programs.ssh = lib.mkIf config.jemand771.ssh.enable {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
         addKeysToAgent = "yes";
         identitiesOnly = true;

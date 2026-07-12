@@ -71,6 +71,15 @@
         preservation
         proxmox-nixos
         ;
+      overlaysFor =
+        system:
+        [
+          colmena.overlays.default
+          nix-minecraft.overlay
+          nix-vscode-extensions.overlays.default
+        ]
+        ++ lib.optional (builtins.hasAttr system proxmox-nixos.overlays) proxmox-nixos.overlays.${system}
+        ++ [ self.overlays.default ];
     in
     {
       lib =
@@ -89,12 +98,7 @@
             self.nixosModules.default
             nixos-wsl.nixosModules.default
             {
-              nixpkgs.overlays = [
-                nix-vscode-extensions.overlays.default
-                nix-minecraft.overlay
-                proxmox-nixos.overlays.${pkgs.stdenv.hostPlatform.system}
-                self.overlays.default
-              ];
+              nixpkgs.overlays = overlaysFor pkgs.stdenv.hostPlatform.system;
             }
             ./meta-options.nix
             ./home/options.nix
@@ -157,7 +161,7 @@
         pkgs = (
           import nixpkgs {
             inherit system;
-            overlays = [ colmena.overlays.default ];
+            overlays = overlaysFor system;
           }
         );
       in

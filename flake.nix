@@ -80,6 +80,7 @@
         call "mapDir.nix" ./lib call;
       nixosModules = self.lib.mapDir ./modules/nixos (n: ./modules/nixos/${n});
       homeModules = self.lib.mapDir ./modules/home-manager (n: ./modules/home-manager/${n});
+      overlays.default = final: _prev: self.lib.mapDir ./pkgs (n: final.callPackage ./pkgs/${n} { });
       nixosConfigurations = self.colmenaHive.nodes;
       colmenaHive =
         let
@@ -92,6 +93,7 @@
                 nix-vscode-extensions.overlays.default
                 nix-minecraft.overlay
                 proxmox-nixos.overlays.${pkgs.stdenv.hostPlatform.system}
+                self.overlays.default
               ];
             }
             ./meta-options.nix

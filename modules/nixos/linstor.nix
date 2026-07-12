@@ -7,7 +7,7 @@
 {
   options.jemand771.linstor = {
     enable = lib.mkEnableOption "linstor";
-    controller.enable = lib.mkEnableOption "linstor controller (+drbd)";
+    controller.enable = lib.mkEnableOption "linstor controller (+drbd-reactor)";
     controllers = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];

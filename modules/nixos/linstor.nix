@@ -54,6 +54,8 @@
         };
         # we just want the system config goodies, not the actual service (it runs `drbdadm up all`, ugh)
         systemd.suppressedSystemUnits = [ "drbd.service" ];
+        # force drbd 9 (in-tree is v8)
+        boot.extraModulePackages = [ config.boot.kernelPackages.drbd ];
 
         systemd.services.linstor-satellite = {
           description = "LINSTOR satellite";

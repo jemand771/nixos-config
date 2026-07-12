@@ -42,6 +42,14 @@
           controllers = ${lib.concatStringsSep "," config.jemand771.linstor.controllers}
         '';
 
+        # trick incus into using our linstor binaries (well, "trick", just debianmoding)
+        systemd.tmpfiles.settings.incus-linstor-shim = {
+          "/usr/share/linstor-server/bin/Satellite"."L+".argument =
+            lib.getExe' pkgs.linstor-server "linstor-satellite";
+          "/usr/share/linstor-server/bin/Controller"."L+".argument =
+            lib.getExe' pkgs.linstor-server "linstor-controller";
+        };
+
         services.drbd = {
           enable = true;
           config = ''

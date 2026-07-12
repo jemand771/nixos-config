@@ -78,10 +78,28 @@
         };
       }
 
-      {
-        # controller
+      (lib.mkIf config.jemand771.linstor.controller.enable {
+        # created manually instead of via StateDirectory for the initial bootstrapping dance
+        # (so the controller doesn't depend on something in there that doesn't exist yet)
+        systemd.tmpfiles.settings.linstor."/var/lib/linstor".d = {
+          mode = "0700";
+          user = "root";
+          group = "root";
+        };
+
+        systemd.services.linstor-controller = {
+          description = "LINSTOR controller";
+          # not wantedBy anything because drbd-reactor starts and stops it
+          after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
+          serviceConfig = {
+            ExecStart = "${lib.getExe' pkgs.linstor-server "linstor-controller"}";
+            Restart = "on-failure";
+          };
+        };
+
         # reactor (+promoters)
-      }
+      })
     ]
   );
 }

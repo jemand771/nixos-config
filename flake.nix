@@ -49,6 +49,10 @@
     preservation.url = "github:nix-community/preservation";
     # they tell you not to overwrite the nixpkgs input so I won't
     proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
+    nix-output-monitor = {
+      url = "github:maralorn/nix-output-monitor";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -70,12 +74,14 @@
         nix-minecraft
         preservation
         proxmox-nixos
+        nix-output-monitor
         ;
       overlaysFor =
         system:
         [
           colmena.overlays.default
           nix-minecraft.overlay
+          nix-output-monitor.overlays.default
           nix-vscode-extensions.overlays.default
         ]
         ++ lib.optional (builtins.hasAttr system proxmox-nixos.overlays) proxmox-nixos.overlays.${system}

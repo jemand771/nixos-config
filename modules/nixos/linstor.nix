@@ -98,6 +98,16 @@
           };
         };
 
+        # mounted by promoter before starting the controller
+        systemd.mounts = [
+          {
+            what = "/dev/drbd/by-res/linstor_db/0";
+            where = "/var/lib/linstor";
+            type = "ext4";
+            options = "noauto";
+          }
+        ];
+
         # see https://github.com/LINBIT/drbd-utils/blob/master/scripts/drbd-service-shim.sh.in
         systemd.tmpfiles.settings.drbd-reactor = {
           "/lib/drbd/scripts".d = {

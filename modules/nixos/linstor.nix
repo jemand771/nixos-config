@@ -206,6 +206,123 @@
             "linstor-controller.service",
           ]
         '';
+
+        # first register all nodes on any diskful/controller node:
+        # linstor node create <name> <ip>
+        # linstor storage-pool create ...
+        # that forms the cluster, but linstor's db isn't distributed. to fix that:
+        # systemctl start --wait linstor-bootstrap
+        # also see https://linbit.com/drbd-user-guide/linstor-guide-1_0-en/#s-linstor_ha
+        # on later node additions, remember to adjust the linstor_db replica count so each controller gets one:
+        # linstor resource-group modify linstor_db --place-count 3 --diskless-on-remaining false
+        systemd.services.linstor-bootstrap = {
+          description = "Bootstrap LINSTOR";
+          after = [
+            "linstor-satellite.service"
+            "network-online.target"
+          ];
+          requires = [ "linstor-satellite.service" ];
+          wants = [ "network-online.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            TimeoutStartSec = "60s";
+          };
+          script =
+            let
+              linstor = lib.getExe' pkgs.linstor-client "linstor";
+              drbdadm = lib.getExe' pkgs.drbd "drbdadm";
+              mkfs = lib.getExe' pkgs.e2fsprogs "mkfs.ext4";
+              mount = lib.getExe' pkgs.util-linux "mount";
+              umount = lib.getExe' pkgs.util-linux "umount";
+              blkid = lib.getExe' pkgs.util-linux "blkid";
+            in
+            ''
+              set -euo pipefail
+
+              if [ -e /var/lib/linstor-ha-marker/enabled ]; then
+                echo /var/lib/linstor-ha-marker/enabled exists
+                exit 1
+              fi
+              if ${linstor} resource list -r linstor_db | grep linstor_db; then
+                echo linstor_db already exists
+                exit 1
+              fi
+
+              systemctl start linstor-controller.service
+              until ${linstor} node list; do sleep 1; done
+
+              ${linstor} resource-group create linstor_db \
+                --place-count 2 \
+                --storage-pool incus_zfs \
+                --diskless-on-remaining true
+              ${linstor} resource-group drbd-options \
+                --auto-promote=no \
+                --quorum=majority \
+                --on-suspended-primary-outdated=force-secondary \
+                --on-no-quorum=io-error \
+                --on-no-data-accessible=io-error \
+                linstor_db
+              ${linstor} volume-group create linstor_db
+              ${linstor} resource-group spawn-resources linstor_db linstor_db 1G
+
+              # by-res symlink created by udev
+              until [ -b "/dev/drbd/by-res/linstor_db/0" ]; do sleep 1; done
+
+              until ${drbdadm} primary linstor_db; do sleep 1; done
+              systemctl stop linstor-controller.service
+
+              if ${blkid} -t TYPE=ext4 /dev/drbd/by-res/linstor_db/0; then
+                echo /dev/drbd/by-res/linstor_db/0 already ext4
+              else
+                ${mkfs} -L linstor_db /dev/drbd/by-res/linstor_db/0
+                mnt="$(mktemp -d)"
+                ${mount} /dev/drbd/by-res/linstor_db/0 "$mnt"
+                cp -a /var/lib/linstor/. "$mnt"/
+                ${umount} "$mnt"
+                rmdir "$mnt"
+              fi
+              ${drbdadm} secondary linstor_db
+
+              mkdir -p /var/lib/linstor-ha-marker
+              touch /var/lib/linstor-ha-marker/enabled
+            '';
+        };
+
+        # systemctl start --wait linstor-join
+        systemd.services.linstor-join = {
+          description = "Join LINSTOR";
+          after = [
+            "linstor-satellite.service"
+            "network-online.target"
+          ];
+          requires = [ "linstor-satellite.service" ];
+          wants = [ "network-online.target" ];
+          serviceConfig.Type = "oneshot";
+          script =
+            let
+              linstor = lib.getExe' pkgs.linstor-client "linstor";
+              drbdadm = lib.getExe' pkgs.drbd "drbdadm";
+            in
+            ''
+              set -euo pipefail
+
+              if [ -e /var/lib/linstor-ha-marker/enabled ]; then
+                echo /var/lib/linstor-ha-marker/enabled exists
+                exit 1
+              fi
+              if ! ${linstor} resource list -r linstor_db | grep linstor_db; then
+                echo linstor_db does not exist, is the cluster bootstrapped?
+                exit 1
+              fi
+              if ! ${drbdadm} status linstor_db | grep -E '[[:space:]]disk:' | grep -vi diskless; then
+                echo local linstor_db replica is diskless
+                exit 1
+              fi
+
+              mkdir -p /var/lib/linstor-ha-marker
+              touch /var/lib/linstor-ha-marker/enabled
+            '';
+        };
       })
     ]
   );

@@ -98,7 +98,104 @@
           };
         };
 
-        # reactor (+promoters)
+        # see https://github.com/LINBIT/drbd-utils/blob/master/scripts/drbd-service-shim.sh.in
+        systemd.tmpfiles.settings.drbd-reactor = {
+          "/lib/drbd/scripts".d = {
+            mode = "0755";
+            user = "root";
+            group = "root";
+          };
+          "/lib/drbd/scripts/drbd-service-shim.sh"."L+".argument =
+            "${pkgs.writeShellScript "drbd-service-shim.sh" ''
+              set -e
+              cmd="$1"
+              res="$2"
+              case "$cmd" in
+                primary)
+                  exec ${pkgs.drbd}/bin/drbdadm primary "$res"
+                  ;;
+                secondary)
+                  exec ${pkgs.drbd}/bin/drbdadm secondary "$res"
+                  ;;
+                secondary-secondary-force)
+                  ${pkgs.drbd}/bin/drbdadm secondary "$res" || ${pkgs.drbd}/bin/drbdadm secondary --force "$res"
+                  ;;
+                *)
+                  echo "drbd-service-shim.sh: unknown verb: $cmd" >&2
+                  exit 1
+                  ;;
+              esac
+            ''}";
+        };
+
+        # only run drbd-reactor when a node has either bootstrapped or joined a HA setup.
+        # linstor_db is local-only until then
+        preservation.preserveAt."/persist".directories = [ "/var/lib/linstor-ha-marker" ];
+        systemd.paths.drbd-reactor = {
+          description = "Start drbd-reactor once this node is a commissioned HA controller";
+          wantedBy = [ "multi-user.target" ];
+          pathConfig.PathExists = "/var/lib/linstor-ha-marker/enabled";
+        };
+        systemd.services.drbd-reactor = {
+          description = "DRBD reactor";
+          # started by drbd-reactor.path (either transiently at boot or via bootstrap/join oneshots)
+          after = [
+            "network-online.target"
+            "systemd-modules-load.service"
+          ];
+          path = [ pkgs.drbd ];
+          wants = [ "network-online.target" ];
+          serviceConfig = {
+            Type = "notify";
+            ExecStart = lib.getExe pkgs.drbd-reactor;
+            Restart = "on-failure";
+          };
+        };
+
+        environment.systemPackages = [
+          # for drbd-reactorctl
+          pkgs.drbd-reactor
+        ];
+
+        # yoink and unyoink resources
+        systemd.services."drbd-promote@" = {
+          description = "Promote DRBD resource %I";
+          after = [
+            "drbd.service"
+            "systemd-modules-load.service"
+          ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = "yes";
+            ExecStart = "${pkgs.drbd}/bin/drbdadm primary %i";
+            ExecStop = "${pkgs.drbd}/bin/drbdadm secondary %i";
+          };
+        };
+
+        # drbd-reactor says: Unit drbd-services@blabla.target not found
+        systemd.targets."drbd-services@" = {
+          description = "DRBD services target for resource %I";
+          unitConfig = {
+            PartOf = "drbd-promote@%i.service";
+            Requires = "drbd-promote@%i.service";
+            After = "drbd-promote@%i.service";
+          };
+        };
+
+        # drbd-reactorctl doesn't care about this config, the canonical location is /etc/drbd-reactor.d
+        environment.etc."drbd-reactor.toml".text = ''
+          snippets = "/etc/drbd-reactor.d"
+        '';
+
+        # enable the HA data mount and controller on the primary node
+        environment.etc."drbd-reactor.d/linstor.toml".text = ''
+          [[promoter]]
+          [promoter.resources.linstor_db]
+          start = [
+            "var-lib-linstor.mount",
+            "linstor-controller.service",
+          ]
+        '';
       })
     ]
   );

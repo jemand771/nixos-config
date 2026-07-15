@@ -193,27 +193,30 @@
             user = "root";
             group = "root";
           };
-          "/lib/drbd/scripts/drbd-service-shim.sh"."L+".argument =
-            "${pkgs.writeShellScript "drbd-service-shim.sh" ''
-              set -e
-              cmd="$1"
-              res="$2"
-              case "$cmd" in
-                primary)
-                  exec ${pkgs.drbd}/bin/drbdadm primary "$res"
-                  ;;
-                secondary)
-                  exec ${pkgs.drbd}/bin/drbdadm secondary "$res"
-                  ;;
-                secondary-secondary-force)
-                  ${pkgs.drbd}/bin/drbdadm secondary "$res" || ${pkgs.drbd}/bin/drbdadm secondary --force "$res"
-                  ;;
-                *)
-                  echo "drbd-service-shim.sh: unknown verb: $cmd" >&2
-                  exit 1
-                  ;;
-              esac
-            ''}";
+          "/lib/drbd/scripts/drbd-service-shim.sh"."L+".argument = "${lib.getExe (
+            pkgs.writeShellApplication {
+              name = "drbd-service-shim.sh";
+              text = ''
+                cmd="$1"
+                res="$2"
+                case "$cmd" in
+                  primary)
+                    exec ${pkgs.drbd}/bin/drbdadm primary "$res"
+                    ;;
+                  secondary)
+                    exec ${pkgs.drbd}/bin/drbdadm secondary "$res"
+                    ;;
+                  secondary-secondary-force)
+                    ${pkgs.drbd}/bin/drbdadm secondary "$res" || ${pkgs.drbd}/bin/drbdadm secondary --force "$res"
+                    ;;
+                  *)
+                    echo "drbd-service-shim.sh: unknown verb: $cmd" >&2
+                    exit 1
+                    ;;
+                esac
+              '';
+            }
+          )}";
         };
 
         # only run drbd-reactor when a node has either bootstrapped or joined a HA setup.

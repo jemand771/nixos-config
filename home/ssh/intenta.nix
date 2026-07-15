@@ -93,5 +93,9 @@
       user = "root";
       identityFile = "~/.ssh/id_virt-manager";
     };
+    "sspaceowl002.intop01.de" = {
+      user = "adm_wihi";
+      identityFile = "~/.ssh/id_infra";
+    };
   };
 }

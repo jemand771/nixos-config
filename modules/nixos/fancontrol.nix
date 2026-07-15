@@ -62,10 +62,15 @@ in
 
     services.udev.extraRules =
       let
-        mkLink = pkgs.writeShellScript "hwmon-stable-link" ''
-          ${lib.getExe' pkgs.coreutils "mkdir"} -p ${runDir}
-          ${lib.getExe' pkgs.coreutils "ln"} -sfn "/sys$2" "${runDir}/$1"
-        '';
+        mkLink = lib.getExe (
+          pkgs.writeShellApplication {
+            name = "hwmon-stable-link";
+            text = ''
+              ${lib.getExe' pkgs.coreutils "mkdir"} -p ${runDir}
+              ${lib.getExe' pkgs.coreutils "ln"} -sfn "/sys$2" "${runDir}/$1"
+            '';
+          }
+        );
       in
       builtins.concatStringsSep "\n" (
         lib.mapAttrsToList (

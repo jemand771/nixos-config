@@ -17,6 +17,44 @@
         "linstor://192.168.9.11"
       ];
     };
+    localIp = lib.mkOption {
+      type = lib.types.str;
+      description = "LINSTOR local IP address";
+      example = "192.168.9.10";
+    };
+    storagePools = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          options = {
+            type = lib.mkOption {
+              type = lib.types.enum [
+                "lvm"
+                "lvmthin"
+                "zfs"
+                "zfsthin"
+                "file"
+                "filethin"
+              ];
+              example = "zfs";
+              description = "storage pool provider";
+            };
+            backing = lib.mkOption {
+              type = lib.types.str;
+              description = "storage pool provider argument";
+              example = "rpool/linstor";
+            };
+          };
+        }
+      );
+      default = { };
+      description = "node-local storage pools (name -> config)";
+      example = {
+        incus_zfs = {
+          type = "zfs";
+          backing = "rpool/linstor";
+        };
+      };
+    };
   };
   config = lib.mkIf config.jemand771.linstor.enable (
     lib.mkMerge [
@@ -75,6 +113,45 @@
             Restart = "on-failure";
             StateDirectory = "linstor.d";
           };
+        };
+      }
+
+      {
+        # on any one (!) node:
+        # systemctl start linstor-controller
+        # then on each node (including the one running the controller):
+        #   systemctl start --wait linstor-register
+        # after that, continue bootstrap+join dance
+        systemd.services.linstor-register = {
+          description = "register LINSTOR node";
+          after = [
+            "linstor-satellite.service"
+            "network-online.target"
+          ];
+          requires = [ "linstor-satellite.service" ];
+          wants = [ "network-online.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            TimeoutStartSec = "60s";
+          };
+          script =
+            let
+              linstor = lib.getExe' pkgs.linstor-client "linstor";
+              node = config.networking.hostName;
+              poolCmds = lib.concatStrings (
+                lib.mapAttrsToList (
+                  name: pool: "${linstor} storage-pool create ${pool.type} ${node} ${name} ${pool.backing}\n"
+                ) config.jemand771.linstor.storagePools
+              );
+            in
+            ''
+              set -euo pipefail
+
+              until ${linstor} node list; do sleep 1; done
+
+              ${linstor} node create ${node} ${config.jemand771.linstor.localIp}
+              ${poolCmds}
+            '';
         };
       }
 
@@ -207,9 +284,9 @@
           ]
         '';
 
-        # first register all nodes on any diskful/controller node:
-        # linstor node create <name> <ip>
-        # linstor storage-pool create ...
+        # first register every node (set localIp + storagePools per host,
+        # then on each node once a controller is up):
+        # systemctl start --wait linstor-register
         # that forms the cluster, but linstor's db isn't distributed. to fix that:
         # systemctl start --wait linstor-bootstrap
         # also see https://linbit.com/drbd-user-guide/linstor-guide-1_0-en/#s-linstor_ha

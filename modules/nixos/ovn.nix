@@ -58,6 +58,7 @@
     # debian calls all these "ovn central" (single entrypoint with "magic inside")
     systemd.services.ovn-nb-ovsdb = {
       description = "OVN Northbound OVSDB";
+      enableStrictShellChecks = true;
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
@@ -77,6 +78,7 @@
     };
     systemd.services.ovn-sb-ovsdb = {
       description = "OVN Southbound OVSDB";
+      enableStrictShellChecks = true;
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
@@ -96,6 +98,7 @@
     };
     systemd.services.ovn-northd = {
       description = "OVN northd";
+      enableStrictShellChecks = true;
       wantedBy = [ "multi-user.target" ];
       after = [
         "ovn-nb-ovsdb.service"
@@ -221,6 +224,7 @@
 
     systemd.services.ovn-controller = lib.mkIf config.jemand771.ovn.chassis.enable {
       description = "OVN controller";
+      enableStrictShellChecks = true;
       wantedBy = [ "multi-user.target" ];
       after = [
         "systemd-networkd-wait-online.service"

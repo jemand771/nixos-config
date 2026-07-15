@@ -121,11 +121,13 @@
     # systemctl start --wait ovn-bootstrap
     systemd.services.ovn-bootstrap = {
       description = "Bootstrap OVN cluster";
+      enableStrictShellChecks = true;
       serviceConfig = {
         Type = "oneshot";
         StateDirectory = "ovn";
       };
       script = ''
+        set -x
         if [ -e /var/lib/ovn/ovnnb_db.db ] || [ -e /var/lib/ovn/ovnsb_db.db ]; then
           echo "OVN db already exists, refusing to re-create" >&2
           exit 1
@@ -143,12 +145,14 @@
     # systemctl start --wait ovn-join@<existing-member-ip>
     systemd.services."ovn-join@" = {
       description = "Join OVN cluster";
+      enableStrictShellChecks = true;
       scriptArgs = "%i";
       serviceConfig = {
         Type = "oneshot";
         StateDirectory = "ovn";
       };
       script = ''
+        set -x
         remote="$1"
         if [ -e /var/lib/ovn/ovnnb_db.db ] || [ -e /var/lib/ovn/ovnsb_db.db ]; then
           echo "OVN db already exists, refusing to join" >&2
@@ -170,6 +174,7 @@
 
     systemd.services.ovn-ovs-setup = {
       description = "Hook local OVS into OVN cluster";
+      enableStrictShellChecks = true;
       wantedBy = [ "multi-user.target" ];
       after = [
         "ovs-vswitchd.service"

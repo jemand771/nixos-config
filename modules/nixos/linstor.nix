@@ -124,6 +124,7 @@
         # after that, continue bootstrap+join dance
         systemd.services.linstor-register = {
           description = "register LINSTOR node";
+          enableStrictShellChecks = true;
           after = [
             "linstor-satellite.service"
             "network-online.target"
@@ -145,7 +146,7 @@
               );
             in
             ''
-              set -euo pipefail
+              set -x
 
               until ${linstor} node list; do sleep 1; done
 
@@ -294,6 +295,7 @@
         # linstor resource-group modify linstor_db --place-count 3 --diskless-on-remaining false
         systemd.services.linstor-bootstrap = {
           description = "Bootstrap LINSTOR";
+          enableStrictShellChecks = true;
           after = [
             "linstor-satellite.service"
             "network-online.target"
@@ -314,7 +316,7 @@
               blkid = lib.getExe' pkgs.util-linux "blkid";
             in
             ''
-              set -euo pipefail
+              set -x
 
               if [ -e /var/lib/linstor-ha-marker/enabled ]; then
                 echo /var/lib/linstor-ha-marker/enabled exists
@@ -368,6 +370,7 @@
         # systemctl start --wait linstor-join
         systemd.services.linstor-join = {
           description = "Join LINSTOR";
+          enableStrictShellChecks = true;
           after = [
             "linstor-satellite.service"
             "network-online.target"
@@ -381,7 +384,7 @@
               drbdadm = lib.getExe' pkgs.drbd "drbdadm";
             in
             ''
-              set -euo pipefail
+              set -x
 
               if [ -e /var/lib/linstor-ha-marker/enabled ]; then
                 echo /var/lib/linstor-ha-marker/enabled exists

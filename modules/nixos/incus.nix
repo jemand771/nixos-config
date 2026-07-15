@@ -68,6 +68,7 @@
     # systemctl start --wait incus-bootstrap
     systemd.services.incus-bootstrap = {
       description = "Bootstrap Incus cluster";
+      enableStrictShellChecks = true;
       after = [ "incus.service" ];
       requires = [ "incus.service" ];
       serviceConfig.Type = "oneshot";
@@ -76,6 +77,8 @@
           incus = lib.getExe' config.virtualisation.incus.clientPackage "incus";
         in
         ''
+          set -x
+
           ${incus} admin init --preseed <<EOF
           config:
             core.https_address: ${config.jemand771.incus.localIp}
@@ -91,12 +94,15 @@
     # systemctl start --wait incus-join
     systemd.services.incus-join = {
       description = "Join Incus cluster";
+      enableStrictShellChecks = true;
       serviceConfig.Type = "oneshot";
       script =
         let
           incus = lib.getExe' config.virtualisation.incus.clientPackage "incus";
         in
         ''
+          set -x
+
           ${incus} admin init --preseed <<EOF
           cluster:
             enabled: true
@@ -109,6 +115,7 @@
 
     systemd.services.incus-preseed-member = {
       description = "Incus preseed for member specific config";
+      enableStrictShellChecks = true;
       wantedBy = [ "incus.service" ];
       after = [ "incus.service" ];
       bindsTo = [ "incus.service" ];

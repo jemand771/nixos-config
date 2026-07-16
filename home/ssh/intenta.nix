@@ -35,10 +35,18 @@
       identityFile = "~/.ssh/id_infra";
       # proxyJump = "ssshjump.intop01.de";
     };
+    "sjenkins002.intop01.de" = {
+      user = "adm_wihi";
+      identityFile = "~/.ssh/id_infra";
+    };
     "sharbor001.intop01.de" = {
       user = "adm_wihi";
       identityFile = "~/.ssh/id_infra";
       # proxyJump = "ssshjump.intop01.de";
+    };
+    "sbalena001.intop01.de" = {
+      user = "adm_wihi";
+      identityFile = "~/.ssh/id_infra";
     };
     "seh-sspaceowlrec001.intop01.de" = {
       user = "adm_wihi";

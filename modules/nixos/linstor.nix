@@ -55,6 +55,11 @@
         };
       };
     };
+    dbStoragePool = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "storage pool for linstor_db (key of jemand771.linstor.storagePools)";
+    };
   };
   config = lib.mkIf config.jemand771.linstor.enable (
     lib.mkMerge [
@@ -63,6 +68,11 @@
           {
             assertion = builtins.length config.jemand771.linstor.controllers > 0;
             message = "need at least one linstor controller";
+          }
+          {
+            assertion =
+              (config.jemand771.linstor.dbStoragePool != null) == config.jemand771.linstor.controller.enable;
+            message = "jemand771.linstor.dbStoragePool must be set if and only if jemand771.linstor.controller.enable is true";
           }
         ];
 
@@ -335,7 +345,7 @@
 
               ${linstor} resource-group create linstor_db \
                 --place-count 2 \
-                --storage-pool incus_zfs \
+                --storage-pool ${config.jemand771.linstor.dbStoragePool} \
                 --diskless-on-remaining true
               ${linstor} resource-group drbd-options \
                 --auto-promote=no \

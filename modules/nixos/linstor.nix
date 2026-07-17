@@ -119,7 +119,10 @@
           after = [ "network-online.target" ];
           wants = [ "network-online.target" ];
           serviceConfig = {
-            ExecStart = lib.getExe' pkgs.linstor-server "linstor-satellite";
+            # journal already has everything, but file logging can't be turned off.
+            # dump logs somewhere they don't bother us (the default would be /logs)
+            ExecStart = "${lib.getExe' pkgs.linstor-server "linstor-satellite"} --logs /run/linstor-satellite";
+            RuntimeDirectory = "linstor-satellite";
             Restart = "on-failure";
             StateDirectory = "linstor.d";
           };
@@ -181,7 +184,10 @@
           after = [ "network-online.target" ];
           wants = [ "network-online.target" ];
           serviceConfig = {
-            ExecStart = "${lib.getExe' pkgs.linstor-server "linstor-controller"}";
+            # journal already has everything, but file logging can't be turned off.
+            # dump logs somewhere they don't bother us (the default would be /logs)
+            ExecStart = "${lib.getExe' pkgs.linstor-server "linstor-controller"} --logs /run/linstor-controller";
+            RuntimeDirectory = "linstor-controller";
             Restart = "on-failure";
           };
         };

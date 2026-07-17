@@ -78,9 +78,9 @@
 
         preservation.preserveAt."/persist" = {
           directories = [
-            # TODO needed?
-            # "/var/lib/linstor"
-            # "/var/lib/linstor.d"
+            # drbd .res files live in /var/lib/linstor.d, preserve.
+            # /var/lib/linstor itself is the mountpoint for linstor_db, so _don't_ preserve
+            "/var/lib/linstor.d"
           ];
         };
 

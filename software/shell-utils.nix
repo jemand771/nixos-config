@@ -43,15 +43,8 @@
     ];
 
   config.programs.fish.enable = true;
-  # TODO the interactiveShellInit below feels wrong? what about:
-  # users.users.willy.shell = pkgs.fish;
-  config.programs.bash = {
-    interactiveShellInit = ''
-      if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
-      then
-          shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-          exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-      fi
-    '';
-  };
+  config.users.defaultUserShell = pkgs.fish;
+  config.programs.fish.interactiveShellInit = ''
+    ${lib.getExe pkgs.nix-your-shell} fish | source
+  '';
 }

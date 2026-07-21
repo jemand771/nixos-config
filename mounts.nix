@@ -1,59 +1,20 @@
 { ... }:
-
+let
+  mountOnDemand = device: {
+    inherit device;
+    fsType = "nfs";
+    options = [
+      "noatime"
+      "noauto"
+      "x-systemd.automount"
+      "x-systemd.idle-timeout=600"
+    ];
+  };
+in
 {
-  # https://nixos.wiki/wiki/NFS
-  boot.supportedFilesystems = [ "nfs" ];
-  systemd.mounts =
-    let
-      commonMountOptions = {
-        type = "nfs";
-        mountConfig = {
-          Options = "noatime";
-        };
-      };
-
-    in
-
-    [
-      (
-        commonMountOptions
-        // {
-          what = "10.7.5.1:/nfs/main";
-          where = "/mnt/main";
-        }
-      )
-
-      (
-        commonMountOptions
-        // {
-          what = "10.7.5.1:/nfs/backup";
-          where = "/mnt/backup";
-        }
-      )
-
-      (
-        commonMountOptions
-        // {
-          what = "10.7.5.1:/nfs/ines";
-          where = "/mnt/ines";
-        }
-      )
-    ];
-
-  systemd.automounts =
-    let
-      commonAutoMountOptions = {
-        wantedBy = [ "multi-user.target" ];
-        automountConfig = {
-          TimeoutIdleSec = "600";
-        };
-      };
-
-    in
-
-    [
-      (commonAutoMountOptions // { where = "/mnt/main"; })
-      (commonAutoMountOptions // { where = "/mnt/backup"; })
-      (commonAutoMountOptions // { where = "/mnt/ines"; })
-    ];
+  fileSystems = {
+    "/mnt/main" = mountOnDemand "10.7.5.1:/nfs/main";
+    "/mnt/backup" = mountOnDemand "10.7.5.1:/nfs/backup";
+    "/mnt/ines" = mountOnDemand "10.7.5.1:/nfs/ines";
+  };
 }

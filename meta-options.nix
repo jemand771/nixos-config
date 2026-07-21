@@ -10,5 +10,6 @@
     office-utils.enable = true;
     shell-utils.enable = true;
     syncthing.enable = true;
+    nasmounts.enable = true;
   };
 }

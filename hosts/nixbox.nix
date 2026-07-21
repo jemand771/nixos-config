@@ -122,7 +122,6 @@
   imports = [
     ../secrets-nixos.nix
     ../backups.nix
-    ../mounts.nix
     ../playground/minecraft.nix
     microvm.nixosModules.host
     ../playground/vms.nix

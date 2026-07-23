@@ -35,10 +35,6 @@
         )
         [
           {
-            name = "old";
-            ip = "138.201.134.54";
-          }
-          {
             name = "sx";
             ip = "88.99.58.198";
           }
@@ -47,49 +43,19 @@
             ip = "88.99.58.196";
           }
           {
-            name = "spg";
-            ip = "168.119.251.136";
-          }
-          {
             name = "innung";
             ip = "159.69.35.76";
-          }
-          {
-            name = "buildbox";
-            ip = "95.217.233.49";
           }
           {
             name = "jitsi";
             ip = "49.13.22.182";
           }
           {
-            name = "control-1";
-            ip = "162.55.169.122";
+            name = "postal";
+            ip = "mail.d39s-mail.de";
           }
-          {
-            name = "control-2";
-            ip = "167.235.242.88";
-          }
-          {
-            name = "control-3";
-            ip = "5.75.226.245";
-          }
-          {
-            name = "worker-1";
-            ip = "78.46.237.164";
-          }
-          {
-            name = "worker-2";
-            ip = "167.235.229.191";
-          }
-          {
-            name = "worker-3";
-            ip = "168.119.96.92";
-          }
-          {
-            name = "worker-4";
-            ip = "5.75.242.73";
-          }
+          # TODO proxmox
+          # wp cluster
           {
             name = "wp-control-1";
             ip = "49.12.78.242";
@@ -141,10 +107,6 @@
           {
             name = "wp-worker-14";
             ip = "91.98.122.212";
-          }
-          {
-            name = "data-exchange";
-            ip = "91.99.223.24";
           }
         ]
     )

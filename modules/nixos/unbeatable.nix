@@ -133,6 +133,14 @@
           "linstor://10.5.1.11"
           "linstor://10.5.1.12"
         ];
+        localIp = config.jemand771.unbeatable.ip;
+        dbStoragePool = if config.jemand771.unbeatable.isCloud then null else "incus_zfs";
+        storagePools = lib.optionalAttrs (!config.jemand771.unbeatable.isCloud) {
+          incus_zfs = {
+            type = "zfs";
+            backing = "rpool/incus-linstor";
+          };
+        };
       };
       openssh.enable = true;
       ovn = {

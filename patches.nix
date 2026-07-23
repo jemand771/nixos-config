@@ -15,7 +15,7 @@ let
         url = "https://github.com/NixOS/nixpkgs/compare/master...jemand771:nixpkgs:jenkins.diff";
         hash = "sha256-/huCC+rIOPmzxXC5VWyIElTmhuBxWpVWrxR7ct2KowQ=";
       }) # jenkins plugins
-      (npr 535873 "sha256-9eaHxaYljswAJU3iPxXU61Au5FxI4gB3mp9+lUeCQcw=") # blender cudaCapabilities
+      (npr 544698 "sha256-peswBtn/LpYa9Ps3Wt6zKN64XEwDOPCccwFEnGDr5Xg=") # protobuf4
     ];
   };
 in

@@ -74,6 +74,12 @@
               (config.jemand771.linstor.dbStoragePool != null) == config.jemand771.linstor.controller.enable;
             message = "jemand771.linstor.dbStoragePool must be set if and only if jemand771.linstor.controller.enable is true";
           }
+          {
+            assertion =
+              config.jemand771.linstor.dbStoragePool == null
+              || builtins.hasAttr config.jemand771.linstor.dbStoragePool config.jemand771.linstor.storagePools;
+            message = "jemand771.linstor.dbStoragePool must be a key of jemand771.linstor.storagePools";
+          }
         ];
 
         preservation.preserveAt."/persist" = {

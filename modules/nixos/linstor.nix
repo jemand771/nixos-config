@@ -255,6 +255,7 @@
           after = [
             "network-online.target"
             "systemd-modules-load.service"
+            "linstor-satellite.service"
           ];
           unitConfig.ConditionPathExists = "/var/lib/linstor-ha-marker/enabled";
           path = [ pkgs.drbd ];

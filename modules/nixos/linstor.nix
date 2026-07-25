@@ -256,6 +256,7 @@
             "network-online.target"
             "systemd-modules-load.service"
           ];
+          unitConfig.ConditionPathExists = "/var/lib/linstor-ha-marker/enabled";
           path = [ pkgs.drbd ];
           wants = [ "network-online.target" ];
           serviceConfig = {

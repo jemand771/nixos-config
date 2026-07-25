@@ -331,6 +331,12 @@
             Type = "oneshot";
             TimeoutStartSec = "60s";
           };
+          # TODO resource group options x diskless tiebreakers don't tolerate failures all that well:
+          #      with 1 diskless (tiebreaker) and 2 diskful (controller):
+          #      * controller goes offline -> all good
+          #      * restart other controller (the only one left) -> quorum breaks _and doesn't recover_
+          #      * first failed controller returns -> quorum restored
+          # ...why?
           script =
             let
               linstor = lib.getExe' pkgs.linstor-client "linstor";

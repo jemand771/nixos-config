@@ -60,11 +60,10 @@
         };
         "willyhille@gmx.net" = gmx // {
           realName = "Willy Hille";
+          primary = true;
         };
         "willy.hille@d39s.de" = d39s // {
           realName = "Willy Hille";
-          # TODO not really
-          primary = true;
         };
         "info@d39s.de" = d39s // {
           realName = "info";

@@ -21,7 +21,6 @@
   # I don't really feel up for that task at the moment.
   # Instead, I let thunderbird prompt me for the password on first launch (and first time sending an email)
   # and tick the "save password" checkbox. Not entirely declarative, but good enough for now.
-  # TODO deduplicate much? imap/smtp/thunderbird.enable are all shared
   accounts.email.accounts =
     let
       d39s = {

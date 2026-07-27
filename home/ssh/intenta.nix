@@ -105,5 +105,9 @@
       user = "adm_wihi";
       identityFile = "~/.ssh/id_infra";
     };
+    "bitbucket-extern.intenta-automotive.de" = {
+      user = "exwihi";
+      identityFile = "~/.ssh/id_au";
+    };
   };
 }

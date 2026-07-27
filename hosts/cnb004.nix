@@ -6,7 +6,12 @@
 
   virtualisation.docker = {
     enable = true;
-    daemon.settings.features.containerd-snapshotter = true;
+    daemon.settings = {
+      features.containerd-snapshotter = true;
+      # wsl nat / company vpn fuckery
+      mtu = 1400;
+      default-network-opts.bridge."com.docker.network.driver.mtu" = "1400";
+    };
   };
   programs.git = {
     enable = true;

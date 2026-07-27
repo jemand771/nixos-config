@@ -108,7 +108,7 @@
     ms-python.vscode-pylance
     ms-vscode-remote.remote-containers
     grafana.vscode-jsonnet
-    harrydowning.yaml-embedded-languages
+    ruschaaf.extended-embedded-languages
     golang.go
     redhat.java
     vscjava.vscode-maven

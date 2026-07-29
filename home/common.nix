@@ -108,7 +108,14 @@
     ms-python.vscode-pylance
     ms-vscode-remote.remote-containers
     grafana.vscode-jsonnet
-    ruschaaf.extended-embedded-languages
+    # nixfmt turns /*python*/ into /* python */, so react to that aswell
+    (ruschaaf.extended-embedded-languages.overrideAttrs (prev: {
+      postPatch = (prev.postPatch or "") + ''
+        substituteInPlace syntaxes/nix.embedded.json \
+          --replace-fail '/\\*(?i:' '/\\*\\s*(?i:' \
+          --replace-fail ')\\*/)' ')\\s*\\*/)'
+      '';
+    }))
     golang.go
     redhat.java
     vscjava.vscode-maven

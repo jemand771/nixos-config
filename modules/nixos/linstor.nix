@@ -107,11 +107,11 @@
         services.drbd = {
           enable = true;
           config = ''
-            include "/var/lib/linstor.d/*.res";
             global {
               usage-count no;
               udev-always-use-vnr;
             }
+            include "/var/lib/linstor.d/*.res";
           '';
         };
         # we just want the system config goodies, not the actual service (it runs `drbdadm up all`, ugh)

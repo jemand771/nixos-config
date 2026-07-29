@@ -312,10 +312,11 @@
           ]
         '';
 
-        # first register every node (set localIp + storagePools per host,
-        # then on each node once a controller is up):
+        # start a controller somewhere (only one!):
+        # systemctl start linstor-controller
+        # register every node:
         # systemctl start --wait linstor-register
-        # that forms the cluster, but linstor's db isn't distributed. to fix that:
+        # that forms the cluster, but linstor's db isn't distributed. to fix that, on the same controller node (!):
         # systemctl start --wait linstor-bootstrap
         # also see https://linbit.com/drbd-user-guide/linstor-guide-1_0-en/#s-linstor_ha
         # on later node additions, remember to adjust the linstor_db replica count so each controller gets one:

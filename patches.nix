@@ -16,7 +16,7 @@ let
         hash = "sha256-/huCC+rIOPmzxXC5VWyIElTmhuBxWpVWrxR7ct2KowQ=";
       }) # jenkins plugins
       (npr 545542 "sha256-5U2DTTLvvCOTQJd3wTJIzL/1HFdX0u7w4XGKTOAR0cw=") # CUDAToolkit_ROOT
-      (npr 547077 "sha256-orqyna9coIvFegGSFpqHvLyWEAgLxVhc+Rup/yx9bGg=") # onnxruntime
+      (npr 547077 "sha256-JdSO+k6+KottM99+7K5vU2J2d9/4DiRKn0CdEck9pIc=") # onnxruntime
     ];
   };
 in

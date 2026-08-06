@@ -10,6 +10,7 @@
   config.programs.ssh = lib.mkIf config.jemand771.ssh.enable {
     enable = true;
     enableDefaultConfig = false;
+    includes = [ "config.d/*.conf" ];
     settings = {
       "*" = {
         addKeysToAgent = "yes";

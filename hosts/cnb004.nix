@@ -38,6 +38,7 @@
   zramSwap.enable = true;
   environment.systemPackages = [
     self.packages.${pkgs.stdenv.hostPlatform.system}.play
+    pkgs.bomgar-acc
   ];
 
   # no openssh here, so specify whatever it would do manually

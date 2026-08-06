@@ -168,6 +168,7 @@
           import nixpkgs {
             inherit system;
             overlays = overlaysFor system;
+            config.allowUnfree = true;
           }
         );
       in

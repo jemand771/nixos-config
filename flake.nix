@@ -99,7 +99,10 @@
       nixosConfigurations = self.colmenaHive.nodes;
       colmenaHive =
         let
-          pkgs = import nixpkgs { system = "x86_64-linux"; };
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            config.problems.handlers.drbd.broken = "warn";
+          };
           defaultModules = [
             self.nixosModules.default
             nixos-wsl.nixosModules.default
@@ -168,7 +171,10 @@
           import nixpkgs {
             inherit system;
             overlays = overlaysFor system;
-            config.allowUnfree = true;
+            config = {
+              allowUnfree = true;
+              problems.handlers.drbd.broken = "warn";
+            };
           }
         );
       in

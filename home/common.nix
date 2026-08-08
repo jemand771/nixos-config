@@ -74,6 +74,15 @@
       "**/__pycache__" = true;
     };
     "java.jdt.ls.java.home" = pkgs.javaPackages.compiler.openjdk25;
+    "java.import.exclusions" = [
+      # extension defaults
+      "**/node_modules/**"
+      "**/.metadata/**"
+      "**/archetype-resources/**"
+      "**/META-INF/maven/**"
+      # pom.xml makes a bunch of jars appear in pkgs/by-name/an/anyk
+      "**/repos/nixpkgs/**"
+    ];
     "vscode-pets.petSize" = "medium";
     "vscode-pets.throwBallWithMouse" = true;
     "vscode-pets.theme" = "winter";

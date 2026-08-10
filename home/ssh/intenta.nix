@@ -2,11 +2,6 @@
 {
   options.jemand771.ssh.hostsets.intenta.enable = lib.mkEnableOption "ssh.hostsets.intenta";
   config.programs.ssh.settings = lib.mkIf config.jemand771.ssh.hostsets.intenta.enable {
-    "bt-*" = {
-      hostname = "127.0.0.1";
-      port = 1;
-      user = "nobody";
-    };
     "spse*.intop01.de" = {
       user = "root";
       identityFile = "~/.ssh/id_seinf";

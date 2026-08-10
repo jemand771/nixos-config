@@ -224,6 +224,8 @@ pkgs.buildFHSEnv {
     ])
     ++ [ putty ];
 
+  passthru = { inherit installer; };
+
   profile = ''
     export QT_QPA_PLATFORM=xcb
   '';

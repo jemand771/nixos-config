@@ -40,6 +40,7 @@
     self.packages.${pkgs.stdenv.hostPlatform.system}.play
     pkgs.bomgar-acc
   ];
+  system.extraDependencies = [ pkgs.bomgar-acc.installer ];
 
   # no openssh here, so specify whatever it would do manually
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];

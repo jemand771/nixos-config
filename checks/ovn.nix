@@ -52,34 +52,29 @@ pkgs.testers.runNixOSTest {
     ''
       start_all()
 
-      def restart_ovsdb(node):
-          # units hit the restart limit before we can form the cluster, manually reset
-          node.succeed("systemctl reset-failed ovn-nb-ovsdb.service ovn-sb-ovsdb.service")
-          node.succeed("systemctl restart ovn-nb-ovsdb.service ovn-sb-ovsdb.service")
-
       with subtest("bootstrap cluster"):
           node1.succeed("systemctl start --wait ovn-bootstrap.service")
-          restart_ovsdb(node1)
           node1.wait_until_succeeds("${ovs-appctl} -t /run/ovn/ovnnb_db.ctl cluster/status OVN_Northbound")
           node1.wait_until_succeeds("${ovs-appctl} -t /run/ovn/ovnsb_db.ctl cluster/status OVN_Southbound")
 
       with subtest("join cluster"):
           node2.succeed("systemctl start --wait ovn-join@${ip1}.service")
-          restart_ovsdb(node2)
 
       with subtest("north+south db report both members"):
-          for ctl, db in [
-              ("/run/ovn/ovnnb_db.ctl", "OVN_Northbound"),
-              ("/run/ovn/ovnsb_db.ctl", "OVN_Southbound"),
-          ]:
-              node1.wait_until_succeeds(
-                  f"test \"$(${ovs-appctl} -t {ctl} cluster/status {db} | grep -c 'at tcp:')\" = 2"
-              )
+          for node in node1, node2:
+              for ctl, db in [
+                  ("/run/ovn/ovnnb_db.ctl", "OVN_Northbound"),
+                  ("/run/ovn/ovnsb_db.ctl", "OVN_Southbound"),
+              ]:
+                  node.wait_until_succeeds(
+                      f"${ovs-appctl} -t {ctl} cluster/status {db} | grep '^Status: cluster member'"
+                  )
+                  node.wait_until_succeeds(
+                      f"test \"$(${ovs-appctl} -t {ctl} cluster/status {db} | grep -c 'at tcp:')\" = 2"
+                  )
 
       with subtest("start northd and ovn-controller"):
           for node in node1, node2:
-              node.succeed("systemctl reset-failed ovn-northd.service ovn-controller.service")
-              node.succeed("systemctl restart ovn-northd.service ovn-controller.service")
               node.wait_for_unit("ovn-northd.service")
               node.wait_for_unit("ovn-controller.service")
 

@@ -39,7 +39,7 @@ let
   };
 in
 pkgs.testers.runNixOSTest {
-  name = "ovn-bootstrap-join";
+  name = "ovn";
   nodes = {
     node1 = mkNode ip1;
     node2 = mkNode ip2;

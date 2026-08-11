@@ -23,10 +23,7 @@ let
         preservation.nixosModules.default
       ];
       networking.firewall.trustedInterfaces = [ "eth1" ];
-      environment.systemPackages = [
-        config.virtualisation.incus.clientPackage
-        pkgs.lvm2
-      ];
+      environment.systemPackages = [ config.virtualisation.incus.clientPackage ];
       virtualisation = {
         cores = 2;
         emptyDiskImages = lib.optional controller 2048;

@@ -15,7 +15,6 @@ let
       ];
       networking.firewall.trustedInterfaces = [ "eth1" ];
       virtualisation.emptyDiskImages = pkgs.lib.optional controller 2048;
-      environment.systemPackages = [ pkgs.lvm2 ];
       jemand771.linstor = {
         enable = true;
         controller.enable = controller;

@@ -17,8 +17,6 @@ let
       # vdb: /persist (all)
       # vdc: LVM (controllers)
       virtualisation.emptyDiskImages = [ 512 ] ++ lib.optional controller 2048;
-      environment.systemPackages = [ pkgs.lvm2 ];
-      services.lvm.enable = true;
 
       # preservation in vm test magic
       boot.initrd.systemd.enable = true;

@@ -62,8 +62,10 @@
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
+      startLimitIntervalSec = 0;
       serviceConfig = {
         Restart = "on-failure";
+        RestartSec = "1s";
         RuntimeDirectory = "ovn";
         RuntimeDirectoryPreserve = "yes";
         StateDirectory = "ovn";
@@ -84,6 +86,7 @@
       wants = [ "network-online.target" ];
       serviceConfig = {
         Restart = "on-failure";
+        RestartSec = "1s";
         RuntimeDirectory = "ovn";
         RuntimeDirectoryPreserve = "yes";
         StateDirectory = "ovn";
@@ -108,8 +111,10 @@
         "ovn-nb-ovsdb.service"
         "ovn-sb-ovsdb.service"
       ];
+      startLimitIntervalSec = 0;
       serviceConfig = {
         Restart = "on-failure";
+        RestartSec = "1s";
         RuntimeDirectory = "ovn";
         RuntimeDirectoryPreserve = "yes";
         StateDirectory = "ovn";
@@ -235,8 +240,10 @@
       ];
       wants = [ "systemd-networkd-wait-online.service" ];
       environment.OVS_RUNDIR = "/run/openvswitch";
+      startLimitIntervalSec = 0;
       serviceConfig = {
         Restart = "on-failure";
+        RestartSec = "2s";
         RuntimeDirectory = "ovn";
         RuntimeDirectoryPreserve = "yes";
         StateDirectory = "ovn";

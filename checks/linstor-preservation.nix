@@ -29,7 +29,6 @@ let
         neededForBoot = true;
         autoFormat = true;
       };
-      virtualisation.fileSystems."/nix/store".neededForBoot = true;
 
       preservation.enable = true;
       jemand771.linstor = {

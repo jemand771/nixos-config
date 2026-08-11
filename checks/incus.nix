@@ -7,7 +7,7 @@
 let
   mkNode =
     localIp:
-    { config, pkgs, ... }:
+    { config, ... }:
     {
       imports = [
         self.nixosModules.incus

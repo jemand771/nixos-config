@@ -7,7 +7,6 @@
   options.jemand771.preservation.enable = lib.mkEnableOption "opinionated preservation";
   config = lib.mkIf config.jemand771.preservation.enable {
     preservation.enable = true;
-    boot.initrd.systemd.enable = true;
     fileSystems."/persist".neededForBoot = true;
     systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
     boot.initrd.systemd.services.rollback = lib.mkIf config.jemand771.zfs-rpool.enable {

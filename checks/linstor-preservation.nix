@@ -19,7 +19,6 @@ let
       virtualisation.emptyDiskImages = [ 512 ] ++ lib.optional controller 2048;
 
       # preservation in vm test magic
-      boot.initrd.systemd.enable = true;
       virtualisation.fileSystems."/" = lib.mkVMOverride {
         fsType = "tmpfs";
         options = [ "mode=0755" ];

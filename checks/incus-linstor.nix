@@ -29,7 +29,6 @@ let
       ];
       virtualisation = {
         cores = 2;
-        memorySize = if controller then 3072 else 2048;
         emptyDiskImages = lib.optional controller 2048;
         incus.preseed = {
           # no cluster networks in this test

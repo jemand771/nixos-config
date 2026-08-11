@@ -14,7 +14,6 @@ let
         preservation.nixosModules.default
       ];
       networking.firewall.trustedInterfaces = [ "eth1" ];
-      virtualisation.memorySize = if controller then 2048 else 1024;
       # vdb: /persist (all)
       # vdc: LVM (controllers)
       virtualisation.emptyDiskImages = [ 512 ] ++ lib.optional controller 2048;

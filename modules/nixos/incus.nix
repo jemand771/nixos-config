@@ -135,7 +135,11 @@
         lib.concatMapStringsSep "\n" (net: ''
           ${incus} network create ${net.name} --type ${net.type} --target ${config.networking.hostName} parent=${net.config.parent} || true
           ${incus} network create ${net.name} --type ${net.type} || true
-        '') (lib.filter (net: net.config ? parent) config.virtualisation.incus.preseed.networks);
+        '') (lib.filter (net: net.config ? parent) config.virtualisation.incus.preseed.networks)
+        + lib.concatMapStringsSep "\n" (pool: ''
+          ${incus} storage create ${pool.name} ${pool.driver} --target ${config.networking.hostName} || true
+          ${incus} storage create ${pool.name} ${pool.driver} || true
+        '') (config.virtualisation.incus.preseed.storage_pools or [ ]);
     };
   };
 }

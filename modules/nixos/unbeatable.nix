@@ -5,6 +5,17 @@
   config,
   ...
 }:
+let
+  # ugly to have this as a separate list,
+  # would be even uglier if every node had to eval all others
+  controllerIPs = [
+    "10.5.1.11"
+    "10.5.1.12"
+  ];
+  cloudIPs = [
+    "10.5.0.2"
+  ];
+in
 {
   options.jemand771.unbeatable = {
     enable = lib.mkEnableOption "base configs for my hetzner cluster";
@@ -81,7 +92,21 @@
       "network.ovn.northbound_connection" = lib.concatMapStringsSep "," (
         host: "tcp:${host}:6641"
       ) config.jemand771.ovn.peers;
+      "storage.linstor.controller_connection" = lib.concatMapStringsSep "," (
+        ip: "http://${ip}:3370"
+      ) controllerIPs;
     };
+    virtualisation.incus.preseed.storage_pools = [
+      {
+        name = "default";
+        driver = "linstor";
+        config = {
+          # not like we have any more lol
+          "linstor.resource_group.place_count" = "2";
+          "linstor.resource_group.storage_pool" = "incus_zfs";
+        };
+      }
+    ];
     # preseed technically can't create cluster networks this way, but it _can_ maintain them.
     # creation happens elsewhere, see oneshot in incus.nix. (mapping per-node hardware to cluster-wide abstractions)
     virtualisation.incus.preseed.networks = [
@@ -129,10 +154,7 @@
       linstor = {
         enable = true;
         controller.enable = !config.jemand771.unbeatable.isCloud;
-        controllers = [
-          "linstor://10.5.1.11"
-          "linstor://10.5.1.12"
-        ];
+        controllers = map (ip: "linstor://${ip}") controllerIPs;
         localIp = config.jemand771.unbeatable.ip;
         dbStoragePool = if config.jemand771.unbeatable.isCloud then null else "incus_zfs";
         storagePools = lib.optionalAttrs (!config.jemand771.unbeatable.isCloud) {
@@ -146,11 +168,7 @@
       ovn = {
         enable = true;
         localIp = config.jemand771.unbeatable.ip;
-        peers = [
-          "10.5.0.2"
-          "10.5.1.11"
-          "10.5.1.12"
-        ];
+        peers = controllerIPs ++ cloudIPs;
         chassis.enable = !config.jemand771.unbeatable.isCloud;
       };
       preservation.enable = true;

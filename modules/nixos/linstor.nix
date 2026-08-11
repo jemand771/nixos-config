@@ -123,6 +123,7 @@
           description = "LINSTOR satellite";
           wantedBy = [ "multi-user.target" ];
           after = [ "network-online.target" ];
+          before = [ "incus.service" ];
           wants = [ "network-online.target" ];
           serviceConfig = {
             # journal already has everything, but file logging can't be turned off.

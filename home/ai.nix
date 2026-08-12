@@ -12,12 +12,19 @@
     programs.claude-code = {
       enable = true;
       enableMcpIntegration = true;
-      package = pkgs.writeShellScriptBin "claude" ''
-        export INTENTA_JENKINS_MCP_AUTH=$(</run/agenix/intenta-jenkins-mcp-auth)
-        export D39S_JENKINS_MCP_AUTH=$(</run/agenix/d39s-jenkins-mcp-auth)
-        export GITHUB_MCP_PAT=$(</run/agenix/github-mcp-pat)
-        exec ${lib.getExe options.programs.claude-code.package.default} "$@"
-      '';
+      package =
+        let
+          inherit (options.programs.claude-code.package) default;
+        in
+        pkgs.writeShellScriptBin "claude" ''
+          export INTENTA_JENKINS_MCP_AUTH=$(</run/agenix/intenta-jenkins-mcp-auth)
+          export D39S_JENKINS_MCP_AUTH=$(</run/agenix/d39s-jenkins-mcp-auth)
+          export GITHUB_MCP_PAT=$(</run/agenix/github-mcp-pat)
+          exec ${lib.getExe default} "$@"
+        ''
+        // {
+          inherit (default) version;
+        };
       settings = {
         includeCoAuthoredBy = false;
         permissions.allow = [

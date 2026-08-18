@@ -109,5 +109,9 @@
       user = "exwihi";
       identityFile = "~/.ssh/id_au";
     };
+    "seh-scaptp001.intop01.de" = {
+      user = "adm_wihi";
+      identityFile = "~/.ssh/id_nbptp"; # TODO should be id_infra
+    };
   };
 }

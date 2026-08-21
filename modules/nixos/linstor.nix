@@ -196,6 +196,7 @@
             ExecStart = "${lib.getExe' pkgs.linstor-server "linstor-controller"} --logs /run/linstor-controller";
             RuntimeDirectory = "linstor-controller";
             Restart = "on-failure";
+            SuccessExitStatus = "143";
           };
         };
 

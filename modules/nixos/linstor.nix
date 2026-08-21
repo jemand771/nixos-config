@@ -280,6 +280,7 @@
             "drbd.service"
             "systemd-modules-load.service"
           ];
+          partOf = [ "drbd-services@%i.target" ];
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = "yes";
@@ -291,11 +292,8 @@
         # drbd-reactor says: Unit drbd-services@blabla.target not found
         systemd.targets."drbd-services@" = {
           description = "DRBD services target for resource %I";
-          unitConfig = {
-            PartOf = "drbd-promote@%i.service";
-            Requires = "drbd-promote@%i.service";
-            After = "drbd-promote@%i.service";
-          };
+          bindsTo = [ "drbd-promote@%i.service" ];
+          after = [ "drbd-promote@%i.service" ];
         };
 
         # drbd-reactorctl doesn't care about this config, the canonical location is /etc/drbd-reactor.d

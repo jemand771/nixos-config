@@ -39,6 +39,7 @@ pkgs.testers.runNixOSTest {
     with subtest("bootstrap cluster"):
         node1.succeed("systemctl start --wait incus-bootstrap.service")
         node1.wait_until_succeeds("incus cluster list --format csv")
+        node2.sleep(4)
 
     with subtest("join cluster"):
         token = node1.succeed("incus cluster add node2 | tail -n1").strip()

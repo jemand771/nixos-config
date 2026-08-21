@@ -31,7 +31,7 @@ pkgs.testers.runNixOSTest {
     node1 = mkNode "192.168.1.1";
     node2 = mkNode "192.168.1.2";
   };
-  testScript = ''
+  testScript = /* python */ ''
     start_all()
     node1.wait_for_unit("incus.service")
     node2.wait_for_unit("incus.service")

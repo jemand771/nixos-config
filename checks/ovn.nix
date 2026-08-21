@@ -49,7 +49,7 @@ pkgs.testers.runNixOSTest {
       ovs-appctl = pkgs.lib.getExe' pkgs.openvswitch "ovs-appctl";
       ping = pkgs.lib.getExe pkgs.unixtools.ping;
     in
-    ''
+    /* python */ ''
       start_all()
 
       with subtest("bootstrap cluster"):

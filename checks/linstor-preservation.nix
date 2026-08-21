@@ -122,6 +122,24 @@ pkgs.testers.runNixOSTest {
         for node in machines:
             node.wait_until_succeeds("linstor resource list -r linstor_db | grep linstor_db")
 
+    with subtest("quorum loss recovers without all nodes present"):
+        node3.succeed("drbdadm down linstor_db")
+        owner, standby = wait_for_primary()
+        standby.shutdown()
+        owner.wait_until_fails("systemctl is-active linstor-controller.service")
+        standby.start(allow_reboot=True)
+        standby.wait_for_unit("linstor-satellite.service")
+        owner, _ = wait_for_primary()
+        owner.wait_until_succeeds("systemctl is-active linstor-controller.service")
+        for node in controllers:
+            node.fail("systemctl is-failed linstor-controller.service")
+        node3.succeed("drbdadm adjust linstor_db")
+        node3.wait_until_succeeds("drbdadm dstate linstor_db | grep '^Diskless'")
+        for node in controllers:
+            node.wait_until_succeeds("drbdadm dstate linstor_db | grep '^UpToDate'")
+        for node in machines:
+            node.wait_until_fails("drbdadm status linstor_db | grep Connecting")
+
     with subtest("primary crash failover"):
         owner, standby = wait_for_primary()
         owner.crash()

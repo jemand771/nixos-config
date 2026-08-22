@@ -133,6 +133,7 @@ pkgs.testers.runNixOSTest {
         owner.wait_until_succeeds("systemctl is-active linstor-controller.service")
         for node in controllers:
             node.fail("systemctl is-failed linstor-controller.service")
+            node.fail("systemctl is-failed drbd-promote@linstor_db.service")
         node3.succeed("drbdadm adjust linstor_db")
         node3.wait_until_succeeds("drbdadm dstate linstor_db | grep '^Diskless'")
         for node in controllers:

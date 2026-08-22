@@ -285,7 +285,7 @@
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = "yes";
-            ExecStart = "${pkgs.drbd}/bin/drbdadm primary %i";
+            ExecCondition = "${pkgs.drbd}/bin/drbdadm primary %i";
             ExecStop = "${pkgs.drbd}/bin/drbdadm secondary %i";
           };
         };

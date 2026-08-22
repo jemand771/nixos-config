@@ -78,6 +78,7 @@ pkgs.testers.runNixOSTest {
         for node in controllers:
             node.wait_until_succeeds("drbdadm dstate linstor_db | grep '^UpToDate'")
         node3.wait_until_succeeds("drbdadm dstate linstor_db | grep '^Diskless'")
+        node1.wait_until_succeeds("linstor resource list -r linstor_db | grep TieBreaker")
 
     with subtest("join second HA controller"):
         node2.succeed("systemctl start --wait linstor-join.service")

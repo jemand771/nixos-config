@@ -320,7 +320,7 @@
         # systemctl start --wait linstor-bootstrap
         # also see https://linbit.com/drbd-user-guide/linstor-guide-1_0-en/#s-linstor_ha
         # on later node additions, remember to adjust the linstor_db replica count so each controller gets one:
-        # linstor resource-group modify linstor_db --place-count 3 --diskless-on-remaining false
+        # linstor resource-group modify linstor_db --place-count 3
         systemd.services.linstor-bootstrap = {
           description = "Bootstrap LINSTOR";
           enableStrictShellChecks = true;
@@ -366,8 +366,7 @@
 
               ${linstor} resource-group create linstor_db \
                 --place-count 2 \
-                --storage-pool ${config.jemand771.linstor.dbStoragePool} \
-                --diskless-on-remaining true
+                --storage-pool ${config.jemand771.linstor.dbStoragePool}
               ${linstor} resource-group drbd-options \
                 --auto-promote=no \
                 --quorum=majority \

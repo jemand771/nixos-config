@@ -124,5 +124,9 @@ pkgs.testers.runNixOSTest {
         ).strip()
         for node in controllers:
             node.wait_until_succeeds(f"drbdadm dstate {res} | grep '^UpToDate'")
+
+    with subtest("linstor auto-adds tiebreaker"):
+        node3.wait_until_succeeds(f"drbdadm dstate {res} | grep '^Diskless'")
+        node1.wait_until_succeeds(f"linstor resource list -r {res} | grep TieBreaker")
   '';
 }

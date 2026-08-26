@@ -29,6 +29,7 @@
       pv-migrate
       rancher
       samba
+      skopeo
       spice-gtk
       quickemu
       velero

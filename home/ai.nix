@@ -27,6 +27,7 @@
         };
       settings = {
         includeCoAuthoredBy = false;
+        remoteControlAtStartup = false;
         permissions.allow = [
           "WebSearch"
           "WebFetch"

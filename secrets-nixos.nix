@@ -10,4 +10,8 @@
     file = secrets/d39s-jenkins-mcp-auth.age;
     owner = "willy";
   };
+  age.secrets.kubeconfig-771-new-key = {
+    file = secrets/kubeconfig-771-new-key.age;
+    owner = "willy";
+  };
 }

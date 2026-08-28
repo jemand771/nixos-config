@@ -13,4 +13,8 @@ in
     nixbox
     cnb004
   ];
+  "secrets/kubeconfig-771-new-key.age".publicKeys = [
+    nixbox
+    cnb004
+  ];
 }

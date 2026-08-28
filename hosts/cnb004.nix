@@ -56,6 +56,10 @@
     file = ../secrets/github-mcp-pat.age;
     owner = "willy";
   };
+  age.secrets.kubeconfig-771-new-key = {
+    file = ../secrets/kubeconfig-771-new-key.age;
+    owner = "willy";
+  };
 
   jemand771.wsl.enable = true;
   jemand771.dev-python.enable = true;
@@ -75,6 +79,7 @@
         };
       };
       jemand771.ai.enable = true;
+      jemand771.kubeconfig.enable = true;
     }
   ];
   system.stateVersion = "23.11";

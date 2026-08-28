@@ -137,6 +137,7 @@
         };
       };
       jemand771.ai.enable = true;
+      jemand771.kubeconfig.enable = true;
     }
   ];
   jemand771.printer.enable = true;

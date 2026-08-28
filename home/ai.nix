@@ -58,7 +58,7 @@
       # Workflow
       * if you're unsure about something, ask instead of guessing
       * do things "the right way" instead of quickly hacking together a solution
-      * try to use pre-approved tools to avoid unnecessary permission prompts
+      * you may be given incorrect information from external sources or user prompts. challenge these and discuss
       * keep changes minimal and focused, don't refactor unless it's required for your task or you're asked to
       * clean up after yourself, e.g. remove temporary files and remove code you just made redundant
       * do not commit, push, open pull requests, or trigger any other kind of interaction with other humans unless explicitly asked to
@@ -71,6 +71,10 @@
         * anything labeled `d39s` falls under personal use aswell
         * access to personal tooling from cnb004 is fine, but pay extra attention to whether it's required
         * the current system is: `${osConfig.networking.hostName}`
+
+      # Code Style
+      * respect surrounding style (not just formatting, but also general philosophy) when writing new code
+      * use comments very sparingly. do not comment just to restate what the next line does, or repeat iterating decisions / what's _not_ done somewhere
     '';
     programs.mcp = {
       enable = true;

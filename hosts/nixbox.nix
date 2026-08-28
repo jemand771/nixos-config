@@ -120,7 +120,6 @@
   };
 
   imports = [
-    ../secrets-nixos.nix
     ../backups.nix
     ../playground/minecraft.nix
     microvm.nixosModules.host

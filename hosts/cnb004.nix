@@ -44,22 +44,6 @@
 
   # no openssh here, so specify whatever it would do manually
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  age.secrets.intenta-jenkins-mcp-auth = {
-    file = ../secrets/intenta-jenkins-mcp-auth.age;
-    owner = "willy";
-  };
-  age.secrets.d39s-jenkins-mcp-auth = {
-    file = ../secrets/d39s-jenkins-mcp-auth.age;
-    owner = "willy";
-  };
-  age.secrets.github-mcp-pat = {
-    file = ../secrets/github-mcp-pat.age;
-    owner = "willy";
-  };
-  age.secrets.kubeconfig-771-new-key = {
-    file = ../secrets/kubeconfig-771-new-key.age;
-    owner = "willy";
-  };
 
   jemand771.wsl.enable = true;
   jemand771.dev-python.enable = true;

@@ -1,20 +1,9 @@
 let
-  nixbox = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMS5uOqFENq1oDlZLOxWEp7cwnKm6eom4ZdSYOAHu0+h";
-  cnb004 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzafjoKVvEzC+J10uq6hy9T3ARprkRtuzogVs34b29j";
+  inherit (import ./secrets) secrets;
 in
-{
-  "secrets/restic-password.age".publicKeys = [ nixbox ];
-  "secrets/intenta-jenkins-mcp-auth.age".publicKeys = [ cnb004 ];
-  "secrets/d39s-jenkins-mcp-auth.age".publicKeys = [
-    nixbox
-    cnb004
-  ];
-  "secrets/github-mcp-pat.age".publicKeys = [
-    nixbox
-    cnb004
-  ];
-  "secrets/kubeconfig-771-new-key.age".publicKeys = [
-    nixbox
-    cnb004
-  ];
-}
+builtins.listToAttrs (
+  map (name: {
+    name = "secrets/${name}.age";
+    value.publicKeys = secrets.${name}.hosts;
+  }) (builtins.attrNames secrets)
+)

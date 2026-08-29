@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   osConfig,
   self,
@@ -179,6 +180,11 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+  };
+
+  programs.kubecolor = {
+    enable = true;
+    enableAlias = true;
   };
 
   programs.home-manager.enable = true;

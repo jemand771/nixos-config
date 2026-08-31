@@ -11,6 +11,14 @@
     default = "";
     example = "192.168.9.10";
   };
+  options.jemand771.incus.memberConfig = lib.mkOption {
+    type = lib.types.attrsOf lib.types.str;
+    description = "incus member config";
+    default = { };
+    example = {
+      "scheduler.instance" = "never";
+    };
+  };
   options.jemand771.incus.projects = lib.mkOption {
     type = lib.types.attrsOf lib.types.attrs;
     description = "extra project configuratoin";
@@ -139,7 +147,14 @@
         + lib.concatMapStringsSep "\n" (pool: ''
           ${incus} storage create ${pool.name} ${pool.driver} --target ${config.networking.hostName} || true
           ${incus} storage create ${pool.name} ${pool.driver} || true
-        '') (config.virtualisation.incus.preseed.storage_pools or [ ]);
+        '') (config.virtualisation.incus.preseed.storage_pools or [ ])
+        + lib.optionalString (config.jemand771.incus.memberConfig != { }) ''
+          ${incus} cluster set ${config.networking.hostName} ${
+            lib.escapeShellArgs (
+              lib.mapAttrsToList (key: value: "${key}=${value}") config.jemand771.incus.memberConfig
+            )
+          } || true
+        '';
     };
   };
 }

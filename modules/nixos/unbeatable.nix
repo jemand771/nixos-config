@@ -141,6 +141,9 @@ in
       incus = {
         enable = true;
         localIp = config.jemand771.unbeatable.ip;
+        memberConfig = lib.optionalAttrs config.jemand771.unbeatable.isCloud {
+          "scheduler.instance" = "never";
+        };
         projects = {
           default = {
             "limits.containers" = "0";

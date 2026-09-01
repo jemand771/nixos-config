@@ -116,7 +116,7 @@ in
         config = {
           "parent" = "br-uplink";
           "ipv4.gateway" = "46.225.196.57/29";
-          "ipv4.ovn.ranges" = "46.225.196.59-46.225.196.62";
+          "ipv4.ovn.ranges" = "46.225.196.60-46.225.196.62";
           "ipv6.gateway" = "2a01:4f8:fff0:18a::1/64";
           "ipv6.routes" = "2a01:4f8:fff0:18a::/64";
           "ipv6.ovn.ranges" = "2a01:4f8:fff0:18a::10-2a01:4f8:fff0:18a::1f";

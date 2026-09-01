@@ -151,6 +151,9 @@ in
             "restricted.networks.uplinks" = "cloudlab-ext";
           };
           infra = { };
+          ingress = {
+            "restricted.devices.nic" = "allow";
+          };
         };
       };
       linstor = {

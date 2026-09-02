@@ -24,6 +24,10 @@ in
       ];
       owner = "willy";
     };
+    incus-client-willy-key = {
+      hosts = [ nixbox ];
+      owner = "willy";
+    };
     kubeconfig-771-new-key = {
       hosts = [
         nixbox

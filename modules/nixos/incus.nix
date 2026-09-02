@@ -23,6 +23,9 @@
     type = lib.types.attrsOf lib.types.path;
     description = "client certificates to add to the trust store";
     default = { };
+    example = {
+      willy = ../../certs/incus-client-willy.crt;
+    };
   };
   options.jemand771.incus.projects = lib.mkOption {
     type = lib.types.attrsOf lib.types.attrs;

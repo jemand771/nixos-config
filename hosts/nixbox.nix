@@ -136,6 +136,7 @@
         };
       };
       jemand771.ai.enable = true;
+      jemand771.incus-client.enable = true;
       jemand771.kubeconfig.enable = true;
     }
   ];

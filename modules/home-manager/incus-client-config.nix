@@ -14,8 +14,10 @@
         "88.99.66.165"
         "178.105.206.248"
       ];
+      # INCUS_CONF=. incus remote generate-certificate
       clientCertificate = ../../certs/incus-client-willy.crt;
       clientKey = osConfig.age.secrets.incus-client-willy-key.path;
+      # yoink from /var/lib/incus/cluster.crt
       serverCertificate = ../../certs/incus-server-cloudlab.crt;
     };
   };

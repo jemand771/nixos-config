@@ -130,6 +130,7 @@
     };
 
     # preseed can do certs, but not idempotently
+    # TODO remove unmanaged trust?
     systemd.services.incus-trust = lib.mkIf (config.jemand771.incus.trustedCertificates != { }) {
       description = "Incus client certificate trust store";
       enableStrictShellChecks = true;

@@ -19,6 +19,11 @@
       "scheduler.instance" = "never";
     };
   };
+  options.jemand771.incus.trustedCertificates = lib.mkOption {
+    type = lib.types.attrsOf lib.types.path;
+    description = "client certificates to add to the trust store";
+    default = { };
+  };
   options.jemand771.incus.projects = lib.mkOption {
     type = lib.types.attrsOf lib.types.attrs;
     description = "extra project configuratoin";
@@ -119,6 +124,29 @@
           EOF
           rm -f /run/incus-join-token
         '';
+    };
+
+    # preseed can do certs, but not idempotently
+    systemd.services.incus-trust = lib.mkIf (config.jemand771.incus.trustedCertificates != { }) {
+      description = "Incus client certificate trust store";
+      enableStrictShellChecks = true;
+      wantedBy = [ "incus.service" ];
+      after = [ "incus.service" ];
+      bindsTo = [ "incus.service" ];
+      partOf = [ "incus.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script =
+        let
+          incus = lib.getExe' config.virtualisation.incus.clientPackage "incus";
+        in
+        lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (
+            name: cert: "${incus} config trust add-certificate --name ${name} ${cert} || true"
+          ) config.jemand771.incus.trustedCertificates
+        );
     };
 
     systemd.services.incus-preseed-member = {

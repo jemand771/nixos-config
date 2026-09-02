@@ -37,58 +37,63 @@ in
     };
     # TODO is this correct?
     # boot.kernelParams = [ "console=tty0" "console=ttyS0,115200" ];
-    networking = {
-      useNetworkd = true;
-    }
-    // (
-      if config.jemand771.unbeatable.isCloud then
-        {
-          # to internal vswitch
-          interfaces.enp7s0.mtu = 1400;
-          firewall.trustedInterfaces = [ "enp7s0" ];
-          # IP is assigned via hetzner UI, cloud node gets dhcp
-        }
-      else
-        {
-          # cluster traffic goes here
-          vlans.cloudlab-int = {
-            id = 4001;
-            interface = "enp0s31f6";
-          };
-          interfaces.cloudlab-int = {
-            mtu = 1400;
-          };
-          bridges.br-underlay.interfaces = [ "cloudlab-int" ];
-          # for attaching vms to the incus host net
-          interfaces.br-underlay = {
-            mtu = 1400;
-            ipv4.routes = [
+    networking = lib.mkMerge [
+      {
+        useNetworkd = true;
+        firewall.allowedTCPPorts = [ 8443 ];
+      }
+      (
+        if config.jemand771.unbeatable.isCloud then
+          {
+            # to internal vswitch
+            interfaces.enp7s0.mtu = 1400;
+            firewall.trustedInterfaces = [ "enp7s0" ];
+            # IP is assigned via hetzner UI, cloud node gets dhcp
+          }
+        else
+          {
+            # cluster traffic goes here
+            vlans.cloudlab-int = {
+              id = 4001;
+              interface = "enp0s31f6";
+            };
+            interfaces.cloudlab-int = {
+              mtu = 1400;
+            };
+            bridges.br-underlay.interfaces = [ "cloudlab-int" ];
+            # for attaching vms to the incus host net
+            interfaces.br-underlay = {
+              mtu = 1400;
+              ipv4.routes = [
+                {
+                  # hetzner magic
+                  address = "10.5.0.0";
+                  prefixLength = 16;
+                  via = "10.5.1.1";
+                }
+              ];
+            };
+            interfaces.br-underlay.ipv4.addresses = [
               {
-                # hetzner magic
-                address = "10.5.0.0";
-                prefixLength = 16;
-                via = "10.5.1.1";
+                address = config.jemand771.unbeatable.ip;
+                prefixLength = 24;
               }
             ];
-          };
-          interfaces.br-underlay.ipv4.addresses = [
-            {
-              address = config.jemand771.unbeatable.ip;
-              prefixLength = 24;
-            }
-          ];
-          firewall.trustedInterfaces = [ "br-underlay" ];
-          # ingress traffic ("public subnets") comes in here
-          vlans.cloudlab-ext = {
-            id = 4002;
-            interface = "enp0s31f6";
-          };
-          interfaces.cloudlab-ext = {
-            mtu = 1400;
-          };
-        }
-    );
+            firewall.trustedInterfaces = [ "br-underlay" ];
+            # ingress traffic ("public subnets") comes in here
+            vlans.cloudlab-ext = {
+              id = 4002;
+              interface = "enp0s31f6";
+            };
+            interfaces.cloudlab-ext = {
+              mtu = 1400;
+            };
+          }
+      )
+    ];
     virtualisation.incus.preseed.config = {
+      # api listener for clients (not cluster traffic)
+      "core.https_address" = ":8443";
       "network.ovn.northbound_connection" = lib.concatMapStringsSep "," (
         host: "tcp:${host}:6641"
       ) config.jemand771.ovn.peers;

@@ -112,5 +112,26 @@
       user = "adm_wihi";
       identityFile = "~/.ssh/id_nbptp"; # TODO should be id_infra
     };
+    "caetl" = {
+      user = "hillew";
+      hostName = "10.220.220.141";
+      identityFile = "~/.ssh/id_caltrain";
+    };
+    "cain" = {
+      user = "hillew";
+      hostName = "10.213.6.55";
+      identityFile = "~/.ssh/id_caltrain";
+      proxyJump = "caetl";  # TODO shouldn't be necessary but currently is
+    };
+    "camon" = {
+      user = "hillew";
+      hostName = "10.220.220.142";
+      identityFile = "~/.ssh/id_caltrain";
+    };
+    "caout" = {
+      user = "hillew";
+      hostName = "10.220.220.140";
+      identityFile = "~/.ssh/id_caltrain";
+    };
   };
 }

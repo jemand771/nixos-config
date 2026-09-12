@@ -147,7 +147,7 @@
     enableNixboxProfile = true;
   };
   # manual hardware settings
-  hardware.ckb-next.enable = true;
+  hardware.wooting.enable = true;
   hardware.logitech.wireless.enable = true;
   boot.kernelParams = [
     "pcie_port_pm=off"

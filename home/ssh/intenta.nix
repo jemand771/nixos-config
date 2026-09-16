@@ -121,7 +121,7 @@
       user = "hillew";
       hostName = "10.213.6.55";
       identityFile = "~/.ssh/id_caltrain";
-      proxyJump = "caetl";  # TODO shouldn't be necessary but currently is
+      proxyJump = "caetl"; # TODO shouldn't be necessary but currently is
     };
     "camon" = {
       user = "hillew";

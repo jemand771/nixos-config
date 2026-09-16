@@ -38,6 +38,7 @@
   zramSwap.enable = true;
   environment.systemPackages = [
     self.packages.${pkgs.stdenv.hostPlatform.system}.play
+    self.packages.${pkgs.stdenv.hostPlatform.system}.skcopy
     pkgs.bomgar-acc
   ];
   system.extraDependencies = [ pkgs.bomgar-acc.installer ];

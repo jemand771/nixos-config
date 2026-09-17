@@ -9,7 +9,7 @@ let
 
   installer = pkgs.requireFile {
     name = "bomgar-acc-installer.bin";
-    hash = "sha256-vMYWKxGW9D8To8X1GQePAVWHiyLURaH9L9t3f4YxXeg=";
+    hash = "sha256-wZirHAd1A/HdA4pOgt4MU/zdWlraen5H5R4IgKB2XhY=";
     message = ''
       Log in to BeyondTrust, download the "installer" for linux and run:
         nix-store --add-fixed sha256 bomgar-acc-installer.bin

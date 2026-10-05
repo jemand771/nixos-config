@@ -114,23 +114,22 @@
     };
     "caetl" = {
       user = "hillew";
-      hostName = "10.220.220.141";
+      hostName = "10.213.46.141";
       identityFile = "~/.ssh/id_caltrain";
     };
     "cain" = {
       user = "hillew";
       hostName = "10.213.6.55";
       identityFile = "~/.ssh/id_caltrain";
-      proxyJump = "caetl"; # TODO shouldn't be necessary but currently is
     };
     "camon" = {
       user = "hillew";
-      hostName = "10.220.220.142";
+      hostName = "10.213.46.142";
       identityFile = "~/.ssh/id_caltrain";
     };
     "caout" = {
       user = "hillew";
-      hostName = "10.220.220.140";
+      hostName = "10.213.36.140";
       identityFile = "~/.ssh/id_caltrain";
     };
   };

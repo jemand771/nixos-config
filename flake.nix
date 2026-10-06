@@ -152,7 +152,6 @@
             meta = {
               nixpkgs = pkgs;
               specialArgs = inputs;
-              allowApplyAll = false;
             };
           }
           // self.lib.mapDir ./hosts (n: {

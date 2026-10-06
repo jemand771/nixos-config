@@ -67,5 +67,6 @@
       jemand771.kubeconfig.enable = true;
     }
   ];
+  deployment.targetHost = null;
   system.stateVersion = "23.11";
 }

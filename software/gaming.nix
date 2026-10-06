@@ -11,7 +11,7 @@ let
     jdk21
     jdk25
   ];
-  javaPath = package: "java/${package.name}";
+  javaPath = package: "java/${lib.versions.major package.version}";
 in
 {
   options.jemand771.gaming.enable = lib.mkEnableOption "gaming";

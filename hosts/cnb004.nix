@@ -1,4 +1,9 @@
-{ pkgs, self, ... }:
+{
+  config,
+  pkgs,
+  self,
+  ...
+}:
 {
   # TODO this would like to be somewhere else
   networking.hostName = "cnb004";
@@ -31,7 +36,26 @@
     ../certs/intenta-root01.crt
     ../certs/intenta-sub01.crt
   ];
-  # TODO network shares (if I can get them to work)
+  fileSystems."/mnt/intop01" = {
+    device = "\\\\intop01.de\\files";
+    fsType = "drvfs";
+    noCheck = true;
+    options = [
+      "uid=1000"
+      "gid=100"
+      "umask=022"
+      "fmask=111"
+      "x-systemd.automount"
+      "x-systemd.idle-timeout=600"
+    ];
+  };
+  systemd.tmpfiles.settings.intop01-drives = {
+    "/mnt/h".L.argument = "/mnt/intop01/home/wihi";
+    "/mnt/n".L.argument = "/mnt/intop01/main";
+    "/mnt/t".L.argument = "/mnt/intop01/temp";
+    "/mnt/w".L.argument = "/mnt/intop01/data";
+    "/mnt/y".L.argument = "/mnt/intop01/data-transient";
+  };
   # TODO svp2 schroot config, or ignore and abandon? (build locally and just reference hardcoded path to avoid delays from IFD?)
   # TODO warning, dangerous and ugly, see https://github.com/NixOS/nixpkgs/issues/30723
   nix.settings.extra-sandbox-paths = [ "/docker-auth.json" ];

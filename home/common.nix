@@ -20,11 +20,9 @@
             name = "Willy";
             email = "jemand771@gmx.net";
           };
-      push = {
-        autoSetupRemote = true;
-        submodule.recurse = true;
-        pull.rebase = true;
-      };
+      push.autoSetupRemote = true;
+      submodule.recurse = true;
+      pull.rebase = true;
       stash.showIncludeUntracked = true;
     };
     signing = {

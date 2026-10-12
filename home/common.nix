@@ -25,6 +25,7 @@
         submodule.recurse = true;
         pull.rebase = true;
       };
+      stash.showIncludeUntracked = true;
     };
     signing = {
       format = null;

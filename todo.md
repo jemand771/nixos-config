@@ -28,4 +28,3 @@
 ## misc
 * ssh from all desktop machines to all other machines
 * host-specific config cleanup
-* resolve home-manager options hack

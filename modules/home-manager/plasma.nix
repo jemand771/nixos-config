@@ -1,10 +1,7 @@
+{ config, lib, ... }:
 {
-  osConfig,
-  lib,
-  ...
-}:
-{
-  programs.plasma = lib.mkIf osConfig.jemand771.plasma.enable {
+  options.jemand771.plasma.enable = lib.mkEnableOption "plasma-manager";
+  config.programs.plasma = lib.mkIf config.jemand771.plasma.enable {
     enable = true;
     # TODO enable after natural scrolling is supported as a native config option
     # https://github.com/nix-community/plasma-manager/pull/123

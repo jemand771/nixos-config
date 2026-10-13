@@ -109,7 +109,6 @@
               nixpkgs.overlays = overlaysFor pkgs.stdenv.hostPlatform.system;
             }
             ./meta-options.nix
-            ./home/options.nix
             home-manager.nixosModules.home-manager
             (
               { config, lib, ... }:
@@ -126,7 +125,6 @@
                     self.homeModules.default
                     ./home/ai.nix
                     ./home/common.nix
-                    ./home/plasma.nix
                     ./home/thunderbird.nix
                     ./home/ssh
                     (

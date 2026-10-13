@@ -28,7 +28,13 @@
         port = 3390;
         # GDK_BACKEND: force using the x11 desktop, otherwise some windows launch via wslg
         # PULSE_LATENCY_MSEC: bigger audio buffer to fix stuttering/crackling
-        defaultWindowManager = "GDK_BACKEND=x11 PULSE_LATENCY_MSEC=150 startplasma-x11";
+        # KWIN_X11_REFRESH_RATE: "monitors" report 50Hz, force 60Hz instead
+        defaultWindowManager = "GDK_BACKEND=x11 PULSE_LATENCY_MSEC=150 KWIN_X11_REFRESH_RATE=60000 startplasma-x11";
+        # 30-ish -> 60-ish fps
+        extraConfDirCommands = ''
+          substituteInPlace $out/xrdp.ini \
+            --replace-fail "rfx_frame_interval=32" "rfx_frame_interval=16"
+        '';
       };
     };
     # audio goes to wslg's pulse server -> install audio controls even when no server is enabled

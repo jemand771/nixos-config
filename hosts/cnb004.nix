@@ -71,6 +71,7 @@
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   jemand771.wsl.enable = true;
+  jemand771.wsl.desktop.enable = true;
   jemand771.dev-python.enable = true;
   jemand771.dev-infra.enable = true;
   jemand771.shell-utils.enable = true;

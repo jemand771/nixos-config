@@ -6,8 +6,7 @@
 }:
 {
   options.jemand771.wsl.enable = lib.mkEnableOption "WSL stuffs";
-  options.jemand771.wsl.desktop.enable =
-    lib.mkEnableOption "plasma desktop via xrdp";
+  options.jemand771.wsl.desktop.enable = lib.mkEnableOption "plasma desktop via xrdp";
   config = lib.mkIf config.jemand771.wsl.enable {
     wsl = {
       enable = true;

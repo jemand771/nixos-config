@@ -91,6 +91,16 @@
       };
       jemand771.ai.enable = true;
       jemand771.kubeconfig.enable = true;
+      jemand771.plasma = {
+        enable = true;
+        taskbarLaunchers = [
+          "applications:org.kde.dolphin.desktop"
+          "applications:firefox.desktop"
+          "applications:org.kde.konsole.desktop"
+          "applications:teams-for-linux.desktop"
+        ];
+      };
+      programs.plasma.overrideConfig = true;
     }
   ];
   deployment.targetHost = null;

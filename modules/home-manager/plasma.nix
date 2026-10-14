@@ -1,6 +1,17 @@
 { config, lib, ... }:
 {
-  options.jemand771.plasma.enable = lib.mkEnableOption "plasma-manager";
+  options.jemand771.plasma = {
+    enable = lib.mkEnableOption "plasma-manager";
+    taskbarLaunchers = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
+      description = "launcher URLs to pin to the taskbar";
+      default = null;
+      example = [
+        "applications:org.kde.dolphin.desktop"
+        "preferred://browser"
+      ];
+    };
+  };
   config.programs.plasma = lib.mkIf config.jemand771.plasma.enable {
     enable = true;
     # TODO enable after natural scrolling is supported as a native config option
@@ -9,5 +20,25 @@
     workspace = {
       lookAndFeel = "org.kde.breezedark.desktop";
     };
+    panels = [
+      {
+        screen = "all";
+        floating = true;
+        height = 46;
+        widgets = [
+          "org.kde.plasma.kickoff"
+          "org.kde.plasma.pager"
+          {
+            iconTasks.launchers = config.jemand771.plasma.taskbarLaunchers;
+          }
+          "org.kde.plasma.marginsseparator"
+          "org.kde.plasma.systemtray"
+          {
+            digitalClock.time.showSeconds = "always";
+          }
+          "org.kde.plasma.showdesktop"
+        ];
+      }
+    ];
   };
 }

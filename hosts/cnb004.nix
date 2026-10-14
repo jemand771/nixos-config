@@ -126,6 +126,7 @@
         ];
       };
       programs.plasma.overrideConfig = true;
+      programs.plasma.kscreenlocker.autoLock = false;
     }
   ];
   deployment.targetHost = null;

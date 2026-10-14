@@ -66,6 +66,7 @@
     pkgs.bomgar-acc
   ];
   system.extraDependencies = [ pkgs.bomgar-acc.installer ];
+  programs.firefox.enable = true;
 
   # no openssh here, so specify whatever it would do manually
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];

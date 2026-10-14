@@ -63,6 +63,7 @@
     pkgs.play
     pkgs.skcopy
     pkgs.bomgar-acc
+    pkgs.password-depot
   ];
   system.extraDependencies = [ pkgs.bomgar-acc.installer ];
   programs.firefox = {

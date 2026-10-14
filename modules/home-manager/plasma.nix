@@ -2,6 +2,14 @@
 {
   options.jemand771.plasma = {
     enable = lib.mkEnableOption "plasma-manager";
+    panelScreens = lib.mkOption {
+      type = with lib.types; either (enum [ "all" ]) (listOf ints.unsigned);
+      default = "all";
+      example = [
+        0
+        1
+      ];
+    };
     taskbarLaunchers = lib.mkOption {
       type = lib.types.nullOr (lib.types.listOf lib.types.str);
       description = "launcher URLs to pin to the taskbar";
@@ -22,9 +30,9 @@
     };
     panels = [
       {
-        screen = "all";
+        screen = config.jemand771.plasma.panelScreens;
         floating = true;
-        height = 46;
+        height = 44;
         widgets = [
           "org.kde.plasma.kickoff"
           "org.kde.plasma.pager"

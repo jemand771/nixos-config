@@ -138,7 +138,19 @@
       jemand771.ai.enable = true;
       jemand771.incus-client.enable = true;
       jemand771.kubeconfig.enable = true;
-      jemand771.plasma.enable = true;
+      jemand771.plasma = {
+        enable = true;
+        panelScreens = [
+          0
+          1
+        ];
+        taskbarLaunchers = [
+          "applications:org.kde.dolphin.desktop"
+          "applications:firefox.desktop"
+          "applications:org.kde.konsole.desktop"
+          "applications:discord.desktop"
+        ];
+      };
     }
   ];
   jemand771.printer.enable = true;

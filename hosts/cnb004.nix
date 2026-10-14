@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   self,
   ...
@@ -66,7 +67,30 @@
     pkgs.bomgar-acc
   ];
   system.extraDependencies = [ pkgs.bomgar-acc.installer ];
-  programs.firefox.enable = true;
+  programs.firefox = {
+    enable = true;
+    policies.EnableTrackingProtection.Category = "strict";
+    policies.FirefoxHome = {
+      Stories = false;
+      SponsoredStories = false;
+      SponsoredTopSites = false;
+      Locked = true;
+    };
+    policies.FirefoxSuggest = {
+      SponsoredSuggestions = false;
+      Locked = true;
+    };
+    policies.ExtensionSettings =
+      lib.mapAttrs
+        (_: slug: {
+          installation_mode = "force_installed";
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/${slug}/latest.xpi";
+        })
+        {
+          "uBlock0@raymondhill.net" = "ublock-origin";
+          "{446900e4-71c2-419f-a6a7-df9c091e268b}" = "bitwarden-password-manager";
+        };
+  };
 
   # no openssh here, so specify whatever it would do manually
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];

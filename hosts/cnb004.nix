@@ -64,6 +64,7 @@
     pkgs.skcopy
     pkgs.bomgar-acc
     pkgs.password-depot
+    pkgs.outlook-web
   ];
   system.extraDependencies = [ pkgs.bomgar-acc.installer ];
   programs.firefox = {

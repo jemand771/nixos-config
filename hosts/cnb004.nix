@@ -124,6 +124,7 @@
           "applications:firefox.desktop"
           "applications:org.kde.konsole.desktop"
           "applications:teams-for-linux.desktop"
+          "applications:outlook-web.desktop"
         ];
       };
       programs.plasma.overrideConfig = true;

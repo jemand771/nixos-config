@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  self,
   ...
 }:
 {
@@ -61,8 +60,8 @@
   # TODO warning, dangerous and ugly, see https://github.com/NixOS/nixpkgs/issues/30723
   nix.settings.extra-sandbox-paths = [ "/docker-auth.json" ];
   environment.systemPackages = [
-    self.packages.${pkgs.stdenv.hostPlatform.system}.play
-    self.packages.${pkgs.stdenv.hostPlatform.system}.skcopy
+    pkgs.play
+    pkgs.skcopy
     pkgs.bomgar-acc
   ];
   system.extraDependencies = [ pkgs.bomgar-acc.installer ];

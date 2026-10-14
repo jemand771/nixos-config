@@ -69,6 +69,7 @@
   programs.firefox = {
     enable = true;
     policies.EnableTrackingProtection.Category = "strict";
+    policies.PasswordManagerEnabled = false;
     policies.FirefoxHome = {
       Stories = false;
       SponsoredStories = false;

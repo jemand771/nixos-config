@@ -129,6 +129,8 @@
         ];
       };
       programs.plasma.overrideConfig = true;
+      # TODO report upstream: deleting baloofilerc causes baloo to reindex everything :-)
+      programs.plasma.resetFilesExclude = [ "baloofilerc" ];
       programs.plasma.kscreenlocker.autoLock = false;
     }
   ];

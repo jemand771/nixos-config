@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 {
@@ -27,10 +28,23 @@
         # GDK_BACKEND: force using the x11 desktop, otherwise some windows launch via wslg
         # KWIN_X11_REFRESH_RATE: "monitors" report 50Hz, force 60Hz instead
         defaultWindowManager = "GDK_BACKEND=x11 KWIN_X11_REFRESH_RATE=60000 startplasma-x11";
-        # 30-ish -> 60-ish fps
         extraConfDirCommands = ''
+          # 30-ish -> 60-ish fps
           substituteInPlace $out/xrdp.ini \
             --replace-fail "rfx_frame_interval=32" "rfx_frame_interval=16"
+          # force the layout I picked over what windows' rdp client requests
+          cat ${
+            pkgs.writeText "xrdp_keyboard_pc.ini" (
+              lib.generators.toINI { } {
+                rdp_keyboard_pc = {
+                  keyboard_type = 4;
+                  variant = config.services.xserver.xkb.variant;
+                  rdp_layouts = "default_rdp_layouts";
+                  layouts_map = "default_layouts_map";
+                };
+              }
+            )
+          } >> $out/xrdp_keyboard.ini
         '';
         audio.enable = true;
       };

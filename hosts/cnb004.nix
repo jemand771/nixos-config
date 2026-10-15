@@ -129,8 +129,12 @@
         ];
       };
       programs.plasma.overrideConfig = true;
-      # TODO report upstream: deleting baloofilerc causes baloo to reindex everything :-)
-      programs.plasma.resetFilesExclude = [ "baloofilerc" ];
+      programs.plasma.resetFilesExclude = [
+        # TODO report upstream: deleting baloofilerc causes baloo to reindex everything :-)
+        "baloofilerc"
+        # contains runtime state (hand-created wallet name)
+        "kwalletrc"
+      ];
       programs.plasma.kscreenlocker.autoLock = false;
     }
   ];

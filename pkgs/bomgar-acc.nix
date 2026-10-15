@@ -110,6 +110,18 @@ let
       "$rundir/bomgar-acc" "$@"
     '';
   };
+
+  desktopItem = pkgs.makeDesktopItem {
+    name = "bomgar-acc";
+    desktopName = "BeyondTrust Access Console";
+    exec = "bomgar-acc";
+    icon = "bomgar-acc";
+    categories = [
+      "Network"
+      "RemoteAccess"
+    ];
+    startupWMClass = "bomgar-acc";
+  };
 in
 pkgs.buildFHSEnv {
   pname = "bomgar-acc";
@@ -157,4 +169,11 @@ pkgs.buildFHSEnv {
   '';
 
   runScript = "${launcher}/bin/bomgar-acc-launch";
+
+  extraInstallCommands = ''
+    install -Dm444 ${desktopItem}/share/applications/bomgar-acc.desktop \
+      $out/share/applications/bomgar-acc.desktop
+    install -Dm444 ${payload}/libexec/bomgar-acc/pixmaps/square_logo.svg \
+      $out/share/icons/hicolor/scalable/apps/bomgar-acc.svg
+  '';
 }

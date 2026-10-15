@@ -104,15 +104,9 @@
         audio.enable = true;
       };
       # no builtin pipewire support :(
-      pulseaudio = {
-        enable = true;
-        # wslg manages $XDG_RUNTIME_DIR/pulse/pid
-        daemon.config.use-pid-file = "no";
-      };
+      pulseaudio.enable = true;
     };
-    # overwrite wslg's socket
-    systemd.user.sockets.pulseaudio.after = lib.mkIf config.jemand771.wsl.desktop.enable [
-      "wslg-session.service"
-    ];
+    # pulse server above supersedes everything wslg could ever symlink here (pid, socket, ...)
+    systemd.user.services.wslg-session.enable = !config.jemand771.wsl.desktop.enable;
   };
 }

@@ -71,6 +71,7 @@
     enable = true;
     policies.EnableTrackingProtection.Category = "strict";
     policies.PasswordManagerEnabled = false;
+    policies.Preferences."browser.sessionstore.max_resumed_crashes" = -1;
     policies.FirefoxHome = {
       Stories = false;
       SponsoredStories = false;

@@ -7,6 +7,24 @@
 {
   options.jemand771.wsl.enable = lib.mkEnableOption "WSL stuffs";
   options.jemand771.wsl.desktop.enable = lib.mkEnableOption "plasma desktop via xrdp";
+  options.jemand771.wsl.nat = lib.mkOption {
+    type = lib.types.nullOr (
+      lib.types.submodule {
+        options = {
+          address = lib.mkOption {
+            type = lib.types.str;
+            example = "172.25.185.3/20";
+          };
+          gateway = lib.mkOption {
+            type = lib.types.str;
+            example = "172.25.176.1";
+          };
+        };
+      }
+    );
+    default = null;
+    description = "eth0 config (managed by wsl itself, just import the current values)";
+  };
   config = lib.mkIf config.jemand771.wsl.enable {
     wsl = {
       enable = true;
@@ -18,6 +36,43 @@
 
     # vscode antinag
     environment.variables.DONT_PROMPT_WSL_INSTALL = "1";
+
+    # eth0+dns configured by windows
+    networking.networkmanager = lib.mkIf config.networking.networkmanager.enable {
+      dns = "none";
+      settings.main.no-auto-default = "*";
+      unmanaged = [
+        "interface-name:docker*"
+        "interface-name:br-*"
+        "interface-name:veth*"
+        "interface-name:virbr*"
+        "interface-name:vnet*"
+        "interface-name:podman*"
+      ];
+    };
+    systemd.services.NetworkManager-wait-online.enable = lib.mkIf config.networking.networkmanager.enable false;
+    networking.wireless.enable = lib.mkIf config.networking.networkmanager.enable (lib.mkForce false);
+    # pretend to own eth0 so it's usable as a vpn base
+    environment.etc."NetworkManager/system-connections/wsl-eth0.nmconnection" =
+      lib.mkIf (config.networking.networkmanager.enable && config.jemand771.wsl.nat != null)
+        {
+          mode = "0600";
+          text = lib.generators.toINI { } {
+            connection = {
+              id = "wsl-eth0";
+              uuid = "81920d52-a4f5-4818-ba4a-19c702405eaa";
+              type = "ethernet";
+              interface-name = "eth0";
+              autoconnect = false;
+            };
+            ipv4 = {
+              method = "manual";
+              address1 = config.jemand771.wsl.nat.address;
+              gateway = config.jemand771.wsl.nat.gateway;
+            };
+            ipv6.method = "link-local";
+          };
+        };
 
     services = lib.mkIf config.jemand771.wsl.desktop.enable {
       desktopManager.plasma6.enable = true;

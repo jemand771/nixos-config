@@ -1,0 +1,35 @@
+diff -ru a/vpn/openconnect/nm-openconnect-service.h b/vpn/openconnect/nm-openconnect-service.h
+--- a/vpn/openconnect/nm-openconnect-service.h
++++ b/vpn/openconnect/nm-openconnect-service.h
+@@ -20,6 +20,7 @@
+ #define NM_OPENCONNECT_KEY_GATEWAY "gateway"
+ #define NM_OPENCONNECT_KEY_COOKIE "cookie"
+ #define NM_OPENCONNECT_KEY_GWCERT "gwcert"
++#define NM_OPENCONNECT_KEY_RESOLVE "resolve"
+ #define NM_OPENCONNECT_KEY_AUTHTYPE "authtype"
+ #define NM_OPENCONNECT_KEY_USERCERT "usercert"
+ #define NM_OPENCONNECT_KEY_CACERT "cacert"
+diff -ru a/vpn/openconnect/openconnectauth.cpp b/vpn/openconnect/openconnectauth.cpp
+--- a/vpn/openconnect/openconnectauth.cpp
++++ b/vpn/openconnect/openconnectauth.cpp
+@@ -416,7 +416,20 @@
+     QVariantMap secretData;
+ 
+     secrets.insert(d->secrets);
++#if OPENCONNECT_CHECK_VER(5, 3)
++    // openconnect_get_hostname() returns the resolved IP address. Connecting to that would lose
++    // SNI and the Host header, so pass the original name and pin the address via --resolve instead.
++    QString host(openconnect_get_dnsname(d->vpninfo));
++    QString ipaddr(openconnect_get_hostname(d->vpninfo));
++    if (host != ipaddr) {
++        if (ipaddr.startsWith(QLatin1Char('[')) && ipaddr.endsWith(QLatin1Char(']'))) {
++            ipaddr = ipaddr.mid(1, ipaddr.length() - 2);
++        }
++        secrets.insert(QLatin1String(NM_OPENCONNECT_KEY_RESOLVE), host + ':' + ipaddr);
++    }
++#else
+     QString host(openconnect_get_hostname(d->vpninfo));
++#endif
+     const QString port = QString::number(openconnect_get_port(d->vpninfo));
+     QString gateway = host + ':' + port;
+     const char *urlpath = openconnect_get_urlpath(d->vpninfo);

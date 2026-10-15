@@ -28,6 +28,7 @@ in
       hosts = [ nixbox ];
       owner = "willy";
     };
+    caltrain-vpn-password.hosts = [ cnb004 ];
     kubeconfig-771-new-key = {
       hosts = [
         nixbox

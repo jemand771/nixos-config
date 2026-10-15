@@ -36,6 +36,59 @@
     ../certs/intenta-root01.crt
     ../certs/intenta-sub01.crt
   ];
+  jemand771.wsl.nat = {
+    address = "172.25.185.3/20";
+    gateway = "172.25.176.1";
+  };
+  # TODO review and work around or file upstream (slop)
+  nixpkgs.overlays = [
+    (_: prev: {
+      kdePackages = prev.kdePackages.overrideScope (
+        _: kprev: {
+          plasma-nm = kprev.plasma-nm.overrideAttrs (old: {
+            patches = old.patches or [ ] ++ [ ../patches/plasma-nm-openconnect-resolve.patch ];
+          });
+        }
+      );
+    })
+  ];
+  networking.networkmanager = {
+    enable = true;
+    plugins = [ pkgs.networkmanager-openconnect ];
+    ensureProfiles.environmentFiles = [ config.age.secrets.caltrain-vpn-password.path ];
+    ensureProfiles.profiles.caltrain = {
+      connection = {
+        id = "Caltrain";
+        uuid = "4bec0839-9404-4d7c-a00f-56ed1d81f491";
+        type = "vpn";
+        autoconnect = false;
+      };
+      vpn = {
+        service-type = "org.freedesktop.NetworkManager.openconnect";
+        protocol = "gp";
+        gateway = "sjcc-vpn.caltrain-ot.com/gateway";
+        cookie-flags = 2;
+        gwcert-flags = 2;
+        gateway-flags = 2;
+      };
+      # prefills plasma-nm's login form
+      vpn-secrets = {
+        "form:_login:user" = "hillew";
+        "form:_login:passwd" = "$CALTRAIN_VPN_PASSWORD";
+        save_passwords = "yes";
+      };
+      ipv4 = {
+        method = "auto";
+        # default is all traffic, yucky
+        never-default = true;
+        ignore-auto-routes = true;
+        route1 = "10.213.0.0/16";
+        route2 = "10.220.220.113/32";
+        route3 = "10.220.220.114/32";
+      };
+      ipv6.method = "disabled";
+    };
+  };
   fileSystems."/mnt/intop01" = {
     device = "\\\\intop01.de\\files";
     fsType = "drvfs";

@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 {
@@ -26,19 +25,25 @@
         # windows' rdp server listens on 3389 already
         port = 3390;
         # GDK_BACKEND: force using the x11 desktop, otherwise some windows launch via wslg
-        # PULSE_LATENCY_MSEC: bigger audio buffer to fix stuttering/crackling
         # KWIN_X11_REFRESH_RATE: "monitors" report 50Hz, force 60Hz instead
-        defaultWindowManager = "GDK_BACKEND=x11 PULSE_LATENCY_MSEC=150 KWIN_X11_REFRESH_RATE=60000 startplasma-x11";
+        defaultWindowManager = "GDK_BACKEND=x11 KWIN_X11_REFRESH_RATE=60000 startplasma-x11";
         # 30-ish -> 60-ish fps
         extraConfDirCommands = ''
           substituteInPlace $out/xrdp.ini \
             --replace-fail "rfx_frame_interval=32" "rfx_frame_interval=16"
         '';
+        audio.enable = true;
+      };
+      # no builtin pipewire support :(
+      pulseaudio = {
+        enable = true;
+        # wslg manages $XDG_RUNTIME_DIR/pulse/pid
+        daemon.config.use-pid-file = "no";
       };
     };
-    # audio goes to wslg's pulse server -> install audio controls even when no server is enabled
-    environment.systemPackages = lib.mkIf config.jemand771.wsl.desktop.enable [
-      pkgs.kdePackages.plasma-pa
+    # overwrite wslg's socket
+    systemd.user.sockets.pulseaudio.after = lib.mkIf config.jemand771.wsl.desktop.enable [
+      "wslg-session.service"
     ];
   };
 }

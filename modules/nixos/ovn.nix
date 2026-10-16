@@ -119,6 +119,18 @@
         RuntimeDirectoryPreserve = "yes";
         StateDirectory = "ovn";
       };
+      # new northd on old database refuses to start, but conversion requires the DBs to be up.
+      # (migration through controller in HA, not just fiddling with the DB files)
+      preStart = ''
+        convert() {
+          needs=$(${lib.getExe' pkgs.openvswitch "ovsdb-client"} needs-conversion "$1" "$2")
+          if [ "$needs" = yes ]; then
+            ${lib.getExe' pkgs.openvswitch "ovsdb-client"} convert "$1" "$2"
+          fi
+        }
+        convert unix:/run/ovn/ovnnb_db.sock ${pkgs.ovn}/share/ovn/ovn-nb.ovsschema
+        convert unix:/run/ovn/ovnsb_db.sock ${pkgs.ovn}/share/ovn/ovn-sb.ovsschema
+      '';
       script = ''
         exec ${lib.getExe' pkgs.ovn "ovn-northd"} \
           --ovnnb-db=${lib.concatMapStringsSep "," (host: "tcp:${host}:6641") config.jemand771.ovn.peers} \

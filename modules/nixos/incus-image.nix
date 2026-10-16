@@ -14,7 +14,7 @@
       (
         pkgs.linkFarm "incus-image-${config.networking.hostName}" {
           "disk.qcow2" = "${config.system.build.qemuImage}/nixos.qcow2";
-          "metadata.tar.xz" = "${config.system.build.metadata}/${config.image.filePath}";
+          "metadata.tar.xz" = "${config.system.build.metadata}/tarball/${config.image.baseName}.tar.xz";
         }
       );
 }

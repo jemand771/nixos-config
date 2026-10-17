@@ -129,6 +129,14 @@ in
         };
       }
       {
+        # managed macvlan on vSwitch. do not use (except for vrrp shenanigans)
+        name = "public";
+        type = "macvlan";
+        config = {
+          "parent" = "br-uplink";
+        };
+      }
+      {
         # TODO this is all jumbled together - create and manage network ACLs
         name = "default";
         type = "ovn";
@@ -158,7 +166,7 @@ in
           };
           infra = { };
           ingress = {
-            "restricted.devices.nic" = "allow";
+            "restricted.networks.access" = "default,public";
           };
         };
       };

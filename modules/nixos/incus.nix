@@ -56,6 +56,7 @@
             "features.storage.volumes" = "true";
             "features.storage.buckets" = "true";
             "restricted" = "true";
+            "restricted.networks.access" = "default";
           }
           // value;
         }) (lib.attrsToList config.jemand771.incus.projects);

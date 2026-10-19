@@ -37,9 +37,11 @@
     # vscode antinag
     environment.variables.DONT_PROMPT_WSL_INSTALL = "1";
 
-    # eth0+dns configured by windows
+    # eth0 configured by windows, dns via resolved so vpns can add split dns
+    wsl.wslConf.network.generateResolvConf = lib.mkIf config.networking.networkmanager.enable false;
+    networking.nameservers = lib.mkIf config.networking.networkmanager.enable [ "10.255.255.254" ];
     networking.networkmanager = lib.mkIf config.networking.networkmanager.enable {
-      dns = "none";
+      dns = "systemd-resolved";
       settings.main.no-auto-default = "*";
       unmanaged = [
         "interface-name:docker*"
@@ -74,38 +76,41 @@
           };
         };
 
-    services = lib.mkIf config.jemand771.wsl.desktop.enable {
-      desktopManager.plasma6.enable = true;
-      xrdp = {
-        enable = true;
-        # windows' rdp server listens on 3389 already
-        port = 3390;
-        # GDK_BACKEND: force using the x11 desktop, otherwise some windows launch via wslg
-        # KWIN_X11_REFRESH_RATE: "monitors" report 50Hz, force 60Hz instead
-        defaultWindowManager = "GDK_BACKEND=x11 KWIN_X11_REFRESH_RATE=60000 startplasma-x11";
-        extraConfDirCommands = ''
-          # 30-ish -> 60-ish fps
-          substituteInPlace $out/xrdp.ini \
-            --replace-fail "rfx_frame_interval=32" "rfx_frame_interval=16"
-          # force the layout I picked over what windows' rdp client requests
-          cat ${
-            pkgs.writeText "xrdp_keyboard_pc.ini" (
-              lib.generators.toINI { } {
-                rdp_keyboard_pc = {
-                  keyboard_type = 4;
-                  variant = config.services.xserver.xkb.variant;
-                  rdp_layouts = "default_rdp_layouts";
-                  layouts_map = "default_layouts_map";
-                };
-              }
-            )
-          } >> $out/xrdp_keyboard.ini
-        '';
-        audio.enable = true;
-      };
-      # no builtin pipewire support :(
-      pulseaudio.enable = true;
-    };
+    services = lib.mkMerge [
+      (lib.mkIf config.networking.networkmanager.enable { resolved.enable = true; })
+      (lib.mkIf config.jemand771.wsl.desktop.enable {
+        desktopManager.plasma6.enable = true;
+        xrdp = {
+          enable = true;
+          # windows' rdp server listens on 3389 already
+          port = 3390;
+          # GDK_BACKEND: force using the x11 desktop, otherwise some windows launch via wslg
+          # KWIN_X11_REFRESH_RATE: "monitors" report 50Hz, force 60Hz instead
+          defaultWindowManager = "GDK_BACKEND=x11 KWIN_X11_REFRESH_RATE=60000 startplasma-x11";
+          extraConfDirCommands = ''
+            # 30-ish -> 60-ish fps
+            substituteInPlace $out/xrdp.ini \
+              --replace-fail "rfx_frame_interval=32" "rfx_frame_interval=16"
+            # force the layout I picked over what windows' rdp client requests
+            cat ${
+              pkgs.writeText "xrdp_keyboard_pc.ini" (
+                lib.generators.toINI { } {
+                  rdp_keyboard_pc = {
+                    keyboard_type = 4;
+                    variant = config.services.xserver.xkb.variant;
+                    rdp_layouts = "default_rdp_layouts";
+                    layouts_map = "default_layouts_map";
+                  };
+                }
+              )
+            } >> $out/xrdp_keyboard.ini
+          '';
+          audio.enable = true;
+        };
+        # no builtin pipewire support :(
+        pulseaudio.enable = true;
+      })
+    ];
     # pulse server above supersedes everything wslg could ever symlink here (pid, socket, ...)
     systemd.user.services.wslg-session.enable = !config.jemand771.wsl.desktop.enable;
   };

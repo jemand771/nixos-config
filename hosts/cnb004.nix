@@ -82,6 +82,7 @@
         "form:_login:user" = "hillew";
         "form:_login:passwd" = "$CALTRAIN_VPN_PASSWORD";
         save_passwords = "yes";
+        autoconnect = "yes";
       };
       ipv4 = {
         method = "auto";

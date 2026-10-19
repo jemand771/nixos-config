@@ -29,6 +29,7 @@ in
       owner = "willy";
     };
     caltrain-vpn-password.hosts = [ cnb004 ];
+    intop01-smb-credentials.hosts = [ cnb004 ];
     kubeconfig-771-new-key = {
       hosts = [
         nixbox

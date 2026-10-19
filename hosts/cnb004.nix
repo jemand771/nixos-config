@@ -133,26 +133,32 @@
   };
   # charon-nm refuses to start without
   environment.etc."strongswan.conf".text = "";
-  fileSystems."/mnt/intop01" = {
-    device = "\\\\intop01.de\\files";
-    fsType = "drvfs";
-    noCheck = true;
-    options = [
-      "uid=1000"
-      "gid=100"
-      "umask=022"
-      "fmask=111"
-      "x-systemd.automount"
-      "x-systemd.idle-timeout=600"
-    ];
-  };
-  systemd.tmpfiles.settings.intop01-drives = {
-    "/mnt/h".L.argument = "/mnt/intop01/home/wihi";
-    "/mnt/n".L.argument = "/mnt/intop01/main";
-    "/mnt/t".L.argument = "/mnt/intop01/temp";
-    "/mnt/w".L.argument = "/mnt/intop01/data";
-    "/mnt/y".L.argument = "/mnt/intop01/data-transient";
-  };
+  fileSystems =
+    lib.mapAttrs'
+      (
+        letter: share:
+        lib.nameValuePair "/mnt/${letter}" {
+          device = "//sfs002.intop01.de/${share}";
+          fsType = "cifs";
+          noCheck = true;
+          options = [
+            "credentials=${config.age.secrets.intop01-smb-credentials.path}"
+            "uid=1000"
+            "gid=100"
+            "file_mode=0644"
+            "dir_mode=0755"
+            "x-systemd.automount"
+            "x-systemd.idle-timeout=600"
+          ];
+        }
+      )
+      {
+        h = "homes/wihi";
+        n = "main";
+        t = "temp";
+        w = "data2";
+        y = "data-transient";
+      };
   # TODO svp2 schroot config, or ignore and abandon? (build locally and just reference hardcoded path to avoid delays from IFD?)
   # TODO warning, dangerous and ugly, see https://github.com/NixOS/nixpkgs/issues/30723
   nix.settings.extra-sandbox-paths = [ "/docker-auth.json" ];

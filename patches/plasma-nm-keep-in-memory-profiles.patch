@@ -1,0 +1,32 @@
+diff --git a/kded/secretagent.cpp b/kded/secretagent.cpp
+index b1074fa..74c9e97 100644
+--- a/kded/secretagent.cpp
++++ b/kded/secretagent.cpp
+@@ -261,7 +261,12 @@ void SecretAgent::dialogAccepted()
+                     }
+ 
+                     if (con) {
+-                        con->update(completeConnectionSettings->toMap());
++                        // don't promote in-memory profiles (e.g. from /run) to persistent storage
++                        if (con->isUnsaved()) {
++                            con->updateUnsaved(completeConnectionSettings->toMap());
++                        } else {
++                            con->update(completeConnectionSettings->toMap());
++                        }
+                     }
+                 }
+             }
+diff --git a/libs/handler.cpp b/libs/handler.cpp
+index 61b5fe0..0ba6590 100644
+--- a/libs/handler.cpp
++++ b/libs/handler.cpp
+@@ -659,7 +659,8 @@ QCoro::Task<> Handler::removeConnectionInternal(const QString &connection)
+ QCoro::Task<> Handler::updateConnection(NetworkManager::Connection::Ptr connection, const NMVariantMapMap &map)
+ {
+     QPointer<Handler> thisGuard(this);
+-    QDBusReply<void> reply = co_await connection->update(map);
++    // don't promote in-memory profiles (e.g. from /run) to persistent storage
++    QDBusReply<void> reply = co_await (connection->isUnsaved() ? connection->updateUnsaved(map) : connection->update(map));
+     if (!thisGuard) {
+         co_return;
+     }

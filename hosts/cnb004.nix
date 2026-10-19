@@ -46,7 +46,10 @@
       kdePackages = prev.kdePackages.overrideScope (
         _: kprev: {
           plasma-nm = kprev.plasma-nm.overrideAttrs (old: {
-            patches = old.patches or [ ] ++ [ ../patches/plasma-nm-openconnect-resolve.patch ];
+            patches = old.patches or [ ] ++ [
+              ../patches/plasma-nm-openconnect-resolve.patch
+              ../patches/plasma-nm-keep-in-memory-profiles.patch
+            ];
           });
         }
       );

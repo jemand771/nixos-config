@@ -115,6 +115,7 @@
         virtual = "yes";
         proposal = "yes";
         ike = "aes256-sha256-modp2048";
+        esp = "aes256-sha1";
         # once again 0.0.0.0/0 is stinky, but we can just ask the server for what we want
         remote-ts = lib.concatStringsSep ";" [
           "10.150.0.0/16"

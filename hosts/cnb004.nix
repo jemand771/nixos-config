@@ -54,7 +54,10 @@
   ];
   networking.networkmanager = {
     enable = true;
-    plugins = [ pkgs.networkmanager-openconnect ];
+    plugins = [
+      pkgs.networkmanager-openconnect
+      pkgs.networkmanager-strongswan
+    ];
     ensureProfiles.environmentFiles = [ config.age.secrets.caltrain-vpn-password.path ];
     ensureProfiles.profiles.caltrain = {
       connection = {
@@ -88,7 +91,43 @@
       };
       ipv6.method = "disabled";
     };
+    ensureProfiles.profiles.intenta = {
+      connection = {
+        id = "Intenta";
+        uuid = "b444bc6b-50bd-46bd-b50b-972f451b6fc6";
+        type = "vpn";
+        autoconnect = false;
+        permissions = "user:willy;";
+      };
+      vpn = {
+        service-type = "org.freedesktop.NetworkManager.strongswan";
+        address = "vpn.intop01.de";
+        certificate = "${../certs/intenta-watchguard-ike.crt}";
+        # cert has no vpn.intop01.de san
+        remote-identity = "O=WatchGuard, OU=Fireware, CN=ike2muvpn Server";
+        method = "eap";
+        user = "willy.hille";
+        password-flags = 1;
+        virtual = "yes";
+        proposal = "yes";
+        ike = "aes256-sha256-modp2048";
+        # once again 0.0.0.0/0 is stinky, but we can just ask the server for what we want
+        remote-ts = lib.concatStringsSep ";" [
+          "10.150.0.0/16"
+          "10.153.0.0/16"
+          "10.154.0.0/16"
+          "217.160.252.63/32"
+        ];
+      };
+      ipv4 = {
+        method = "auto";
+        dns-search = "~intop01.de;";
+      };
+      ipv6.method = "disabled";
+    };
   };
+  # charon-nm refuses to start without
+  environment.etc."strongswan.conf".text = "";
   fileSystems."/mnt/intop01" = {
     device = "\\\\intop01.de\\files";
     fsType = "drvfs";

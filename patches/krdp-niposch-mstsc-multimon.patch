@@ -1,0 +1,76 @@
+diff --git a/src/RdpConnection.cpp b/src/RdpConnection.cpp
+index 63499b3..e97f8fb 100644
+--- a/src/RdpConnection.cpp
++++ b/src/RdpConnection.cpp
+@@ -648,6 +648,10 @@ void RdpConnection::initialize()
+     freerdp_settings_set_bool(settings, FreeRDP_FrameMarkerCommandEnabled, true);
+     freerdp_settings_set_bool(settings, FreeRDP_SurfaceFrameMarkerEnabled, true);
+ 
++    // mstsc only lays out its monitors properly after the monitor layout pdu; FreeRDP
++    // drops the client's support flag unless the server enabled it before the gcc exchange
++    freerdp_settings_set_bool(settings, FreeRDP_SupportMonitorLayoutPdu, true);
++
+     d->peer->Capabilities = peerCapabilities;
+     d->peer->Activate = peerActivate;
+     d->peer->PostConnect = peerPostConnect;
+@@ -785,6 +789,13 @@ bool RdpConnection::onCapabilities()
+             .primary = monitor->is_primary != 0,
+         });
+     }
++    // mstsc /multimon sends its primary monitor as the desktop size and sizes its
++    // window to whatever the demand active (sent right after this) announces
++    const auto sanitized = ClientDisplay::sanitize(info, info.desktopSize);
++    if (!sanitized.monitors.isEmpty()) {
++        freerdp_settings_set_uint32(settings, FreeRDP_DesktopWidth, sanitized.desktopSize.width());
++        freerdp_settings_set_uint32(settings, FreeRDP_DesktopHeight, sanitized.desktopSize.height());
++    }
+     {
+         std::lock_guard lock(d->clientDisplayMutex);
+         d->clientDisplay = info;
+diff --git a/src/VideoStream.cpp b/src/VideoStream.cpp
+index ff77726..8943b4d 100644
+--- a/src/VideoStream.cpp
++++ b/src/VideoStream.cpp
+@@ -887,6 +887,20 @@ uint32_t VideoStream::onCapsAdvertise(const RDPGFX_CAPS_ADVERTISE_PDU *capsAdver
+ 
+     d->capsConfirmed = true;
+ 
++    // mstsc sets up its multimon presentation from the first ResetGraphics and only
++    // re-reads it when its window changes, so don't make it wait for the first frame
++    {
++        std::lock_guard lock(d->layoutMutex);
++        if (!d->configuredLayout.isEmpty()) {
++            const auto plan = planReset(VideoFrame{}, d->configuredLayout);
++            if (performReset(plan.desktopSize, plan.monitors, plan.surfaces)) {
++                d->pendingReset = false;
++                d->monitorLayout = plan.monitors;
++                Q_EMIT graphicsReset(plan.monitors);
++            }
++        }
++    }
++
+     return CHANNEL_RC_OK;
+ }
+ 
+@@ -927,11 +941,20 @@ bool VideoStream::performReset(const QSize &desktopSize, const QVector<VideoMoni
+     resetGraphicsPdu.height = desktopSize.height();
+     resetGraphicsPdu.monitorCount = monitors.size();
+ 
++    // mstsc places the output relative to its own primary monitor, which it expects at (0,0);
++    // surface origins stay relative to the union's top-left
++    QPoint primaryOrigin;
++    for (const auto &monitor : monitors) {
++        if (monitor.primary) {
++            primaryOrigin = monitor.geometry.topLeft();
++        }
++    }
++
+     auto monitorDefs = std::make_unique<MONITOR_DEF[]>(monitors.size());
+     for (int i = 0; i < monitors.size(); ++i) {
+         const auto &monitor = monitors.at(i);
+         // Inclusive edges: see SurfaceLayout::edgesOf().
+-        const auto edges = SurfaceLayout::edgesOf(monitor.geometry);
++        const auto edges = SurfaceLayout::edgesOf(monitor.geometry.translated(-primaryOrigin));
+         monitorDefs[i].left = edges.left;
+         monitorDefs[i].top = edges.top;
+         monitorDefs[i].right = edges.right;

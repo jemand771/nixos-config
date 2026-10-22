@@ -1,0 +1,108 @@
+diff --git a/src/plugins/screencast/outputscreencastsource.cpp b/src/plugins/screencast/outputscreencastsource.cpp
+index 4e27dd6..da6c325 100644
+--- a/src/plugins/screencast/outputscreencastsource.cpp
++++ b/src/plugins/screencast/outputscreencastsource.cpp
+@@ -72,15 +72,20 @@ void OutputScreenCastSource::setNextPresentationTimestamp(std::chrono::nanosecon
+ 
+ Region OutputScreenCastSource::render(QImage *target, const Region &bufferRepair)
+ {
+-    auto texture = GLTexture::allocate(GL_RGBA8, target->size());
+-    if (!texture) {
+-        return Region{};
++    const bool reuse = m_stagingTexture && m_stagingTexture->size() == target->size();
++    if (!reuse) {
++        m_stagingFramebuffer.reset();
++        m_stagingTexture = GLTexture::allocate(GL_RGBA8, target->size());
++        if (!m_stagingTexture) {
++            return Region{};
++        }
++        m_stagingTexture->setContentTransform(OutputTransform::FlipY);
++        m_stagingFramebuffer = std::make_unique<GLFramebuffer>(m_stagingTexture.get());
+     }
+-    texture->setContentTransform(OutputTransform::FlipY);
+-    GLFramebuffer buffer(texture.get());
+-    const Region ret = render(&buffer, Region::infinite());
+-    grabTexture(texture.get(), target);
+-    return ret;
++    // the staging texture already holds the previous frame, target is stale by bufferRepair on top
++    const Region damage = render(m_stagingFramebuffer.get(), reuse ? Region() : Region::infinite());
++    grabTexture(m_stagingTexture.get(), target, reuse ? bufferRepair | damage : Region::infinite());
++    return damage;
+ }
+ 
+ Region OutputScreenCastSource::render(GLFramebuffer *target, const Region &bufferRepair)
+@@ -152,6 +157,10 @@ void OutputScreenCastSource::pause()
+     m_cursorView.reset();
+     m_sceneView.reset();
+     m_layer.reset();
++    if (m_stagingTexture && eglContext()->makeCurrent()) {
++        m_stagingFramebuffer.reset();
++        m_stagingTexture.reset();
++    }
+ 
+     m_active = false;
+ }
+diff --git a/src/plugins/screencast/outputscreencastsource.h b/src/plugins/screencast/outputscreencastsource.h
+index f73a270..fdde68f 100644
+--- a/src/plugins/screencast/outputscreencastsource.h
++++ b/src/plugins/screencast/outputscreencastsource.h
+@@ -14,6 +14,8 @@ namespace KWin
+ {
+ 
+ class FilteredSceneView;
++class GLFramebuffer;
++class GLTexture;
+ class ItemTreeView;
+ class LogicalOutput;
+ class ScreencastLayer;
+@@ -54,6 +56,9 @@ private:
+     std::unique_ptr<ItemTreeView> m_cursorView;
+     bool m_active = false;
+     bool m_renderCursor = false;
++    // keeps the last frame between memfd renders, so only damage has to be rendered and read back
++    std::unique_ptr<GLTexture> m_stagingTexture;
++    std::unique_ptr<GLFramebuffer> m_stagingFramebuffer;
+ };
+ 
+ } // namespace KWin
+diff --git a/src/plugins/screencast/screencastutils.h b/src/plugins/screencast/screencastutils.h
+index 4dc22d6..cfdd6cb 100644
+--- a/src/plugins/screencast/screencastutils.h
++++ b/src/plugins/screencast/screencastutils.h
+@@ -38,6 +38,36 @@ static void grabTexture(GLTexture *texture, QImage *target)
+     context->popFramebuffer();
+ }
+ 
++// Reads back only \a region of the texture, the rest of \a target keeps its contents
++static void grabTexture(GLTexture *texture, QImage *target, const Region &region)
++{
++    const Rect bounds(QPoint(), texture->size());
++    const Region clipped = region & bounds;
++    if (clipped.isEmpty()) {
++        return;
++    }
++    // every read is a synchronous round trip, many tiny rects would cost more than they save
++    if (clipped.rects().size() > 32 || clipped.boundingRect() == bounds) {
++        grabTexture(texture, target);
++        return;
++    }
++    EglContext *context = EglContext::currentContext();
++
++    texture->bind();
++    GLFramebuffer fbo(texture);
++    context->pushFramebuffer(&fbo);
++    glPixelStorei(GL_PACK_ROW_LENGTH, target->bytesPerLine() / (target->depth() / 8));
++    for (const Rect &rect : clipped.rects()) {
++        glPixelStorei(GL_PACK_SKIP_PIXELS, rect.x());
++        glPixelStorei(GL_PACK_SKIP_ROWS, rect.y());
++        context->glReadnPixels(rect.x(), rect.y(), rect.width(), rect.height(), closestGLType(target->format()), GL_UNSIGNED_BYTE, target->sizeInBytes(), target->bits());
++    }
++    glPixelStorei(GL_PACK_ROW_LENGTH, 0);
++    glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
++    glPixelStorei(GL_PACK_SKIP_ROWS, 0);
++    context->popFramebuffer();
++}
++
+ static inline Region scaleRegion(const Region &region, qreal scale, const Rect &bounds)
+ {
+     return region.scaledAndRoundedOut(scale) & bounds;

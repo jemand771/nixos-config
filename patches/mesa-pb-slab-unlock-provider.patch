@@ -1,0 +1,17 @@
+diff --git a/src/gallium/auxiliary/pipebuffer/pb_bufmgr_slab.c b/src/gallium/auxiliary/pipebuffer/pb_bufmgr_slab.c
+index 3e8536b..6cee629 100644
+--- a/src/gallium/auxiliary/pipebuffer/pb_bufmgr_slab.c
++++ b/src/gallium/auxiliary/pipebuffer/pb_bufmgr_slab.c
+@@ -303,7 +303,12 @@ pb_slab_create(struct pb_slab_manager *mgr)
+    if (!slab)
+       return PIPE_ERROR_OUT_OF_MEMORY;
+ 
++   /* The provider may release buffers of this very manager while allocating
++    * (d3d12_bo_new reclaims deferred frees), which would take mgr->mutex
++    * again. The caller re-checks mgr->slabs afterwards. */
++   mtx_unlock(&mgr->mutex);
+    slab->bo = mgr->provider->create_buffer(mgr->provider, mgr->slabSize, &mgr->desc);
++   mtx_lock(&mgr->mutex);
+    if(!slab->bo) {
+       ret = PIPE_ERROR_OUT_OF_MEMORY;
+       goto out_err0;

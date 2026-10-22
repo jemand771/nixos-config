@@ -1,0 +1,37 @@
+diff --git a/src/core/gbmgraphicsbufferallocator.cpp b/src/core/gbmgraphicsbufferallocator.cpp
+index d27fc00..2ff03a0 100644
+--- a/src/core/gbmgraphicsbufferallocator.cpp
++++ b/src/core/gbmgraphicsbufferallocator.cpp
+@@ -228,7 +228,14 @@ GraphicsBuffer *GbmGraphicsBufferAllocator::allocate(const GraphicsBufferOptions
+     if (!options.scanout && m_device->busType() == DRM_BUS_FAUX && options.modifiers.contains(DRM_FORMAT_MOD_LINEAR)) {
+         // With vgem, gbm attempts to allocate dumb buffers, which can't
+         // actually work on the render node, so use udmabuf instead
+-        return UDmabufAllocator::allocate(options.format, options.size);
++        if (auto ret = UDmabufAllocator::allocate(options.format, options.size)) {
++            return ret;
++        }
++        // No udmabuf (e.g. the WSL kernel): other faux devices can still allocate
++        // through gbm, just not with an explicit linear modifier
++        GraphicsBufferOptions implicitOptions = options;
++        implicitOptions.modifiers = {DRM_FORMAT_MOD_INVALID};
++        return allocateDmaBuf(m_device->gbmDevice(), m_device->deviceId(), implicitOptions);
+     }
+     return allocateDmaBuf(m_device->gbmDevice(), m_device->deviceId(), options);
+ }
+diff --git a/src/plugins/screencast/screencaststream.cpp b/src/plugins/screencast/screencaststream.cpp
+index 10f7421..9ec3d94 100644
+--- a/src/plugins/screencast/screencaststream.cpp
++++ b/src/plugins/screencast/screencaststream.cpp
+@@ -452,6 +452,12 @@ bool ScreenCastStream::createStream()
+         m_modifiers = *itModifiers;
+     }
+     m_hasDmaBuf = testCreateDmaBuf(m_source->renderDevice(), m_resolution, m_drmFormat, m_modifiers).has_value();
++    // gbm buffers on a faux device without udmabuf (see GbmGraphicsBufferAllocator) only work within kwin,
++    // clients get an fd without data
++    if (m_hasDmaBuf && m_source->renderDevice() && m_source->renderDevice()->drmDevice()
++        && m_source->renderDevice()->drmDevice()->busType() == DRM_BUS_FAUX && !GpuManager::self()->udmabuf().isValid()) {
++        m_hasDmaBuf = false;
++    }
+ 
+     char buffer[2048];
+     QList<const spa_pod *> params = buildFormats(false, buffer);

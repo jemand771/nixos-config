@@ -1,0 +1,29 @@
+diff --git a/src/CaptureStream.cpp b/src/CaptureStream.cpp
+index a30f36e..5d8ed52 100644
+--- a/src/CaptureStream.cpp
++++ b/src/CaptureStream.cpp
+@@ -88,7 +88,9 @@ void CaptureStream::start()
+         return;
+     }
+     m_source = std::make_unique<PipeWireSourceStream>();
+-    m_source->setAllowDmaBuf(true);
++    // raster frames have to end up in cpu memory anyway, let the compositor do the download;
++    // dma-bufs it can allocate aren't necessarily importable here (e.g. on wsl's faux drm device)
++    m_source->setAllowDmaBuf(false);
+     m_source->setDamageEnabled(true);
+     m_source->setMaxFramerate({ m_rate, 1 });
+     connect(m_source.get(), &PipeWireSourceStream::stateChanged, this,
+diff --git a/src/VideoStream.cpp b/src/VideoStream.cpp
+index 8943b4d..fcae96e 100644
+--- a/src/VideoStream.cpp
++++ b/src/VideoStream.cpp
+@@ -994,7 +994,8 @@ bool VideoStream::performReset(const QSize &desktopSize, const QVector<VideoMoni
+         d->surfaces.push_back(Surface{
+             .id = surfaceId,
+             .progressive = negotiatedCodec() == VideoCodec::Progressive
+-                ? std::shared_ptr<PROGRESSIVE_CONTEXT>(progressive_context_new(TRUE), progressive_context_free) : nullptr,
++                // winpr's thread pool wakes every worker for every 64x64 tile, which burns several cores in the kernel
++                ? std::shared_ptr<PROGRESSIVE_CONTEXT>(progressive_context_new_ex(TRUE, THREADING_FLAGS_DISABLE_THREADS), progressive_context_free) : nullptr,
+             .size = entry.size,
+             .origin = entry.origin,
+         });

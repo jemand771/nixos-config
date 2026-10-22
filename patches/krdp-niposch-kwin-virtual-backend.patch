@@ -1,0 +1,14 @@
+diff --git a/server/OutputSnapshot.h b/server/OutputSnapshot.h
+index 18e5afb..6326ccc 100644
+--- a/server/OutputSnapshot.h
++++ b/server/OutputSnapshot.h
+@@ -54,7 +54,8 @@ struct Placement {
+ 
+ inline bool isVirtual(const QString &name)
+ {
+-    return name.startsWith(VirtualPrefix);
++    // kwin's virtual backend names its outputs Virtual-0, Virtual-1, ...
++    return name.startsWith(QLatin1String("Virtual-krdp-"));
+ }
+ 
+ /** Connected outputs from `kscreen-doctor -j`. Empty + \a error set on malformed input. */

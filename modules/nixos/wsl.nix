@@ -4,9 +4,27 @@
   pkgs,
   ...
 }:
+let
+  desktop = config.jemand771.wsl.desktop;
+  # windows' rdp server listens on 3389 already
+  rdpPort = 3390;
+  krdpserver = pkgs.writeShellScript "krdpserver" ''
+    set -eu
+    dir=''${XDG_DATA_HOME:-$HOME/.local/share}/krdp
+    if [ ! -s "$dir/cert.pem" ]; then
+      mkdir -p "$dir"
+      ${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:2048 -nodes -days 3650 \
+        -subj /CN=${config.networking.hostName} -keyout "$dir/key.pem" -out "$dir/cert.pem"
+    fi
+    exec ${pkgs.kdePackages.krdp}/bin/krdpserver --plasma --port ${toString rdpPort} \
+      --certificate "$dir/cert.pem" --certificate-key "$dir/key.pem" \
+      --username ${config.wsl.defaultUser} --password "$(< "$CREDENTIALS_DIRECTORY/password")"
+  '';
+in
 {
   options.jemand771.wsl.enable = lib.mkEnableOption "WSL stuffs";
-  options.jemand771.wsl.desktop.enable = lib.mkEnableOption "plasma desktop via xrdp";
+  options.jemand771.wsl.desktop.enable =
+    lib.mkEnableOption "headless plasma wayland session served by krdp";
   options.jemand771.wsl.nat = lib.mkOption {
     type = lib.types.nullOr (
       lib.types.submodule {
@@ -36,6 +54,25 @@
 
     # vscode antinag
     environment.sessionVariables.DONT_PROMPT_WSL_INSTALL = "1";
+
+    environment.systemPackages = lib.mkIf desktop.enable [
+      (pkgs.writeShellApplication {
+        name = "wsl-desktop-wait";
+        runtimeInputs = [
+          pkgs.coreutils
+          pkgs.gnugrep
+          pkgs.iproute2
+        ];
+        text = ''
+          for _ in $(seq 240); do
+            ss -Htln 'sport = :${toString rdpPort}' | grep -q . && exit 0
+            sleep 0.5
+          done
+          echo "nothing listening on port ${toString rdpPort}" >&2
+          exit 1
+        '';
+      })
+    ];
 
     # eth0 configured by windows, dns via resolved so vpns can add split dns
     wsl.wslConf.network.generateResolvConf = lib.mkIf config.networking.networkmanager.enable false;
@@ -78,40 +115,177 @@
 
     services = lib.mkMerge [
       (lib.mkIf config.networking.networkmanager.enable { resolved.enable = true; })
-      (lib.mkIf config.jemand771.wsl.desktop.enable {
+      (lib.mkIf desktop.enable {
         desktopManager.plasma6.enable = true;
-        xrdp = {
-          enable = true;
-          # windows' rdp server listens on 3389 already
-          port = 3390;
-          # GDK_BACKEND: force using the x11 desktop, otherwise some windows launch via wslg
-          # KWIN_X11_REFRESH_RATE: "monitors" report 50Hz, force 60Hz instead
-          defaultWindowManager = "GDK_BACKEND=x11 KWIN_X11_REFRESH_RATE=60000 startplasma-x11";
-          extraConfDirCommands = ''
-            # 30-ish -> 60-ish fps
-            substituteInPlace $out/xrdp.ini \
-              --replace-fail "rfx_frame_interval=32" "rfx_frame_interval=16"
-            # force the layout I picked over what windows' rdp client requests
-            cat ${
-              pkgs.writeText "xrdp_keyboard_pc.ini" (
-                lib.generators.toINI { } {
-                  rdp_keyboard_pc = {
-                    keyboard_type = 4;
-                    variant = config.services.xserver.xkb.variant;
-                    rdp_layouts = "default_rdp_layouts";
-                    layouts_map = "default_layouts_map";
-                  };
-                }
-              )
-            } >> $out/xrdp_keyboard.ini
-          '';
-          audio.enable = true;
+        pipewire = {
+          pulse.enable = true;
+          alsa.enable = true;
         };
-        # no builtin pipewire support :(
-        pulseaudio.enable = true;
       })
     ];
-    # pulse server above supersedes everything wslg could ever symlink here (pid, socket, ...)
-    systemd.user.services.wslg-session.enable = !config.jemand771.wsl.desktop.enable;
+
+    ### warning: SLOP AHEAD ###
+
+    nixpkgs.overlays = lib.mkIf desktop.enable [
+      (_: prev: {
+        kdePackages = prev.kdePackages.overrideScope (
+          _: kprev: {
+            # wsl has no udmabuf: let kwin allocate its virtual outputs' buffers through gbm instead,
+            # but keep screencasts on memfd since those gbm buffers can't be shared with clients
+            kwin = kprev.kwin.overrideAttrs (old: {
+              patches = old.patches or [ ] ++ [
+                ../../patches/kwin-faux-without-udmabuf.patch
+                # memfd screencasts (all of them on wsl) re-rendered and read back whole outputs every frame
+                ../../patches/kwin-screencast-partial-readback.patch
+              ];
+            });
+            # upstream krdp serves a single monitor per connection
+            krdp = kprev.krdp.overrideAttrs (old: {
+              version = "6.7.5-niposch";
+              buildInputs = old.buildInputs ++ [ pkgs.pipewire ];
+              src = pkgs.fetchFromGitHub {
+                owner = "niposch";
+                repo = "krdp";
+                rev = "0b54f7197f88460085f1d7151c281807c20a9923";
+                hash = "sha256-rAO10g9Z6FSexD4HRN08ssOS/VfeNKhtgc1moe9jSnU=";
+              };
+              # nla: backport of upstream's sam database, mstsc insists on it
+              # kwin-virtual-backend: kwin --virtual outputs (Virtual-N) count as physical
+              # mstsc-multimon: announce the monitor union up front, anchor monitor defs on the primary
+              # progressive: no winpr thread pool (wakes every worker per tile), no dma-buf (not importable on wsl)
+              # audio: krdp MR !239 (rdpsnd output + audin microphone via pipewire), wslg's pulse server crackles and dies
+              patches = old.patches ++ [
+                ../../patches/krdp-niposch-nla.patch
+                ../../patches/krdp-niposch-kwin-virtual-backend.patch
+                ../../patches/krdp-niposch-mstsc-multimon.patch
+                ../../patches/krdp-niposch-progressive.patch
+                ../../patches/krdp-niposch-audio.patch
+              ];
+            });
+          }
+        );
+      })
+    ];
+
+    environment.etc."xdg/krdpserverrc" = lib.mkIf desktop.enable {
+      text = lib.generators.toINI { } {
+        General = {
+          MonitorMode = "virtual";
+          VirtualMonitorLayout = "client";
+          VirtualMonitorPolicy = "replace";
+          # rgb tiles: no yuv conversion or x264 blockiness, bandwidth doesn't matter on localhost
+          Codec = "progressive";
+          # its backlog detection reacts to local encode/decode time, not the network
+          AdaptiveQuality = false;
+        };
+      };
+    };
+
+    # mesa's d3d12 driver instead of llvmpipe, kwin alone burned ~5 cores compositing in software
+    wsl.useWindowsDriver = lib.mkIf desktop.enable true;
+    # the driver dlopens libd3d12/libdxcore, but nothing points it at /run/opengl-driver/lib
+    # (LD_LIBRARY_PATH would be ignored by the capability-wrapped kwin_wayland anyway)
+    hardware.graphics.package = lib.mkIf desktop.enable (
+      pkgs.mesa.overrideAttrs (old: {
+        # d3d12's deferred frees re-enter the slab manager's mutex, hanging kwin on glReadPixels
+        patches = old.patches or [ ] ++ [ ../../patches/mesa-pb-slab-unlock-provider.patch ];
+        nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.addDriverRunpath ];
+        postFixup = (old.postFixup or "") + ''
+          addDriverRunpath $out/lib/libgallium-*.so
+        '';
+      })
+    );
+
+    # even the virtual backend wants the drm node for gl compositing, which screencasting requires
+    users.users.${config.wsl.defaultUser}.extraGroups = lib.mkIf desktop.enable [
+      "video"
+      "render"
+    ];
+    # wslg mounts this read-only, which keeps xwayland from creating its socket
+    systemd.services.wslg-x11-socket-dir = lib.mkIf desktop.enable {
+      wantedBy = [ "multi-user.target" ];
+      unitConfig.ConditionPathIsMountPoint = "/tmp/.X11-unix";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = [
+          "${pkgs.util-linux}/bin/mount -o remount,bind,rw /tmp/.X11-unix"
+          "${pkgs.coreutils}/bin/chmod 1777 /tmp/.X11-unix"
+        ];
+      };
+    };
+    systemd.services.plasma-wayland = lib.mkIf desktop.enable {
+      description = "headless plasma wayland session";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "wslg-x11-socket-dir.service" ];
+      after = [
+        "systemd-user-sessions.service"
+        "wslg-x11-socket-dir.service"
+      ];
+      # kwin on wayland doesn't know about services.xserver.xkb
+      environment = {
+        XKB_DEFAULT_LAYOUT = config.services.xserver.xkb.layout;
+        XKB_DEFAULT_VARIANT = config.services.xserver.xkb.variant;
+        # only kwin gets the gpu (see below): d3d12 ignores the colour of qt quick's distance field text,
+        # and glx would otherwise pick zink on top of it
+        LIBGL_ALWAYS_SOFTWARE = "1";
+        # mesa's vulkan device select layer crashes on wsl's faux drm device (no pci info)
+        NODEVICE_SELECT = "1";
+      };
+      serviceConfig = {
+        User = config.wsl.defaultUser;
+        # logind session plus the usual pam environment, no tty or password involved
+        PAMName = "login";
+        WorkingDirectory = "~";
+        ExecStart = "${pkgs.kdePackages.plasma-workspace}/bin/startplasma-wayland";
+        Restart = "always";
+        RestartSec = 2;
+      };
+    };
+    systemd.user.services = lib.mkMerge [
+      {
+        # pipewire-pulse supersedes everything wslg could ever symlink here (pid, socket, ...)
+        wslg-session.enable = !desktop.enable;
+      }
+      (lib.mkIf desktop.enable {
+        plasma-kwin_wayland = {
+          overrideStrategy = "asDropin";
+          # the wrapper looks up kwin_wayland via the session's PATH, don't shadow it
+          path = lib.mkForce [ ];
+          environment = {
+            LIBGL_ALWAYS_SOFTWARE = "0";
+            GALLIUM_DRIVER = "d3d12";
+            # mesa only knows wsl's faux drm device as a software egl device, so kwin assumes
+            # llvmpipe and turns all animations off although d3d12 renders on the gpu
+            KWIN_EFFECTS_FORCE_ANIMATIONS = "1";
+            # mesa's d3d12 ignores the colour of qt quick's distance field text (tabbox, osds come out white/yellow)
+            QML_DISABLE_DISTANCEFIELD = "1";
+          };
+          # placeholder output, krdp replaces it with one virtual output per client monitor
+          serviceConfig.ExecStart = [
+            ""
+            "${pkgs.kdePackages.kwin}/bin/kwin_wayland_wrapper --xwayland --virtual --width 1920 --height 1080"
+          ];
+        };
+        # otherwise it starts with wslg's WAYLAND_DISPLAY/DISPLAY and its extractor crash-loops
+        kde-baloo = {
+          overrideStrategy = "asDropin";
+          path = lib.mkForce [ ];
+          after = [ "plasma-kwin_wayland.service" ];
+        };
+        "app-org.kde.krdpserver" = {
+          description = "krdp server";
+          wantedBy = [ "plasma-workspace.target" ];
+          after = [ "plasma-core.target" ];
+          path = [ pkgs.kdePackages.libkscreen ];
+          serviceConfig = {
+            ExecStart = krdpserver;
+            LoadCredential = "password:%h/.config/krdp/password";
+            Restart = "on-failure";
+            RestartSec = 5;
+          };
+        };
+      })
+    ];
   };
 }

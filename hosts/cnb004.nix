@@ -223,6 +223,11 @@
       jemand771.kubeconfig.enable = true;
       jemand771.plasma = {
         enable = true;
+        panelScreens = [
+          0
+          1
+          2
+        ];
         taskbarLaunchers = [
           "applications:org.kde.dolphin.desktop"
           "applications:firefox.desktop"

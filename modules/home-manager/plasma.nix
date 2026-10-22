@@ -27,7 +27,9 @@
     # overrideConfig = true;
     workspace = {
       lookAndFeel = "org.kde.breezedark.desktop";
+      enableMiddleClickPaste = false;
     };
+    session.sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
     panels = [
       {
         screen = config.jemand771.plasma.panelScreens;

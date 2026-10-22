@@ -1,0 +1,15 @@
+diff --git a/src/PlasmaScreencastV1Session.cpp b/src/PlasmaScreencastV1Session.cpp
+index 38aa60c..436945c 100644
+--- a/src/PlasmaScreencastV1Session.cpp
++++ b/src/PlasmaScreencastV1Session.cpp
+@@ -807,6 +807,10 @@ void PlasmaScreencastV1Session::injectNonMotionEvent(const std::shared_ptr<QEven
+             button = BTN_MIDDLE;
+         } else if (me->button() == Qt::RightButton) {
+             button = BTN_RIGHT;
++        } else if (me->button() == Qt::BackButton) {
++            button = BTN_SIDE;
++        } else if (me->button() == Qt::ForwardButton) {
++            button = BTN_EXTRA;
+         } else {
+             qCWarning(KRDP) << "Unsupported mouse button" << me->button();
+             return;

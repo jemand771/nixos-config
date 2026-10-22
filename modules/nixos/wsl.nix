@@ -154,12 +154,14 @@ in
               # mstsc-multimon: announce the monitor union up front, anchor monitor defs on the primary
               # progressive: no winpr thread pool (wakes every worker per tile), no dma-buf (not importable on wsl)
               # audio: krdp MR !239 (rdpsnd output + audin microphone via pipewire), wslg's pulse server crackles and dies
+              # mouse-xbuttons: back/forward were dropped by the plasma input path (upstream 6.8 too)
               patches = old.patches ++ [
                 ../../patches/krdp-niposch-nla.patch
                 ../../patches/krdp-niposch-kwin-virtual-backend.patch
                 ../../patches/krdp-niposch-mstsc-multimon.patch
                 ../../patches/krdp-niposch-progressive.patch
                 ../../patches/krdp-niposch-audio.patch
+                ../../patches/krdp-niposch-mouse-xbuttons.patch
               ];
             });
           }

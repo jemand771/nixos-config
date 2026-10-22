@@ -35,7 +35,7 @@
     };
 
     # vscode antinag
-    environment.variables.DONT_PROMPT_WSL_INSTALL = "1";
+    environment.sessionVariables.DONT_PROMPT_WSL_INSTALL = "1";
 
     # eth0 configured by windows, dns via resolved so vpns can add split dns
     wsl.wslConf.network.generateResolvConf = lib.mkIf config.networking.networkmanager.enable false;

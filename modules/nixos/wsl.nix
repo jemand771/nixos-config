@@ -120,6 +120,7 @@ in
         pipewire = {
           pulse.enable = true;
           alsa.enable = true;
+          wireplumber.extraConfig.log-linking."context.properties"."log.level" = "2,s-linking:4";
         };
       })
     ];

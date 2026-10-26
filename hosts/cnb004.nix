@@ -162,12 +162,13 @@
   # TODO svp2 schroot config, or ignore and abandon? (build locally and just reference hardcoded path to avoid delays from IFD?)
   # TODO warning, dangerous and ugly, see https://github.com/NixOS/nixpkgs/issues/30723
   nix.settings.extra-sandbox-paths = [ "/docker-auth.json" ];
-  environment.systemPackages = [
-    pkgs.play
-    pkgs.skcopy
-    pkgs.bomgar-acc
-    pkgs.password-depot
-    pkgs.outlook-web
+  environment.systemPackages = with pkgs; [
+    bomgar-acc
+    ktimetracker
+    outlook-web
+    password-depot
+    play
+    skcopy
   ];
   system.extraDependencies = [ pkgs.bomgar-acc.installer ];
   programs.firefox = {

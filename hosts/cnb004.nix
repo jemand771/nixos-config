@@ -171,6 +171,10 @@
     skcopy
   ];
   system.extraDependencies = [ pkgs.bomgar-acc.installer ];
+  environment.etc."teams-for-linux/config.json".text = builtins.toJSON {
+    incomingCalls.toast = true;
+    notifications.timeoutType = "never";
+  };
   programs.firefox = {
     enable = true;
     policies.EnableTrackingProtection.Category = "strict";

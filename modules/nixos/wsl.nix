@@ -156,6 +156,8 @@ in
               # progressive: no winpr thread pool (wakes every worker per tile), no dma-buf (not importable on wsl)
               # audio: krdp MR !239 (rdpsnd output + audin microphone via pipewire), wslg's pulse server crackles and dies
               # mouse-xbuttons: back/forward were dropped by the plasma input path (upstream 6.8 too)
+              # raster-copy: memfd frames went through 4 full-frame copies/swaps on the main thread, now one copy of the damage,
+              #   made before kpipewire returns the buffer to kwin (queued, it raced kwin's next render: tearing, stale rects)
               patches = old.patches ++ [
                 ../../patches/krdp-niposch-nla.patch
                 ../../patches/krdp-niposch-kwin-virtual-backend.patch
@@ -163,6 +165,7 @@ in
                 ../../patches/krdp-niposch-progressive.patch
                 ../../patches/krdp-niposch-audio.patch
                 ../../patches/krdp-niposch-mouse-xbuttons.patch
+                ../../patches/krdp-niposch-raster-copy.patch
               ];
             });
           }

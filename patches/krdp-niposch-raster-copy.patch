@@ -1,0 +1,77 @@
+diff --git a/src/CaptureStream.cpp b/src/CaptureStream.cpp
+index 5d8ed52..13cfafa 100644
+--- a/src/CaptureStream.cpp
++++ b/src/CaptureStream.cpp
+@@ -4,6 +4,7 @@
+ #include "CaptureStream.h"
+ #include "krdp_logging.h"
+ #include <QRegion>
++#include <cstring>
+ #include <pipewire/pipewire.h>
+ #include <unistd.h>
+ namespace KRdp
+@@ -105,7 +106,27 @@ void CaptureStream::start()
+             if (frame.cursor)
+                 Q_EMIT cursorChanged(*frame.cursor);
+             QImage image;
+-            if (frame.dataFrame)
++            QRegion damage;
++            if (frame.dataFrame && (frame.dataFrame->format == SPA_VIDEO_FORMAT_BGRx || frame.dataFrame->format == SPA_VIDEO_FORMAT_BGRA)) {
++                // little-endian BGRx already is RGB32; toImage() would swap to RGBA and the conversion swap back
++                const auto& data = *frame.dataFrame;
++                const QRect bounds(QPoint(0, 0), data.size);
++                if (m_raster.size() != data.size) {
++                    m_raster = QImage(data.size, QImage::Format_RGB32);
++                    damage = bounds;
++                } else {
++                    damage = frame.damage.value_or(QRegion(bounds)) & bounds;
++                }
++                // only detaches (a full copy) while the encoder still holds the previous frame
++                uchar* dst = m_raster.bits();
++                const auto* src = static_cast<const uchar*>(data.data);
++                for (const QRect& rect : damage) {
++                    for (int y = rect.top(); y <= rect.bottom(); ++y) {
++                        memcpy(dst + y * m_raster.bytesPerLine() + rect.left() * 4, src + y * data.stride + rect.left() * 4, rect.width() * 4);
++                    }
++                }
++                image = m_raster;
++            } else if (frame.dataFrame)
+                 image = frame.dataFrame->toImage().convertToFormat(QImage::Format_RGB32).copy();
+             else if (frame.dmabuf) {
+                 QImage downloaded(QSize(frame.dmabuf->width, frame.dmabuf->height), QImage::Format_RGBA8888_Premultiplied);
+@@ -118,9 +139,12 @@ void CaptureStream::start()
+             if (image.isNull())
+                 return;
+             Q_EMIT sizeChanged(image.size());
+-            Q_EMIT rasterFrame(image, frame.damage.value_or(QRegion(QRect(QPoint(0, 0), image.size()))));
++            if (damage.isEmpty())
++                damage = frame.damage.value_or(QRegion(QRect(QPoint(0, 0), image.size())));
++            Q_EMIT rasterFrame(image, damage);
+         },
+-        Qt::QueuedConnection);
++        // kpipewire hands the buffer back to the compositor right after this returns, copy before that
++        Qt::DirectConnection);
+     if (!m_source->createStream(m_nodeId, m_fd >= 0 ? ::dup(m_fd) : -1)) {
+         qCWarning(KRDP) << "Could not create progressive source stream" << m_source->error();
+         m_source.reset();
+@@ -132,6 +156,7 @@ void CaptureStream::stop()
+ {
+     m_requested = false;
+     ++m_generation;
++    m_raster = QImage();
+     if (m_encoded)
+         m_encoded->stop();
+     if (m_source) {
+diff --git a/src/CaptureStream.h b/src/CaptureStream.h
+index 1dae3bb..d4a50ee 100644
+--- a/src/CaptureStream.h
++++ b/src/CaptureStream.h
+@@ -50,6 +50,8 @@ private:
+     std::unique_ptr<PipeWireEncodedStream> m_encoded;
+     std::unique_ptr<PipeWireSourceStream> m_source;
+     DmaBufHandler m_dmaBuf;
++    // last raster frame, memfd buffers only carry valid pixels in their damage
++    QImage m_raster;
+     uint m_nodeId = 0;
+     int m_fd = -1;
+     bool m_progressive = false;

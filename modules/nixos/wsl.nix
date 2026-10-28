@@ -232,6 +232,8 @@ in
         # only kwin gets the gpu (see below): d3d12 ignores the colour of qt quick's distance field text,
         # and glx would otherwise pick zink on top of it
         LIBGL_ALWAYS_SOFTWARE = "1";
+        # llvmpipe repaints qt quick windows every frame (e.g. spectacle) software doesn't
+        QT_QUICK_BACKEND = "software";
         # mesa's vulkan device select layer crashes on wsl's faux drm device (no pci info)
         NODEVICE_SELECT = "1";
       };
@@ -263,6 +265,7 @@ in
             KWIN_EFFECTS_FORCE_ANIMATIONS = "1";
             # mesa's d3d12 ignores the colour of qt quick's distance field text (tabbox, osds come out white/yellow)
             QML_DISABLE_DISTANCEFIELD = "1";
+            QT_QUICK_BACKEND = "";
           };
           # placeholder output, krdp replaces it with one virtual output per client monitor
           serviceConfig.ExecStart = [

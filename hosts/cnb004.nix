@@ -249,6 +249,8 @@
         "kwalletrc"
       ];
       programs.plasma.kscreenlocker.autoLock = false;
+      # TODO shouldn't have to disable this, but causes yellow text afterimages atm
+      programs.plasma.kwin.effects.blur.enable = false;
     }
   ];
   deployment.targetHost = null;

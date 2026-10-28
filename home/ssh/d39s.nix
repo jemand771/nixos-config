@@ -54,7 +54,19 @@
             name = "postal";
             ip = "mail.d39s-mail.de";
           }
-          # TODO proxmox
+          # int cluster
+          {
+            name = "int1";
+            ip = "int1.d39s.de";
+          }
+          {
+            name = "int2";
+            ip = "int2.d39s.de";
+          }
+          {
+            name = "int3";
+            ip = "int3.d39s.de";
+          }
           # wp cluster
           {
             name = "wp-control-1";

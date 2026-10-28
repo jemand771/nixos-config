@@ -65,7 +65,10 @@ in
         ];
         text = ''
           for _ in $(seq 240); do
-            ss -Htln 'sport = :${toString rdpPort}' | grep -q . && exit 0
+            if ss -Htln 'sport = :${toString rdpPort}' | grep -q .; then
+              ip -4 -br addr show dev eth0 | tr -s ' ' | cut -d ' ' -f 3 | cut -d / -f 1
+              exit 0
+            fi
             sleep 0.5
           done
           echo "nothing listening on port ${toString rdpPort}" >&2

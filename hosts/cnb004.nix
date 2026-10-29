@@ -163,6 +163,7 @@
   # TODO warning, dangerous and ugly, see https://github.com/NixOS/nixpkgs/issues/30723
   nix.settings.extra-sandbox-paths = [ "/docker-auth.json" ];
   environment.systemPackages = with pkgs; [
+    apache-directory-studio
     bomgar-acc
     ktimetracker
     outlook-web

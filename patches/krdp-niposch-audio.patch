@@ -16,7 +16,7 @@ new file mode 100644
 index 0000000..588795b
 --- /dev/null
 +++ b/src/AudinStream.cpp
-@@ -0,0 +1,263 @@
+@@ -0,0 +1,261 @@
 +// SPDX-FileCopyrightText: 2026 Nick Haghiri <nick@haghiri.net>
 +//
 +// This file is roughly based on grd-rdp-dvc-audio-input.c from Gnome Remote
@@ -202,8 +202,6 @@ index 0000000..588795b
 +                                             "Playback",
 +                                             PW_KEY_MEDIA_CLASS,
 +                                             "Audio/Source",
-+                                             PW_KEY_NODE_SUSPEND_ON_IDLE,
-+                                             "true",
 +                                             PW_KEY_NODE_NAME,
 +                                             "krdp_microphone",
 +                                             PW_KEY_NODE_DESCRIPTION,

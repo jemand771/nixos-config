@@ -123,7 +123,7 @@ in
         pipewire = {
           pulse.enable = true;
           alsa.enable = true;
-          wireplumber.extraConfig.log-linking."context.properties"."log.level" = "2,s-linking:4";
+          wireplumber.extraConfig.log-suspend."context.properties"."log.level" = "2,s-node:4,si-audio-adapter:4";
         };
       })
     ];
@@ -158,6 +158,8 @@ in
               # mstsc-multimon: announce the monitor union up front, anchor monitor defs on the primary
               # progressive: no winpr thread pool (wakes every worker per tile), no dma-buf (not importable on wsl)
               # audio: krdp MR !239 (rdpsnd output + audin microphone via pipewire), wslg's pulse server crackles and dies
+              #   minus the microphone's suspend-on-idle: teams pauses its capture for ~2ms when joining, the instant
+              #   suspend likely raced the renegotiation and occasionally left the source's ports without a format
               # mouse-xbuttons: back/forward were dropped by the plasma input path (upstream 6.8 too)
               # raster-copy: memfd frames went through 4 full-frame copies/swaps on the main thread, now one copy of the damage,
               #   made before kpipewire returns the buffer to kwin (queued, it raced kwin's next render: tearing, stale rects)
@@ -259,6 +261,7 @@ in
         wslg-session.enable = !desktop.enable;
       }
       (lib.mkIf desktop.enable {
+        pipewire.environment.PIPEWIRE_DEBUG = "2,pw.link:3,pw.node:3";
         plasma-kwin_wayland = {
           overrideStrategy = "asDropin";
           # the wrapper looks up kwin_wayland via the session's PATH, don't shadow it

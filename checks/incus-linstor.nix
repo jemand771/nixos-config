@@ -107,6 +107,7 @@ pkgs.testers.runNixOSTest {
 
     with subtest("create linstor-backed pool"):
         # preseed(-member) ran at startup and failed
+        node1.execute("systemctl restart incus-preseed.service")
         for node in machines:
             node.succeed("systemctl restart incus-preseed-member.service")
         node1.succeed("systemctl restart incus-preseed.service")

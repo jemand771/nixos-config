@@ -154,6 +154,8 @@
         );
     };
 
+    # after bootstrap: rerun preseed once, rerun preseed-member on all nodes, rerun preseed once
+    # (or just reboot everything a bunch of times)
     systemd.services.incus-preseed-member = {
       description = "Incus preseed for member specific config";
       enableStrictShellChecks = true;

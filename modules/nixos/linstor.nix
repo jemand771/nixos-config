@@ -118,6 +118,15 @@
         systemd.suppressedSystemUnits = [ "drbd.service" ];
         # force drbd 9 (in-tree is v8)
         boot.extraModulePackages = [ config.boot.kernelPackages.drbd ];
+        boot.kernelPatches = [
+          {
+            name = "revert-net-convert-proto_ops-bind-callbacks-to-use-s.patch";
+            patch = pkgs.fetchurl {
+              url = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/plain/queue-6.18/revert-net-convert-proto_ops-bind-callbacks-to-use-s.patch?id=96cb4b29cdc7bd66e62e2c2104afd1b327913165";
+              hash = "sha256-vO8lBLB8Od9eYgu08wJq4bu8/jjz++lY8d+19Ae/ELw=";
+            };
+          }
+        ];
 
         systemd.services.linstor-satellite = {
           description = "LINSTOR satellite";

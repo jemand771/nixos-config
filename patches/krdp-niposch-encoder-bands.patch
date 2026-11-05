@@ -1,0 +1,284 @@
+diff --git a/src/VideoStream.cpp b/src/VideoStream.cpp
+index fcae96e..47fed58 100644
+--- a/src/VideoStream.cpp
++++ b/src/VideoStream.cpp
+@@ -14,6 +14,7 @@
+ #include <cmath>
+ #include <cstdint>
+ #include <condition_variable>
++#include <latch>
+ #include <limits>
+ #include <mutex>
+ #include <thread>
+@@ -23,6 +24,7 @@
+ #include <QQueue>
+ #include <QRect>
+ #include <QStringList>
++#include <QThreadPool>
+ #include <QTimer>
+ 
+ #include <freerdp/freerdp.h>
+@@ -251,9 +253,55 @@ uint32_t gfxQoEFrameAcknowledge(RdpgfxServerContext *, const RDPGFX_QOE_FRAME_AC
+     return CHANNEL_RC_OK;
+ }
+ 
++constexpr int ProgressiveTileSize = 64;
++// below this a band costs more in pdu and wakeup overhead than it saves in encoding time
++constexpr int MinTilesPerBand = 32;
++constexpr int DefaultEncoderThreads = 4;
++
++int encoderThreadCount()
++{
++    static const int count = [] {
++        bool ok = false;
++        const int value = qEnvironmentVariableIntValue("KRDP_ENCODER_THREADS", &ok);
++        return ok ? std::clamp(value, 1, 16) : DefaultEncoderThreads;
++    }();
++    return count;
++}
++
++// Tile rows with roughly equal damage per band. Bands only ever start on a tile row, so no tile
++// is shared and each one can go through its own context as a self-contained progressive message.
++std::vector<int> progressiveBandEdges(const REGION16 *region, int height, int maxBands)
++{
++    std::vector<int> rowTiles((height + ProgressiveTileSize - 1) / ProgressiveTileSize, 0);
++    UINT32 rectCount = 0;
++    const RECTANGLE_16 *rects = region16_rects(region, &rectCount);
++    int totalTiles = 0;
++    for (UINT32 i = 0; i < rectCount; ++i) {
++        const int tiles = (rects[i].right - 1) / ProgressiveTileSize - rects[i].left / ProgressiveTileSize + 1;
++        for (int row = rects[i].top / ProgressiveTileSize; row <= (rects[i].bottom - 1) / ProgressiveTileSize; ++row) {
++            rowTiles[row] += tiles;
++            totalTiles += tiles;
++        }
++    }
++
++    const int bandCount = std::clamp(totalTiles / MinTilesPerBand, 1, maxBands);
++    std::vector<int> edges{0};
++    int seenTiles = 0;
++    for (size_t row = 0; row + 1 < rowTiles.size() && int(edges.size()) < bandCount; ++row) {
++        seenTiles += rowTiles[row];
++        if (seenTiles * bandCount >= totalTiles * int(edges.size())) {
++            edges.push_back(int(row + 1) * ProgressiveTileSize);
++        }
++    }
++    edges.push_back(height);
++    return edges;
++}
++
+ struct Surface {
+     uint16_t id = 0;
+     std::shared_ptr<PROGRESSIVE_CONTEXT> progressive;
++    // progressive first, one per encoder thread
++    std::vector<std::shared_ptr<PROGRESSIVE_CONTEXT>> encoders;
+     bool needsFullRaster = true;
+     QSize size;
+     // Top-left in RDP desktop space, as passed to MapSurfaceToOutput.
+@@ -266,6 +314,7 @@ public:
+     using RdpGfxContextPtr = std::unique_ptr<RdpgfxServerContext, decltype(&rdpgfx_server_context_free)>;
+ 
+     RdpConnection *session;
++    QThreadPool encoderPool;
+ 
+     RdpGfxContextPtr gfxContext = RdpGfxContextPtr(nullptr, rdpgfx_server_context_free);
+ 
+@@ -415,6 +464,8 @@ VideoStream::VideoStream(RdpConnection *session)
+     , d(std::make_unique<Private>())
+ {
+     d->session = session;
++    d->encoderPool.setMaxThreadCount(std::max(encoderThreadCount() - 1, 1));
++    d->encoderPool.setExpiryTimeout(-1);
+ 
+     // Needed for the queued negotiatedCodecChanged connection (emitted from the
+     // FreeRDP peer thread) and, once S2+ send them, chromaTimingReported.
+@@ -999,6 +1050,12 @@ bool VideoStream::performReset(const QSize &desktopSize, const QVector<VideoMoni
+             .size = entry.size,
+             .origin = entry.origin,
+         });
++        if (auto &surface = d->surfaces.last(); surface.progressive) {
++            surface.encoders.push_back(surface.progressive);
++            for (int i = 1; i < encoderThreadCount(); ++i) {
++                surface.encoders.emplace_back(progressive_context_new_ex(TRUE, THREADING_FLAGS_DISABLE_THREADS), progressive_context_free);
++            }
++        }
+         if (negotiatedCodec() == VideoCodec::Progressive && (!d->surfaces.last().progressive || progressive_create_surface_context(d->surfaces.last().progressive.get(), surfaceId, entry.size.width(), entry.size.height()) < 0)) {
+             d->pendingReset = true; return false;
+         }
+@@ -1133,7 +1190,7 @@ bool VideoStream::sendFrame(const VideoFrame &frame)
+         Q_EMIT keyFrameRequested(frame.monitorIndex);
+     }
+ 
+-    if (raster) return sendRasterFrame(frame, surface.id, surface.progressive, fullRaster);
++    if (raster) return sendRasterFrame(frame, surface.id, surface.encoders, fullRaster);
+ 
+     auto frameId = d->frameId++;
+ 
+@@ -1201,7 +1258,7 @@ bool VideoStream::sendFrame(const VideoFrame &frame)
+ 
+     return true;
+ }
+-bool VideoStream::sendRasterFrame(const VideoFrame &frame, uint16_t surfaceId, const std::shared_ptr<PROGRESSIVE_CONTEXT> &context, bool fullFrame)
++bool VideoStream::sendRasterFrame(const VideoFrame &frame, uint16_t surfaceId, const std::vector<std::shared_ptr<PROGRESSIVE_CONTEXT>> &encoders, bool fullFrame)
+ {
+     if (frame.image.isNull()) {
+         return true;
+@@ -1220,23 +1277,64 @@ bool VideoStream::sendRasterFrame(const VideoFrame &frame, uint16_t surfaceId, c
+         return true;
+     }
+ 
+-    BYTE *encodedData = nullptr;
+-    UINT32 encodedSize = 0;
++    struct Band {
++        REGION16 region;
++        BYTE *data = nullptr;
++        UINT32 size = 0;
++        int status = 0;
++    };
++
+     const UINT32 rectCount = region16_n_rects(&*invalidRegion);
+-    const int compressionStatus = progressive_compress(context.get(),
+-                                                       image.constBits(),
+-                                                       image.sizeInBytes(),
+-                                                       PIXEL_FORMAT_BGRX32,
+-                                                       image.width(),
+-                                                       image.height(),
+-                                                       image.bytesPerLine(),
+-                                                       &*invalidRegion,
+-                                                       &encodedData,
+-                                                       &encodedSize);
+-    if (compressionStatus < 0 || !encodedData || encodedSize == 0) {
++    const auto edges = progressiveBandEdges(&*invalidRegion, image.height(), int(encoders.size()));
++    std::vector<Band> bands(edges.size() - 1);
++    for (size_t i = 0; i < bands.size(); ++i) {
++        const RECTANGLE_16 bandRect{0, UINT16(edges[i]), UINT16(image.width()), UINT16(edges[i + 1])};
++        region16_init(&bands[i].region);
++        region16_intersect_rect(&bands[i].region, &*invalidRegion, &bandRect);
++    }
++
++    const auto encodeBand = [&](size_t i) {
++        bands[i].status = progressive_compress(encoders[i].get(),
++                                               image.constBits(),
++                                               image.sizeInBytes(),
++                                               PIXEL_FORMAT_BGRX32,
++                                               image.width(),
++                                               image.height(),
++                                               image.bytesPerLine(),
++                                               &bands[i].region,
++                                               &bands[i].data,
++                                               &bands[i].size);
++    };
++
++    std::latch encoded(std::ptrdiff_t(bands.size() - 1));
++    for (size_t i = 1; i < bands.size(); ++i) {
++        d->encoderPool.start([&, i] {
++            encodeBand(i);
++            encoded.count_down();
++        });
++    }
++    encodeBand(0);
++    encoded.wait();
++
++    const auto freeRegions = [&] {
++        for (auto &band : bands) {
++            region16_uninit(&band.region);
++        }
+         region16_uninit(&*invalidRegion);
++    };
++
++    for (const auto &band : bands) {
++        if (band.status < 0 || (band.status > 0 && !band.data)) {
++            qCWarning(KRDP) << "Failed to compress progressive frame"
++                            << "status" << band.status << "rects" << rectCount << "size" << frame.size;
++            freeRegions();
++            return true;
++        }
++    }
++    if (std::all_of(bands.begin(), bands.end(), [](const Band &band) { return band.size == 0; })) {
+         qCWarning(KRDP) << "Failed to compress progressive frame"
+-                        << "status" << compressionStatus << "rects" << rectCount << "size" << frame.size;
++                        << "rects" << rectCount << "size" << frame.size;
++        freeRegions();
+         return true;
+     }
+ 
+@@ -1258,30 +1356,48 @@ bool VideoStream::sendRasterFrame(const VideoFrame &frame, uint16_t surfaceId, c
+     startFramePdu.frameId = frameId;
+     endFramePdu.frameId = frameId;
+ 
+-    const RECTANGLE_16 *extents = region16_extents(&*invalidRegion);
+-
+     RDPGFX_SURFACE_COMMAND surfaceCommand;
+     surfaceCommand.surfaceId = surfaceId;
+     surfaceCommand.codecId = RDPGFX_CODECID_CAPROGRESSIVE;
+     surfaceCommand.contextId = 1;
+     surfaceCommand.format = PIXEL_FORMAT_BGRX32;
+-    surfaceCommand.left = extents->left;
+-    surfaceCommand.top = extents->top;
+-    surfaceCommand.right = extents->right;
+-    surfaceCommand.bottom = extents->bottom;
+     surfaceCommand.width = frame.size.width();
+     surfaceCommand.height = frame.size.height();
+-    surfaceCommand.length = encodedSize;
+-    surfaceCommand.data = encodedData;
+     surfaceCommand.extra = nullptr;
+ 
+-    const UINT status = d->gfxContext->SurfaceFrameCommand(d->gfxContext.get(), &surfaceCommand, &startFramePdu, &endFramePdu);
++    const auto setBand = [&](const Band &band) {
++        const RECTANGLE_16 *extents = region16_extents(&band.region);
++        surfaceCommand.left = extents->left;
++        surfaceCommand.top = extents->top;
++        surfaceCommand.right = extents->right;
++        surfaceCommand.bottom = extents->bottom;
++        surfaceCommand.length = band.size;
++        surfaceCommand.data = band.data;
++    };
++
++    UINT status = CHANNEL_RC_OK;
++    if (bands.size() == 1) {
++        setBand(bands.front());
++        status = d->gfxContext->SurfaceFrameCommand(d->gfxContext.get(), &surfaceCommand, &startFramePdu, &endFramePdu);
++    } else {
++        status = d->gfxContext->StartFrame(d->gfxContext.get(), &startFramePdu);
++        for (const auto &band : bands) {
++            if (status != CHANNEL_RC_OK || band.size == 0) {
++                continue;
++            }
++            setBand(band);
++            status = d->gfxContext->SurfaceCommand(d->gfxContext.get(), &surfaceCommand);
++        }
++        if (status == CHANNEL_RC_OK) {
++            status = d->gfxContext->EndFrame(d->gfxContext.get(), &endFramePdu);
++        }
++    }
+     if (status != CHANNEL_RC_OK) {
+-        qCWarning(KRDP) << "SurfaceFrameCommand failed" << status << "frameId" << frameId << "surface" << surfaceId << "encodedBytes" << encodedSize
++        qCWarning(KRDP) << "SurfaceFrameCommand failed" << status << "frameId" << frameId << "surface" << surfaceId << "bands" << bands.size()
+                         << "damageRects" << rectCount;
+     }
+ 
+-    region16_uninit(&*invalidRegion);
++    freeRegions();
+     return true;
+ }
+ 
+diff --git a/src/VideoStream.h b/src/VideoStream.h
+index a8e1dcb..bef4605 100644
+--- a/src/VideoStream.h
++++ b/src/VideoStream.h
+@@ -6,6 +6,7 @@
+ 
+ #include <memory>
+ #include <optional>
++#include <vector>
+ 
+ #include <QImage>
+ #include <QObject>
+@@ -196,7 +197,7 @@ private:
+      * then keeps the frame at the head of the queue instead of dropping it.
+      */
+     bool sendFrame(const VideoFrame &frame);
+-    bool sendRasterFrame(const VideoFrame &frame, uint16_t surfaceId, const std::shared_ptr<PROGRESSIVE_CONTEXT> &context, bool fullFrame);
++    bool sendRasterFrame(const VideoFrame &frame, uint16_t surfaceId, const std::vector<std::shared_ptr<PROGRESSIVE_CONTEXT>> &encoders, bool fullFrame);
+ 
+     class Private;
+     const std::unique_ptr<Private> d;

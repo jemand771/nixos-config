@@ -171,6 +171,7 @@ in
                 ../../patches/krdp-niposch-audio.patch
                 ../../patches/krdp-niposch-mouse-xbuttons.patch
                 ../../patches/krdp-niposch-raster-copy.patch
+                ../../patches/krdp-niposch-encoder-bands.patch
               ];
             });
           }

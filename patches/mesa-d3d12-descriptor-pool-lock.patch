@@ -1,0 +1,52 @@
+--- a/src/gallium/drivers/d3d12/d3d12_batch.cpp
++++ b/src/gallium/drivers/d3d12/d3d12_batch.cpp
+@@ -206,8 +206,11 @@
+       _mesa_set_clear(batch->sampler_views, delete_sampler_view);
+ 
+       _mesa_set_clear(batch->queries, delete_query);
++      struct d3d12_screen *screen = d3d12_screen(ctx->base.screen);
++      mtx_lock(&screen->descriptor_pool_mutex);
+       util_dynarray_foreach(&batch->zombie_samplers, d3d12_descriptor_handle, handle)
+          d3d12_descriptor_handle_free(handle);
++      mtx_unlock(&screen->descriptor_pool_mutex);
+       util_dynarray_clear(&batch->zombie_samplers);
+       d3d12_descriptor_heap_clear(batch->view_heap);
+       d3d12_descriptor_heap_clear(batch->sampler_heap);
+--- a/src/gallium/drivers/d3d12/d3d12_context_graphics.cpp
++++ b/src/gallium/drivers/d3d12/d3d12_context_graphics.cpp
+@@ -660,15 +660,21 @@
+    memcpy(desc.BorderColor, state->border_color.f, sizeof(float) * 4);
+ 
+    // TODO Normalized Coordinates?
++   /* With a threaded context this runs on the application thread, while the
++    * driver thread frees handles of the same pool when it resets a batch. */
++   mtx_lock(&screen->descriptor_pool_mutex);
+    d3d12_descriptor_pool_alloc_handle(ctx->sampler_pool, &ss->handle);
++   mtx_unlock(&screen->descriptor_pool_mutex);
+    screen->dev->CreateSampler(&desc, ss->handle.cpu_handle);
+ 
+    if (state->compare_mode == PIPE_TEX_COMPARE_R_TO_TEXTURE) {
+       desc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+       desc.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+ 
++      mtx_lock(&screen->descriptor_pool_mutex);
+       d3d12_descriptor_pool_alloc_handle(ctx->sampler_pool,
+                                          &ss->handle_without_shadow);
++      mtx_unlock(&screen->descriptor_pool_mutex);
+       screen->dev->CreateSampler(&desc,
+                                  ss->handle_without_shadow.cpu_handle);
+       ss->is_shadow_sampler = true;
+@@ -1037,7 +1043,13 @@
+                            struct pipe_sampler_view *pview)
+ {
+    struct d3d12_sampler_view *view = d3d12_sampler_view(pview);
++   struct d3d12_screen *screen = d3d12_screen(pctx->screen);
++
++   /* d3d12_create_sampler_view allocates from this pool on the application
++    * thread of a threaded context, this can run on the driver thread. */
++   mtx_lock(&screen->descriptor_pool_mutex);
+    d3d12_descriptor_handle_free(&view->handle);
++   mtx_unlock(&screen->descriptor_pool_mutex);
+    pipe_resource_reference(&view->base.texture, NULL);
+    FREE(view);
+ }

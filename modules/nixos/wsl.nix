@@ -199,8 +199,13 @@ in
     # (LD_LIBRARY_PATH would be ignored by the capability-wrapped kwin_wayland anyway)
     hardware.graphics.package = lib.mkIf desktop.enable (
       pkgs.mesa.overrideAttrs (old: {
-        # d3d12's deferred frees re-enter the slab manager's mutex, hanging kwin on glReadPixels
-        patches = old.patches or [ ] ++ [ ../../patches/mesa-pb-slab-unlock-provider.patch ];
+        patches = old.patches or [ ] ++ [
+          # d3d12's deferred frees re-enter the slab manager's mutex, hanging kwin on glReadPixels
+          ../../patches/mesa-pb-slab-unlock-provider.patch
+          # d3d12 frees sampler view descriptors without the lock it allocates them under. with a threaded
+          # context (firefox) two views end up sharing a slot, so draws sample the wrong texture
+          ../../patches/mesa-d3d12-descriptor-pool-lock.patch
+        ];
         nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.addDriverRunpath ];
         postFixup = (old.postFixup or "") + ''
           addDriverRunpath $out/lib/libgallium-*.so

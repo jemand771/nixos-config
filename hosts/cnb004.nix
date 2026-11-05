@@ -181,9 +181,22 @@
   };
   programs.firefox = {
     enable = true;
+    package = pkgs.firefox.overrideAttrs (old: {
+      makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
+        "--set"
+        "GALLIUM_DRIVER"
+        "d3d12"
+        "--set"
+        "MESA_D3D12_DEFAULT_ADAPTER_NAME"
+        "NVIDIA"
+      ];
+    });
     policies.EnableTrackingProtection.Category = "strict";
     policies.PasswordManagerEnabled = false;
-    policies.Preferences."browser.sessionstore.max_resumed_crashes" = -1;
+    policies.Preferences = {
+      "browser.sessionstore.max_resumed_crashes" = -1;
+      "gfx.webrender.all" = true;
+    };
     policies.FirefoxHome = {
       Stories = false;
       SponsoredStories = false;

@@ -143,6 +143,10 @@ in
                 ../../patches/kwin-screencast-partial-readback.patch
               ];
             });
+            # QT_QUICK_BACKEND=software (see below) drops the custom material spectacle's overlay draws its frozen still with
+            kquickimageeditor = kprev.kquickimageeditor.overrideAttrs (old: {
+              patches = old.patches or [ ] ++ [ ../../patches/kquickimageeditor-software-base-image.patch ];
+            });
             # upstream krdp serves a single monitor per connection
             krdp = kprev.krdp.overrideAttrs (old: {
               version = "6.7.5-niposch";

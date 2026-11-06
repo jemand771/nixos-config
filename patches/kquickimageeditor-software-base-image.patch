@@ -1,0 +1,119 @@
+diff --git a/src/annotations/annotationviewport.cpp b/src/annotations/annotationviewport.cpp
+index 6196e77..be9261a 100644
+--- a/src/annotations/annotationviewport.cpp
++++ b/src/annotations/annotationviewport.cpp
+@@ -15,6 +15,7 @@
+ #include <QSGTextureMaterial>
+ #include <QSGMaterialShader>
+ #include <QSGImageNode>
++#include <QSGRendererInterface>
+ #include <QSGTexture>
+ #include <QScreen>
+ 
+@@ -250,7 +251,8 @@ QPointF AnnotationViewportPrivate::inputOffset() const
+ 
+ class AnnotationViewportNode : public QSGNode
+ {
+-    BaseImageNode *m_baseImageNode;
++    BaseImageNode *m_baseImageNode = nullptr;
++    QSGImageNode *m_softwareBaseImageNode = nullptr;
+     QSGImageNode *m_annotationsNode;
+ 
+ public:
+@@ -263,10 +265,25 @@ public:
+         annotationsNode->setOwnsTexture(true);
+         appendChildNode(annotationsNode);
+     }
++    // The software scene graph can't run custom materials, so it needs a plain image node.
++    AnnotationViewportNode(QSGImageNode *softwareBaseImageNode, QSGImageNode *annotationsNode)
++        : QSGNode()
++        , m_softwareBaseImageNode(softwareBaseImageNode)
++        , m_annotationsNode(annotationsNode)
++    {
++        softwareBaseImageNode->setOwnsTexture(true);
++        appendChildNode(softwareBaseImageNode);
++        annotationsNode->setOwnsTexture(true);
++        appendChildNode(annotationsNode);
++    }
+     BaseImageNode *baseImageNode() const
+     {
+         return m_baseImageNode;
+     }
++    QSGImageNode *softwareBaseImageNode() const
++    {
++        return m_softwareBaseImageNode;
++    }
+     QSGImageNode *annotationsNode() const
+     {
+         return m_annotationsNode;
+@@ -672,15 +689,20 @@ QSGNode *AnnotationViewport::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeDa
+     const auto window = this->window();
+     auto node = static_cast<AnnotationViewportNode *>(oldNode);
+     if (!node) {
+-        node = new AnnotationViewportNode(new BaseImageNode(d->uniformData), //
+-                                          window->createImageNode());
+-        auto baseImageMaterial = static_cast<BaseImageMaterial *>(node->baseImageNode()->material());
+-        baseImageMaterial->setFiltering(QSGTexture::Linear);
++        if (window->rendererInterface()->graphicsApi() == QSGRendererInterface::Software) {
++            node = new AnnotationViewportNode(window->createImageNode(), window->createImageNode());
++            node->softwareBaseImageNode()->setFiltering(QSGTexture::Linear);
++        } else {
++            node = new AnnotationViewportNode(new BaseImageNode(d->uniformData), //
++                                              window->createImageNode());
++            auto baseImageMaterial = static_cast<BaseImageMaterial *>(node->baseImageNode()->material());
++            baseImageMaterial->setFiltering(QSGTexture::Linear);
++            // Setting the mipmap filter type also enables mipmaps.
++            // Super useful for scaling down smoothly.
++            baseImageMaterial->setMipmapFiltering(QSGTexture::Linear);
++            node->annotationsNode()->setMipmapFiltering(QSGTexture::Linear);
++        }
+         node->annotationsNode()->setFiltering(QSGTexture::Linear);
+-        // Setting the mipmap filter type also enables mipmaps.
+-        // Super useful for scaling down smoothly.
+-        baseImageMaterial->setMipmapFiltering(QSGTexture::Linear);
+-        node->annotationsNode()->setMipmapFiltering(QSGTexture::Linear);
+     }
+ 
+     const auto imageDpr = d->document->imageDpr();
+@@ -703,10 +725,11 @@ QSGNode *AnnotationViewport::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeDa
+     };
+ 
+     auto baseImageNode = node->baseImageNode();
+-    if (d->uniformData->dirtyFlags != UniformData::DirtyFlag::None) {
++    auto softwareBaseImageNode = node->softwareBaseImageNode();
++    if (baseImageNode && d->uniformData->dirtyFlags != UniformData::DirtyFlag::None) {
+         baseImageNode->markDirty(BaseImageNode::DirtyMaterial);
+     }
+-    if (!baseImageNode->texture() || d->updateBaseImageTexture) {
++    if (!(baseImageNode ? baseImageNode->texture() : softwareBaseImageNode->texture()) || d->updateBaseImageTexture) {
+         auto image = getImage(d->document->canvasBaseImage());
+         QQuickWindow::CreateTextureOptions createTextureOptions = QQuickWindow::TextureHasMipmaps;
+         if (image.hasAlphaChannel()) {
+@@ -714,7 +737,13 @@ QSGNode *AnnotationViewport::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeDa
+         } else {
+             createTextureOptions |= QQuickWindow::TextureIsOpaque;
+         }
+-        baseImageNode->setTexture(window->createTextureFromImage(image, createTextureOptions));
++        auto texture = window->createTextureFromImage(image, createTextureOptions);
++        if (baseImageNode) {
++            baseImageNode->setTexture(texture);
++        } else {
++            softwareBaseImageNode->setTexture(texture);
++            softwareBaseImageNode->setSourceRect(QRectF(QPointF(0, 0), texture->textureSize()));
++        }
+         d->updateBaseImageTexture = false;
+     }
+ 
+@@ -735,7 +764,11 @@ QSGNode *AnnotationViewport::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeDa
+         }
+     };
+ 
+-    setupImageNode(baseImageNode);
++    if (baseImageNode) {
++        setupImageNode(baseImageNode);
++    } else {
++        setupImageNode(softwareBaseImageNode);
++    }
+     setupImageNode(annotationsNode);
+ 
+     return node;

@@ -17,6 +17,7 @@ let
       }) # jenkins plugins
       (npr 582934 "sha256-MiLX6JWL8Ohl0MSF7apgR2pwEjiQhPL9tDnnuZBrdeE=") # coccinelle
       (npr 582751 "sha256-HX75M2vy4QSuPzm0jgHqJo+n0lEGUrSFqeH8yuSTcwc=") # openasar
+      (npr 584169 "sha256-H+4HsXMkQQmMBs+sd2Pa3VNxW+L2vIr2kBfhGenQzM8=") # vencord
     ];
   };
 in

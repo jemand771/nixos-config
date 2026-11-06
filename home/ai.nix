@@ -83,6 +83,34 @@
           url = "https://sjenkins001.intop01.de/mcp-server/mcp";
           headers.Authorization = "Basic \${INTENTA_JENKINS_MCP_AUTH}";
         };
+        intenta-atlassian = lib.mkIf (osConfig.networking.hostName == "cnb004") {
+          url = "https://mcp.atlassian.com/v2/mcp";
+          oauth.scopes = lib.concatStringsSep " " [
+            "read:me"
+            "read:account"
+            "email"
+            "offline_access"
+            "read:all:twg"
+            "search:rovo:agent-interface"
+            "search:code:agent-interface"
+            "read:jira:agent-interface"
+            "search:jira:agent-interface"
+            "read:confluence:agent-interface"
+            "search:confluence:agent-interface"
+            "read:jsm:agent-interface"
+            "read:bitbucket:agent-interface"
+            "read:assets:agent-interface"
+            "read:loom:agent-interface"
+            "read:goals:agent-interface"
+            "read:projects:agent-interface"
+            "read:teams:agent-interface"
+            "read:focus:agent-interface"
+            "read:talent:agent-interface"
+            "read:capacity-planning:agent-interface"
+            "read:jira-align:agent-interface"
+            "read:artifacts:agent-interface"
+          ];
+        };
         d39s-jenkins = {
           url = "https://jenkins.d39s.de/mcp-server/mcp";
           headers.Authorization = "Basic \${D39S_JENKINS_MCP_AUTH}";

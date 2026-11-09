@@ -53,7 +53,7 @@
       identityFile = "~/.ssh/id_infra";
     };
     "rms.intenta.de" = {
-      user = "root";
+      user = "adm_wihi";
       identityFile = "~/.ssh/id_rms";
     };
     "dodenhof.crosscan.com" = {

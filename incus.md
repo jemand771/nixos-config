@@ -5,10 +5,12 @@
 ```
 incus create cina cina -d eth0,ipv4.address=10.6.0.21
 incus config device add cina eth1 nic network=public
+incus config device add cina eth2 nic network=public
 incus start cina
 
 incus create cinb cinb -d eth0,ipv4.address=10.6.0.22
 incus config device add cinb eth1 nic network=public
+incus config device add cinb eth2 nic network=public
 incus start cinb
 ```
 

@@ -36,10 +36,6 @@
     ../certs/intenta-root01.crt
     ../certs/intenta-sub01.crt
   ];
-  jemand771.wsl.nat = {
-    address = "172.25.185.3/20";
-    gateway = "172.25.176.1";
-  };
   # TODO review and work around or file upstream (slop)
   nixpkgs.overlays = [
     (_: prev: {

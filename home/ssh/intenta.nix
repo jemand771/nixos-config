@@ -129,5 +129,6 @@
       hostName = "10.213.36.140";
       identityFile = "~/.ssh/id_caltrain";
     };
+    "gitlab.sonah.xyz".identityFile = "~/.ssh/id_sonah";
   };
 }

@@ -104,10 +104,7 @@
       user = "adm_wihi";
       identityFile = "~/.ssh/id_infra";
     };
-    "bitbucket-extern.intenta-automotive.de" = {
-      user = "exwihi";
-      identityFile = "~/.ssh/id_au";
-    };
+    "bitbucket-extern.intenta-automotive.de".identityFile = "~/.ssh/id_au";
     "seh-scaptp001.intop01.de" = {
       user = "adm_wihi";
       identityFile = "~/.ssh/id_nbptp"; # TODO should be id_infra

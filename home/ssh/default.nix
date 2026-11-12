@@ -16,12 +16,8 @@
         addKeysToAgent = "yes";
         identitiesOnly = true;
       };
-      "ssh.bitbucket.org" = {
-        identityFile = "~/.ssh/id_bitbucket";
-      };
-      "github.com" = {
-        identityFile = "~/.ssh/id_github";
-      };
+      "ssh.bitbucket.org".identityFile = "~/.ssh/id_bitbucket";
+      "github.com".identityFile = "~/.ssh/id_github";
     };
   };
 }

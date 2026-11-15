@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 {
@@ -43,6 +44,14 @@
     networking.nftables.enable = true;
     virtualisation.incus = {
       enable = true;
+      package = pkgs.incus-lts.overrideAttrs (old: {
+        patches = (old.patches or [ ]) ++ [
+          (pkgs.fetchpatch {
+            url = "https://github.com/lxc/incus/commit/6528817f2db68f8ebb1dda45ee6825ede9050ef7.patch";
+            hash = "sha256-Eu/quAT7p6EEMVVwGCIoxeNgug9zJLl5Ynt3mSvGsGw=";
+          })
+        ];
+      });
       ui.enable = true;
       preseed = {
         projects = builtins.map ({ name, value }: {

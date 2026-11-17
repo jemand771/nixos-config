@@ -35,7 +35,8 @@
           after = [
             deviceUnit
             "local-fs-pre.target"
-          ];
+          ]
+          ++ lib.optional config.boot.initrd.systemd.repart.enable "systemd-repart.service";
           requires = [ deviceUnit ];
           before = [ "sysroot.mount" ];
           unitConfig.DefaultDependencies = "no";

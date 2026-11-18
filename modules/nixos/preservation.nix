@@ -68,6 +68,7 @@
         }
         "/var/lib/systemd/coredump"
         "/var/lib/systemd/timers"
+        "/var/lib/logrotate"
       ];
       files = [
         {
@@ -95,5 +96,9 @@
           ]
       ) config.services.openssh.hostKeys;
     };
+    services.logrotate.extraArgs = [
+      "--state"
+      "/var/lib/logrotate/status"
+    ];
   };
 }

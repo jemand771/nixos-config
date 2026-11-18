@@ -184,6 +184,7 @@ in
         };
       };
       openssh.enable = true;
+      user.sshKeyset = "cloudlab";
       ovn = {
         enable = true;
         localIp = config.jemand771.unbeatable.ip;

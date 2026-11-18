@@ -2,6 +2,7 @@
   imports = [ ../modules/nixos/_incus-guest.nix ];
   networking.hostName = "cinb";
   deployment.tags = [ "cloudlab" ];
+  jemand771.user.sshKeyset = "cloudlab";
 
   jemand771.ingress = {
     enable = true;

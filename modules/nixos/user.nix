@@ -4,7 +4,7 @@
   ...
 }:
 let
-  taggedKeys = {
+  keySets = {
     homelab = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOSvXx0+WsuMzZ1y80J8sCFzNqhCB9ZTqeo/Fr4onBi1 willy@nixbox"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII2VFksHIb2Ir7kGNTgX2JpUvRkFG3X9dLoEHFNIFftd willy@nixbook"
@@ -21,10 +21,16 @@ let
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINMDm0uifArKw4G8u3Hj8h+dgJhmrCovJLuUWUxLabDw willy@cnb004"
     ];
   };
-  keysFor = tags: builtins.concatMap (tag: taggedKeys.${tag} or [ ]) tags;
 in
 {
-  options.jemand771.user.enable = lib.mkEnableOption "willy user (+ssh +sudo)";
+  options.jemand771.user = {
+    enable = lib.mkEnableOption "willy user (+ssh +sudo)";
+    sshKeyset = lib.mkOption {
+      type = lib.types.nullOr (lib.types.enum (builtins.attrNames keySets));
+      default = null;
+      description = "ssh keyset allowed to login as willy";
+    };
+  };
   config = lib.mkIf config.jemand771.user.enable {
     users.users.willy = {
       isNormalUser = true;
@@ -38,7 +44,11 @@ in
       ++ lib.optional config.virtualisation.libvirtd.enable "libvirtd"
       ++ lib.optional config.virtualisation.incus.enable "incus-admin"
       ++ lib.optional config.services.minecraft-servers.enable "minecraft";
-      openssh.authorizedKeys.keys = keysFor config.deployment.tags;
+      openssh.authorizedKeys.keys =
+        let
+          keyset = config.jemand771.user.sshKeyset;
+        in
+        lib.mkIf (keyset != null) keySets.${keyset};
     };
     security.sudo.wheelNeedsPassword = false;
     programs.ssh.startAgent = true;

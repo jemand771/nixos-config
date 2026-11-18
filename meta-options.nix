@@ -12,6 +12,7 @@
       shell-utils.enable = true;
       syncthing.enable = true;
       nasmounts.enable = true;
+      user.sshKeyset = "personal";
     };
     deployment.targetHost = null;
   };

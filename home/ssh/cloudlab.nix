@@ -14,8 +14,8 @@
         identityFile = "~/.ssh/id_cloudlab";
         hostKeyAlias = "cin-vip";
         userKnownHostsFile = "${pkgs.writeText "cin-vip-known-hosts" ''
-          cin-vip ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILCbPNTcfYaNK14fuECGIyfN05LujS11pU7sXJ2Ztr9y root@cina
-          cin-vip ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEqlR+E85FcrI56Ed15u1bhl9/FDFjTTMlwKKpPJY+eU root@cinb
+          cin-vip ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMoeTuadW1+Y8ULAD6DiP5HOKjj6YbxCntuv6Yhc1I9F root@cina
+          cin-vip ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKinQVMx3tb+i4NlR3Vhoxqt8yLqWLFjIQeW0VgxH16T root@cinb
         ''}";
       };
       "cina" = {

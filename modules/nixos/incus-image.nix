@@ -7,7 +7,8 @@
 let
   disks = lib.attrValues config.disko.devices.disk;
   disk =
-    lib.throwIfNot (lib.length disks == 1) "system.build.incusImage can only handle single-disk machines"
+    lib.throwIfNot (lib.length disks == 1)
+      "system.build.incusImage can only handle single-disk machines"
       (
         lib.throwIfNot (config.disko.imageBuilder.imageFormat == "qcow2")
           "system.build.incusImage requires disko.imageBuilder.imageFormat = \"qcow2\""

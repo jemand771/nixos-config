@@ -117,7 +117,8 @@ in
         pipewire = {
           pulse.enable = true;
           alsa.enable = true;
-          wireplumber.extraConfig.log-suspend."context.properties"."log.level" = "2,s-node:4,si-audio-adapter:4";
+          wireplumber.extraConfig.log-suspend."context.properties"."log.level" =
+            "2,s-node:4,si-audio-adapter:4";
         };
       })
     ];

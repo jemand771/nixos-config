@@ -92,6 +92,9 @@
     ];
     "workbench.editor.empty.hint" = "hidden";
     "workbench.colorTheme" = "Dark Modern";
+    "json.schemaDownload.trustedDomains" = {
+      "https://docs.renovatebot.com/" = true;
+    };
   };
   programs.vscode.mutableExtensionsDir = false;
   programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [

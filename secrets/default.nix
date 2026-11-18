@@ -24,6 +24,13 @@ in
       ];
       owner = "willy";
     };
+    claude-code-oauth-token = {
+      hosts = [
+        nixbox
+        cnb004
+      ];
+      owner = "willy";
+    };
     incus-client-willy-key = {
       hosts = [ nixbox ];
       owner = "willy";

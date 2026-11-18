@@ -20,6 +20,9 @@
           export INTENTA_JENKINS_MCP_AUTH=$(</run/agenix/intenta-jenkins-mcp-auth)
           export D39S_JENKINS_MCP_AUTH=$(</run/agenix/d39s-jenkins-mcp-auth)
           export GITHUB_MCP_PAT=$(</run/agenix/github-mcp-pat)
+          ${lib.optionalString (osConfig.age.secrets ? claude-code-oauth-token) ''
+            export CLAUDE_CODE_OAUTH_TOKEN=$(<${osConfig.age.secrets.claude-code-oauth-token.path})
+          ''}
           exec ${lib.getExe default} "$@"
         ''
         // {

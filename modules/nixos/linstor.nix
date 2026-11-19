@@ -118,12 +118,27 @@
         systemd.suppressedSystemUnits = [ "drbd.service" ];
         # force drbd 9 (in-tree is v8)
         boot.extraModulePackages = [ config.boot.kernelPackages.drbd ];
+        # yoinked from drbd-utils
+        systemd.services.drbd-graceful-shutdown = {
+          description = "ensure all DRBD resources shut down gracefully at system shut down";
+          documentation = [ "man:drbd-graceful-shutdown.service(7)" ];
+          after = [ "network-online.target" ];
+          before = [
+            "linstor-satellite.service"
+            "drbd-reactor.service"
+          ];
+          wants = [ "network-online.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStop = "${lib.getExe' pkgs.drbd "drbdsetup"} down all";
+          };
+        };
 
         systemd.services.linstor-satellite = {
           description = "LINSTOR satellite";
           wantedBy = [ "multi-user.target" ];
           after = [ "network-online.target" ];
-          before = [ "incus.service" ];
           wants = [ "network-online.target" ];
           serviceConfig = {
             # journal already has everything, but file logging can't be turned off.

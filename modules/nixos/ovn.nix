@@ -201,10 +201,7 @@
         "systemd-networkd-wait-online.service"
       ];
       requires = [ "ovs-vswitchd.service" ];
-      before = [
-        "ovn-controller.service"
-        "incus.service"
-      ];
+      before = [ "ovn-controller.service" ];
       wants = [ "systemd-networkd-wait-online.service" ];
       serviceConfig = {
         Type = "oneshot";

@@ -91,6 +91,16 @@ in
           }
       )
     ];
+    systemd.services.incus.after = [
+      "ovn-ovs-setup.service"
+      "ovn-nb-ovsdb.service"
+      "ovn-sb-ovsdb.service"
+      "ovn-northd.service"
+      "ovn-controller.service"
+      "linstor-satellite.service"
+      "drbd-reactor.service"
+      "drbd-graceful-shutdown.service"
+    ];
     virtualisation.incus.preseed.config = {
       # api listener for clients (not cluster traffic)
       "core.https_address" = ":8443";

@@ -156,7 +156,7 @@ in
         localIp = config.jemand771.unbeatable.ip;
         trustedCertificates.willy = ../../certs/incus-client-willy.crt;
         memberConfig = lib.optionalAttrs config.jemand771.unbeatable.isCloud {
-          "scheduler.instance" = "never";
+          "scheduler.instance" = "manual";
         };
         projects = {
           default = {

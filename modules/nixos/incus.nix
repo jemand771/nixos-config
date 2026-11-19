@@ -17,7 +17,7 @@
     description = "incus member config";
     default = { };
     example = {
-      "scheduler.instance" = "never";
+      "scheduler.instance" = "manual";
     };
   };
   options.jemand771.incus.trustedCertificates = lib.mkOption {

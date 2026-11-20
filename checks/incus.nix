@@ -20,9 +20,29 @@ let
       jemand771.incus = {
         enable = true;
         inherit localIp;
+        # just to see if memberConfig applies
+        memberConfig."scheduler.instance" = "manual";
+        projects = {
+          default = { };
+          example = { };
+        };
       };
-      # no cluster networks in this test
-      virtualisation.incus.preseed.networks = [ ];
+      virtualisation.incus.preseed = {
+        # just to see if preseed applies
+        networks = [
+          {
+            name = "default";
+            type = "macvlan";
+            config.parent = "eth1";
+          }
+        ];
+        storage_pools = [
+          {
+            name = "default";
+            driver = "dir";
+          }
+        ];
+      };
     };
 in
 pkgs.testers.runNixOSTest {
@@ -52,5 +72,18 @@ pkgs.testers.runNixOSTest {
         )
         node1.succeed("incus cluster list --format csv | grep -q '^node1,'")
         node1.succeed("incus cluster list --format csv | grep -q '^node2,'")
+
+    with subtest("check preseed"):
+        # eventual consistency(tm)
+        for node in machines:
+            node.succeed("systemctl restart incus-preseed-member.service")
+        for node in machines:
+            node.succeed("systemctl restart incus-preseed.service")
+        node1.succeed("incus network show default")
+        node1.succeed("incus storage show default")
+        node1.succeed("incus profile show default --project example | grep 'network: default'")
+        node1.succeed("test \"$(incus project get example restricted.networks.access)\" = default")
+        for node in "node1", "node2":
+            node1.succeed(f"test \"$(incus cluster get {node} scheduler.instance)\" = manual")
   '';
 }

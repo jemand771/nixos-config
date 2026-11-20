@@ -149,6 +149,30 @@
             StateDirectory = "linstor.d";
           };
         };
+
+        # running satellite does not mean ready
+        systemd.services.linstor-satellite-online = {
+          description = "wait for the LINSTOR controller/satellite connection";
+          enableStrictShellChecks = true;
+          wantedBy = [ "multi-user.target" ];
+          after = [ "linstor-satellite.service" ];
+          requires = [ "linstor-satellite.service" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            TimeoutStartSec = "2min";
+          };
+          script =
+            let
+              linstor = lib.getExe' pkgs.linstor-client "linstor";
+              jq = lib.getExe pkgs.jq;
+            in
+            ''
+              until [ "$(${linstor} -m node list -n ${config.networking.hostName} | ${jq} -r '.[0][0].connection_status')" = ONLINE ]; do
+                sleep 1
+              done
+            '';
+        };
       }
 
       {

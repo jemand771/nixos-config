@@ -97,7 +97,7 @@ in
       "ovn-sb-ovsdb.service"
       "ovn-northd.service"
       "ovn-controller.service"
-      "linstor-satellite.service"
+      "linstor-satellite-online.service"
       "drbd-reactor.service"
       "drbd-graceful-shutdown.service"
     ];

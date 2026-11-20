@@ -17,6 +17,7 @@ let
       }) # jenkins plugins
       (npr 582805 "sha256-w2UW/OfLuDfg9pApVpfp9HE8elNbS0M3YiOrjXpfb8c=") # keepalived
       (npr 587646 "sha256-7kd/EpOpnnx3sYnKk9JFszflOrVz2FGvsSjYdWYwmGE=") # openasar
+      (npr 574679 "sha256-M1I9RnOp+KoDQzvtqdCetnhSd341R6uZXf8Gxi9hYlU=") # ossia-score
     ];
   };
 in

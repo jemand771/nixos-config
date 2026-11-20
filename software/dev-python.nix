@@ -31,7 +31,9 @@
       platformio-core
       nixpkgs-review
       debian-devscripts
-      qlcplus
+      (qlcplus.overrideAttrs (old: {
+        patches = old.patches or [ ] ++ [ ../patches/qlcplus-desktop-gl-renderable.patch ];
+      }))
       kdePackages.kdenlive
       audacity
       gh

@@ -1,0 +1,12 @@
+diff --git a/qmlui/main.cpp b/qmlui/main.cpp
+index ff7882f..a448d55 100644
+--- a/qmlui/main.cpp
++++ b/qmlui/main.cpp
+@@ -160,6 +160,7 @@ int main(int argc, char *argv[])
+     if (!parser.isSet(threedSupportOption))
+     {
+         QSurfaceFormat format;
++        format.setRenderableType(QSurfaceFormat::OpenGL);
+         format.setMajorVersion(3);
+         format.setMinorVersion(3);
+         format.setProfile(QSurfaceFormat::CoreProfile);

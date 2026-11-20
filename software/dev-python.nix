@@ -34,6 +34,9 @@
       (qlcplus.overrideAttrs (old: {
         patches = old.patches or [ ] ++ [ ../patches/qlcplus-desktop-gl-renderable.patch ];
       }))
+      casparcg-client
+      casparcg-server
+      casparcg-media-scanner
       kdePackages.kdenlive
       audacity
       gh

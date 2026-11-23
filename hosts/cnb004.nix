@@ -114,6 +114,7 @@
         esp = "aes256-sha1";
         # once again 0.0.0.0/0 is stinky, but we can just ask the server for what we want
         remote-ts = lib.concatStringsSep ";" [
+          "10.149.0.0/16"
           "10.150.0.0/16"
           "10.153.0.0/16"
           "10.154.0.0/16"

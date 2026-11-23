@@ -59,6 +59,8 @@
   # Install firefox.
   programs.firefox.enable = true;
 
+  services.openssh.enable = true;
+
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;

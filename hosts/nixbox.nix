@@ -165,6 +165,8 @@
   boot.kernelParams = [
     "pcie_port_pm=off"
     "pcie_aspm.policy=performance"
+    "video=HDMI-A-2:panel_orientation=upside_down"
+    "video=DP-2:panel_orientation=upside_down"
   ];
   jemand771.nvidiagpu.enable = true;
 

@@ -4,7 +4,7 @@ let
   cnb004 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzafjoKVvEzC+J10uq6hy9T3ARprkRtuzogVs34b29j";
 in
 {
-  hosts = { inherit nixbox cnb004; };
+  hosts = { inherit nixbox nixbook cnb004; };
   secrets = {
     restic-password.hosts = [ nixbox ];
     intenta-jenkins-mcp-auth = {

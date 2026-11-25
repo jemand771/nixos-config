@@ -189,10 +189,12 @@
             nixfmt
             nixfmt-tree
             nixos-anywhere
-            (python3.withPackages (ps: with ps; [
-              humanize
-              tabulate
-            ]))
+            (python3.withPackages (
+              ps: with ps; [
+                humanize
+                tabulate
+              ]
+            ))
           ];
         };
         formatter = pkgs.nixfmt-tree;

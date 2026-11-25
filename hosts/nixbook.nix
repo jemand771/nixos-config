@@ -71,5 +71,10 @@
   jemand771.printer.enable = true;
   hardware.logitech.wireless.enable = true;
   jemand771.meta.personal-system = true;
+  home-manager.users.willy.imports = [
+    {
+      jemand771.ai.enable = true;
+    }
+  ];
   system.stateVersion = "24.05";
 }

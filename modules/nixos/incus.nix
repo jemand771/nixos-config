@@ -184,10 +184,18 @@
         # eventual consistency(tm)
         # create locally (for this node), then try to register cluster wide (only works when all nodes have completed the local part)
         # incus-preseed handles updates after that but _can't_ cover the initial creation (neither local nor clustered)
-        lib.concatMapStringsSep "\n" (net: ''
-          ${incus} network create ${net.name} --type ${net.type} --target ${config.networking.hostName} parent=${net.config.parent} || true
-          ${incus} network create ${net.name} --type ${net.type} || true
-        '') (lib.filter (net: net.config ? parent) config.virtualisation.incus.preseed.networks)
+        lib.concatMapStringsSep "\n"
+          (net: ''
+            ${incus} network create ${net.name} --type ${net.type} --target ${config.networking.hostName} ${
+              lib.optionalString (net.config ? parent) "parent=${net.config.parent}"
+            } || true
+            ${incus} network create ${net.name} --type ${net.type} || true
+          '')
+          (
+            lib.filter (
+              net: net.config ? parent || net.type == "bridge"
+            ) config.virtualisation.incus.preseed.networks
+          )
         + lib.concatMapStringsSep "\n" (pool: ''
           ${incus} storage create ${pool.name} ${pool.driver} --target ${config.networking.hostName} || true
           ${incus} storage create ${pool.name} ${pool.driver} || true

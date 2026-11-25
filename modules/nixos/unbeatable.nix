@@ -41,6 +41,10 @@ in
       {
         useNetworkd = true;
         firewall.allowedTCPPorts = [ 8443 ];
+        firewall.interfaces.dnsbr.allowedUDPPorts = [
+          67
+          547
+        ];
       }
       (
         if config.jemand771.unbeatable.isCloud then
@@ -161,6 +165,18 @@ in
           "bridge.mtu" = "1342";
         };
       }
+      {
+        name = "dnsbr";
+        type = "bridge";
+        config = {
+          "ipv4.address" = "192.168.53.1/24";
+          "ipv4.nat" = "false";
+          "ipv6.address" = "fdeb:3a2c:4783::1/64";
+          "ipv6.nat" = "false";
+          # static ipv6.address
+          "ipv6.dhcp.stateful" = "true";
+        };
+      }
     ];
     jemand771 = {
       incus = {
@@ -179,6 +195,10 @@ in
           infra = { };
           ingress = {
             "restricted.networks.access" = "default,public";
+          };
+          dns = {
+            "restricted.networks.access" = "default,dnsbr";
+            "restricted.devices.proxy" = "allow";
           };
         };
       };

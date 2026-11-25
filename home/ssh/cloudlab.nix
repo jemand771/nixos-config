@@ -24,6 +24,7 @@
         (name: {
           inherit name;
           value = {
+            hostname = "${name}.incus";
             user = "willy";
             identityFile = "~/.ssh/id_cloudlab";
             proxyJump = "cin-vip";

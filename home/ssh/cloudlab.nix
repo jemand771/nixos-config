@@ -18,19 +18,22 @@
           cin-vip ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKinQVMx3tb+i4NlR3Vhoxqt8yLqWLFjIQeW0VgxH16T root@cinb
         ''}";
       };
-      "cina" = {
-        hostname = "10.6.0.21";
-        user = "willy";
-        identityFile = "~/.ssh/id_cloudlab";
-        proxyJump = "cin-vip";
-      };
-      "cinb" = {
-        hostname = "10.6.0.22";
-        user = "willy";
-        identityFile = "~/.ssh/id_cloudlab";
-        proxyJump = "cin-vip";
-      };
     }
+    // builtins.listToAttrs (
+      map
+        (name: {
+          inherit name;
+          value = {
+            user = "willy";
+            identityFile = "~/.ssh/id_cloudlab";
+            proxyJump = "cin-vip";
+          };
+        })
+        [
+          "cina"
+          "cinb"
+        ]
+    )
     // builtins.listToAttrs (
       map
         (

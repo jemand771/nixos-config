@@ -200,5 +200,45 @@
           } || true
         '';
     };
+
+    systemd.services.incus-unevacuate =
+      let
+        marker = "/var/lib/incus/evacuated-by-shutdown";
+        incus = lib.getExe' config.virtualisation.incus.clientPackage "incus";
+        jq = lib.getExe pkgs.jq;
+        status = "${incus} query /1.0/cluster/members/${config.networking.hostName} | ${jq} -r .status";
+      in
+      lib.mkIf (config.virtualisation.incus.preseed.config."core.shutdown_action" or null == "evacuate") {
+        description = "Unevacuate incus member after reboot";
+        enableStrictShellChecks = true;
+        wantedBy = [ "multi-user.target" ];
+        after = [
+          "incus.service"
+          "incus-startup.service"
+        ];
+        restartIfChanged = false;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          Restart = "on-failure";
+          RestartSec = "30s";
+        };
+        # neither incus nor incus-startup.service handle evacuation status, figure out whether this was
+        #   a) a shutdown-triggered auto-evacuation (see core.shutdown_action)
+        #   b) just a coincidental reboot while evacuated earlier (manually)
+        script = ''
+          [ -e ${marker} ] || exit 0
+          if [ "$(${status})" = Evacuated ]; then
+            ${incus} cluster restore ${config.networking.hostName} --force
+          fi
+          rm ${marker}
+        '';
+        # incus-startup.service -> incusd shutdown -> evacuate
+        preStop = ''
+          if [ "$(${status})" != Evacuated ]; then
+            touch ${marker}
+          fi
+        '';
+      };
   };
 }

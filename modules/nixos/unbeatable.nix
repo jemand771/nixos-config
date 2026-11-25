@@ -104,6 +104,8 @@ in
     virtualisation.incus.preseed.config = {
       # api listener for clients (not cluster traffic)
       "core.https_address" = ":8443";
+      # also see incus-unevacuate.service
+      "core.shutdown_action" = "evacuate";
       "network.ovn.northbound_connection" = lib.concatMapStringsSep "," (
         host: "tcp:${host}:6641"
       ) config.jemand771.ovn.peers;

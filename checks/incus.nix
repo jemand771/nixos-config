@@ -35,6 +35,11 @@ let
             type = "macvlan";
             config.parent = "eth1";
           }
+          {
+            name = "testbr";
+            type = "bridge";
+            config."ipv4.address" = "192.168.53.1/24";
+          }
         ];
         storage_pools = [
           {
@@ -74,12 +79,19 @@ pkgs.testers.runNixOSTest {
         node1.succeed("incus cluster list --format csv | grep -q '^node2,'")
 
     with subtest("check preseed"):
+        # created standalone earlier, retry in per-member preseed
+        # TODO this should really be a 2-stage test (bootstrap with blank preseed, then configure)
+        node1.succeed("incus network delete testbr")
         # eventual consistency(tm)
         for node in machines:
             node.succeed("systemctl restart incus-preseed-member.service")
         for node in machines:
             node.succeed("systemctl restart incus-preseed.service")
         node1.succeed("incus network show default")
+        node1.succeed("incus network show testbr | grep 'status: Created'")
+        node1.succeed("test \"$(incus network get testbr ipv4.address)\" = 192.168.53.1/24")
+        for node in machines:
+            node.succeed("ip -br addr show testbr | grep 192.168.53.1/24")
         node1.succeed("incus storage show default")
         node1.succeed("incus profile show default --project example | grep 'network: default'")
         node1.succeed("test \"$(incus project get example restricted.networks.access)\" = default")
